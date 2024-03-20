@@ -74,6 +74,18 @@ display(combined_df)
 <img src="/files/titanic_project/train_df_image.png" width="989" height="350"> 
 
 We've got 12 columns with 10 usable features. 
+- PassengerId is an index
+- The Survived is 1 if they survived or 0 if they died
+- The PClass columnn shows the passenger class (1st, 2nd or 3rd)
+- The name column gives their full name and title
+- Sex is either male or female
+- Age in years
+- SibSp is number of siblings/spouses on the ship
+- Parch is number of parents/children on the ship
+- Ticket shows their ticket code
+- Fare in dollars
+- Cabin, with deck classification
+- Embarked gives their port of departure: S: Southampton, C: Cherbourg, Q: Queenstown
 
 Let's look at the data types and what we are missing:
 
@@ -97,4 +109,5 @@ Data columns (total 12 columns):
  11  Embarked     1307 non-null   object 
 dtypes: float64(3), int64(4), object(5)
 ```
-We mostly have integers and strings, with some objects which are strings. We are missing data in the Age, Cabin, Fare and Embarked columns. We will have to do some imputation (filling in missing values) and encoding (converting the strings to numerical data which the models can handle).
+We mostly have integers and strings, with some objects which are strings. We are missing data in the Age (263), Cabin (1014), Fare (1) and Embarked (2) columns. We will have to do some imputation (filling in missing values) and encoding (converting the strings to numerical data which the models can handle).
+
