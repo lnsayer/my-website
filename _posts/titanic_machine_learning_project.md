@@ -150,4 +150,29 @@ ax1.set_ylabel('Number of people', fontsize = 12)
 
 <img src="/files/titanic_project/survival_rate_age_sex.png" width="auto" height="450"> 
 
-These are quite stark results with the men much more likely to di 
+These are quite stark results with the men much more likely to die than women. Age does not appear to affect survival rates amongst adults, however children are more likely to survive than die. The famous unofficial code of conduct 'Women and children first" is confirmed in use by these plots.
+
+We can also plot the survival rates according to fare price:
+
+```python
+# Plot histograms of the number who survived/died according to fare price
+survived_df = train_df.loc[train_df['Survived'] == 1]
+died_df = train_df.loc[train_df['Survived'] == 0]
+
+# Initiating the figures
+fig, ax = plt.subplots(figsize=(14,6))
+
+# Histograms of the survived and died based on fare price
+survived_hist = ax.hist(survived_df['Fare'], bins=20, alpha=0.5,  label='Survived', color='C0', zorder=0);
+died_ = ax.hist(died_df['Fare'], bins=20, alpha=0.5,  label='Died', color='C1', zorder=1);
+
+# Add a legend to ax0
+ax.legend()
+# Set labels
+ax.set_xlabel('Fare ($)', fontsize = 12)
+ax.set_ylabel('Number of people', fontsize = 12)
+```
+<img src="/files/titanic_project/survival_rate_fare_price.png" width="auto" height="450">  
+
+The tail of the survivors is longer showing that people who paid a higher fare were more likely to survive. However, this is not strict, some passengers who bought an expensive ticket also died. 
+
