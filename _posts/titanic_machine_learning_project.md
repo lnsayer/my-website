@@ -9,8 +9,9 @@ This notebook also serves as a guide for people new to machine learning. Please 
 ### The plan:
 1. Data exploration and visualisation
 2. Data cleaning, feature selection and engineering
-3. Cross Validation and Hyperparameter tuning
-4. Testing different classifiers
+3. Quick Modelling to see feature importance
+4. Cross Validation and Hyperparameter tuning
+5. Testing different classifiers
 
 First a little history. RMS (Royal Mail Ship) Titanic was the largest ocean liner in 1912 when she famously sank 370 miles off the coast of Newfoundland, after hitting an iceberg. Out of the 2,200 people onboard, more than 1,500 are estimated to have died in the disaster. Survival rates were starkly different between different passengers, with age, passenger class and sex playing key factors. 
 
@@ -392,10 +393,41 @@ new_train_df
  <img src="/files/titanic_project/prepared_dataset.png" width="auto" height="300"> 
 Some notes:
 
-It is not immediately clear of the cause for the missing age values. As it is such a useful predictor we want to keep this column. Imputing using the median age would not give the best predictor for age since there are other variables which we can use to predict age such as their title or number of siblings (children are more likely to travel with siblings than adults are). For this reason I decided to use a k-nearest neighbour algorithm to accurately predict the 
+- It is not immediately clear of the cause for the missing age values. This is something we could have investigated further. We do not want to remove this column as it is such a useful predictor. Imputing using the median age would not give the best estimate for age since there are other variables which we can use to predict the missing values such as their title or number of siblings (children are more likely to travel with siblings than adults are). For this reason I decided to use a k-nearest neighbour algorithm because it is accurate, simple and fast. Imputing the missing ages gave a similar distribution compared to the original non-missing data: 
 
+```python
+# Columns to drop in preparing the dataframes
+drop_columns = ["Embarked", "Ticket", "Name", 'PassengerId']
 
+new_train_df = prepare_dataframe(train_df, drop_columns)
+new_test_df = prepare_dataframe(test_df, drop_columns)
 
+#Plotting histograms of the feature variables
+fig, (ax0, ax1) = plt.subplots(nrows=1, ncols=2, figsize = (8,5))
 
+# Create histograms
+ax0.hist(train_df["Age"], bins=20);
+ax1.hist(new_train_df["Age"], bins=20);
+
+# Set labels
+ax0.set_xlabel('Age (yrs)', fontsize = 12)
+ax0.set_ylabel('Number of people', fontsize = 12)
+ax1.set_xlabel('Age (yrs)', fontsize = 12)
+ax0.set_title('Original dataframe')
+ax1.set_title('Imputed dataframe')
+
+print(new_train_df["Age"].isna().sum())
+print(train_df["Age"].isna().sum())
+```
+
+ <img src="/files/titanic_project/imputed_age.png" width="auto" height="450">  
+
+ - Another option for imputing the age would have been to set the missing values as 0. It might have been the case that passengers had a missing age *because* they had died and their records were not kept. Setting the missing values as 0 might have been able to capture this. Further work could explore the effect of this. 
+
+- For the deck code we decided to keep the missing values as a new column because like age the missing values might have been caused a passenger dying. We will see this column turned out to be pretty important in the models' feature importances.
+- Since there is only one missing feature from the Fare column we imputed this with the median.
+- We decided to one-hot encode the Pclass column but in fact this was unnecessary and only made the dataframe more sparse. We could have kept this in its original form. 
+
+### 3. Quick Modelling to see feature importance
 
 
