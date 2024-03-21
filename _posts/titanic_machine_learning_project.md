@@ -71,7 +71,7 @@ pd.set_option('display.max_rows', 10)
 # Show the dataframe
 display(combined_df)
 ```
-<img src="/files/titanic_project/train_df_image.png" width="989" height="350"> 
+<img src="/files/titanic_project/combined_df.png" width="844" height="350"> 
 
 We've got 12 columns with 10 usable features. 
 - PassengerId is an index
@@ -111,3 +111,43 @@ dtypes: float64(3), int64(4), object(5)
 ```
 We mostly have integers and strings, with some objects which are strings. We are missing data in the Age (263), Cabin (1014), Fare (1) and Embarked (2) columns. We will have to do some imputation (filling in missing values) and encoding (converting the strings to numerical data which the models can handle).
 
+Since we have combined the training and test set into one dataframe we can see all the missing data, e.g. if we had only looked at the training set we would miss the missing fare entry in the test set. Normally we want to impute the training and test set separately since our test set represents future data we want to predict. However, as this is the same ship with the same distribution it is okay to impute altogether. It also makes our life easier to do so. 
+
+Let's explore how different features might affect survival rates. We can display the survival rate based on age and sex at the same time. 
+``` python
+# Dataframes of male and female survivals
+male_train_df = train_df.loc[train_df['Sex'] == 'male']
+female_train_df = train_df.loc[train_df['Sex'] == 'female']
+
+male_survived_df = male_train_df.loc[male_train_df['Survived'] == 1]
+male_died_df = male_train_df.loc[male_train_df['Survived'] == 0]
+
+female_survived_df = female_train_df.loc[female_train_df['Survived'] == 1]
+female_died_df = female_train_df.loc[female_train_df['Survived'] == 0]
+
+# Initiating the plots
+fig, (ax0, ax1) = plt.subplots(nrows=1, ncols=2, figsize=(14,6), sharex=True)
+
+# Male and female survived histograms, respectively
+histogram_male_survived = ax0.hist(male_survived_df['Age'], bins=20, alpha=0.5,  label='Survived', color='C0', zorder=1);
+histogram_male_died = ax0.hist(male_died_df['Age'], bins=20, alpha=0.5,  label='Died', color='C1', zorder=0);
+
+histogram_female_survived = ax1.hist(female_survived_df['Age'], bins=20, alpha=0.5,  label='Survived');
+histogram_female_died = ax1.hist(female_died_df['Age'], bins=20, alpha=0.5,  label='Died');
+
+# Add a legend to ax0
+ax0.legend()
+ax1.legend()
+# Set titles
+ax0.set(title='Male', xlabel='Age', ylabel='Number of people');
+ax1.set(title='Female', xlabel='Age', ylabel='Number of people');
+# Set labels
+ax0.set_xlabel('Age (yrs)', fontsize = 12)
+ax0.set_ylabel('Number of people', fontsize = 12)
+ax1.set_xlabel('Age (yrs)', fontsize = 12)
+ax1.set_ylabel('Number of people', fontsize = 12)
+```
+
+<img src="/files/titanic_project/survival_rate_age_sex.png" width="auto" height="450"> 
+
+These are quite stark results with the men much more likely to di 
