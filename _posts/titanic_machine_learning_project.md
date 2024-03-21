@@ -176,3 +176,118 @@ ax.set_ylabel('Number of people', fontsize = 12)
 
 The tail of the survivors is longer showing that people who paid a higher fare were more likely to survive. However, this is not strict, some passengers who bought an expensive ticket also died. 
 
+Finally let's look at the survival rates amongst different passenger classes. 
+
+```python
+pclass1_survive = train_df.loc[(train_df['Survived'] == 1) & (train_df['Pclass'] ==1 )]
+pclass1_die = train_df.loc[(train_df['Survived'] == 0) & (train_df['Pclass'] ==1 )]
+
+pclass2_survive = train_df.loc[(train_df['Survived'] == 1) & (train_df['Pclass'] ==2 )]
+pclass2_die = train_df.loc[(train_df['Survived'] == 0) & (train_df['Pclass'] ==2 )]
+
+pclass3_survive = train_df.loc[(train_df['Survived'] == 1) & (train_df['Pclass'] ==3 )]
+pclass3_die = train_df.loc[(train_df['Survived'] == 0) & (train_df['Pclass'] ==3 )]
+
+survived = [len(pclass1_survive), len(pclass2_survive), len(pclass3_survive)]
+died = [len(pclass1_die), len(pclass2_die), len(pclass3_die)]
+
+fig, ax = plt.subplots(figsize=(10,4))
+
+x = np.arange(3)
+width = 0.4
+
+ax.bar(x-0.2, survived, width) 
+ax.bar(x+0.2, died, width) 
+ax.set_xticks(x, ['1st Class', '2nd Class', '3rd Class'], size =14) 
+ax.set_xlabel("Passenger Class", size =14) 
+ax.set_ylabel("Number of people", size =14) 
+ax.legend(["Survived", "Died"], fontsize =12)
+```
+<img src="/files/titanic_project/survival_rate_passenger_class.png" width="auto" height="450">  
+
+Again, better passenger class corresponds to a higher chance of survival. On the Titanic, you can put a price on life.
+
+### 2. Data cleaning, feature selection and engineering
+
+Now let's try and make some other features useful and even create a new feature. 
+First we will extract all the titles of the passengers. These might be useful since it can explicity tell the model the age and sex of a passenger, as well as their marital status. This code makes a new column 'Title' which returns the string following a comma and space and then a full stop e.g. for `, Mr.` it returns `Mr`. We can see how many entries have each title with `value_counts`. 
+
+```python
+pd.set_option("display.max_rows", None)
+# New data frame to work with
+new_train_df = train_df.copy(deep=True)
+
+# Function to create a new column with the title of each passenger
+new_train_df['Title'] = new_train_df['Name'].map(lambda x: re.compile(", (.*?)\.").findall(x)[0])
+print(new_train_df['Title'].value_counts())
+```
+```python
+Title
+Mr              517
+Miss            182
+Mrs             125
+Master           40
+Dr                7
+Rev               6
+Mlle              2
+Major             2
+Col               2
+the Countess      1
+Capt              1
+Ms                1
+Sir               1
+Lady              1
+Mme               1
+Don               1
+Jonkheer          1
+Name: count, dtype: int64
+```
+We can see there are several unusual titles, let's transfer them to some of the more common titles with this function which can appply it to any dataframe:
+
+```python
+# Function to allocate uncommon titles to broader title categories
+def replace_titles(x):
+    title=x['Title']
+    if title in ['Don', 'Major', 'Capt', 'Jonkheer', 'Rev', 'Col', 'Sir']:
+        return 'Mr'
+    elif title in ['the Countess', 'Mme', 'Lady', 'Dona']:
+        return 'Mrs'
+    elif title in ['Mlle', 'Ms']:
+        return 'Miss'
+    elif title =='Dr':
+        if x['Sex']=='Male':
+            return 'Mr'
+        else:
+            return 'Mrs'
+    else:
+        return title
+```
+In hindsight we could have considered putting these in a special column but for now we will leave it. Next we are going to extract the deck of their cabin with another function: 
+```python
+# Function to replace the cabin code with their deck section, denoted by a letter
+def replace_cabin(x):
+    x['Cabin'] = x['Cabin'].fillna("U0")
+    x['Deck'] = x['Cabin'].map(lambda x: re.compile("([a-zA-Z]+)").search(x).group())
+    x['Deck'] = x['Deck'].map(deck)
+    x['Deck'] = x['Deck'].fillna("U")
+    x.drop('Cabin',axis=1, inplace=True)
+    
+    return x
+```
+We will empty cabin entries with `U`. Perhaps some areas of the boat were able to evacuate more easily than others. The boat hit the iceberg at 11:40pm so it is likely the passengers were inside their cabins at this time. 
+
+Finally we will make a family_size attribute which takes gives the family size of each passenger:
+```python
+# Function to define a person's family size
+def add_family(x):
+    x['Familysize'] = x['SibSp']+x['Parch']+1
+    return x
+```
+
+
+
+
+
+
+
+
