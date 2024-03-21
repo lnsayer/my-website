@@ -274,7 +274,7 @@ def replace_cabin(x):
     
     return x
 ```
-We will empty cabin entries with `U`. Perhaps some areas of the boat were able to evacuate more easily than others. The boat hit the iceberg at 11:40pm so it is likely the passengers were inside their cabins at this time. 
+We will fill empty cabin entries with `U`. Perhaps some areas of the boat were able to evacuate more easily than others. The boat hit the iceberg at 11:40pm so it is likely the passengers were inside their cabins at this time. 
 
 Finally we will make a family_size attribute which takes gives the family size of each passenger:
 ```python
@@ -283,8 +283,116 @@ def add_family(x):
     x['Familysize'] = x['SibSp']+x['Parch']+1
     return x
 ```
+Let's check all these are working with our training dataset: 
+```python
+# Show the new altered dataframes with 'Title', 'Deck' and 'Familysize' columns
+new_train_df['Title']=new_train_df.apply(replace_titles, axis=1)
+new_train_df= replace_cabin(new_train_df)
+new_train_df = add_family(new_train_df)
 
+new_train_df
+```
+ <img src="/files/titanic_project/new_features.png" width="auto" height="400">   
 
+ Next we are going to impute our data and one hot encode categorical data. For this I created a function `prepare_dataframe` which can do this to any dataframe we like and can also drop columns we are not interested in using. It does the following:
+ - Converts the sex column into binary (0 and 1s)
+ - Replace the Name column with Title
+ - Replaces the Cabin column with Deck
+ - Add family size
+ - Imputes Fare with the median value
+ - One hot encodes Embarked, Title, Deck and Pclass
+ - Imputes the Age column using a KNN algorithm
+ - Renames engineered columns
+ - Drop any columns which are requested
+
+```python
+def prepare_dataframe(df, drop_columns):
+    # Copying dataframe to manipulate
+    new_df = df.copy(deep=True)
+    
+    # Binary mapping the sex column
+    binary_mapping = {"male" : 0, "female": 1}
+    new_df["Sex"] = new_df["Sex"].map(binary_mapping)
+    
+    # Creating the new Title and Deck columns
+    new_df['Title'] = new_df['Name'].map(lambda x: re.compile(", (.*?)\.").findall(x)[0])
+    new_df['Title'] = new_df.apply(replace_titles, axis=1)
+    
+    # Add a column with their deck section
+    new_df = replace_cabin(new_df)
+    # Add a column with their family size
+    new_df = add_family(new_df)
+    
+    # Numeric and categorical features to encode
+    numeric_features = ["Fare"]
+    categorical_features = ["Embarked", "Title", "Deck", 'Pclass']
+    
+    # Strategies for transforming these features
+    numeric_transformer = Pipeline(steps = [("imputer", SimpleImputer(strategy="median"))])
+    
+    categorical_transformer = Pipeline(steps = [ ("imputer", SimpleImputer(strategy = "constant", 
+                                                                           fill_value="missing")),
+                                               ("onehot", OneHotEncoder(handle_unknown="ignore"))])
+    # Transforming these features    
+    preprocessor = ColumnTransformer(transformers = [("num", numeric_transformer, numeric_features),
+                                                    ("cat", categorical_transformer, categorical_features)])
+    
+    preprocessor.fit(new_df)
+    
+    transformed_data = preprocessor.transform(new_df)
+    
+    # Getting transformed data and creating new columns to put them in 
+    numeric_data = transformed_data[:, :len(numeric_features)].toarray()
+    categorical_data = transformed_data[:, len(numeric_features):].toarray()
+        
+    categorical_encoded_features = preprocessor.named_transformers_['cat']['onehot'] \
+                                    .get_feature_names_out(input_features=categorical_features)
+    
+    # Replace the columns with transformed data
+    new_df[categorical_encoded_features] = categorical_data
+    new_df[numeric_features] = numeric_data
+    
+    # Impute the missing age data using a KNN algorithm utilising the following features 
+    X = new_df[['SibSp', 'Fare', 'Age', 'Title_Master', 'Title_Miss',
+       'Title_Mr', 'Title_Mrs', 'Pclass', 'Sex']]
+
+    impute_knn = KNNImputer()
+    X_imputed = impute_knn.fit_transform(X)
+
+    X_df = pd.DataFrame(X_imputed)
+    age_column = X_df.iloc[:,2]
+    new_df['Age'] = age_column
+    
+    # Removing obsolete features which have been transformed 
+    if "Embarked_missing" in new_df.columns:
+        new_df.drop("Embarked_missing", axis=1, inplace=True)
+    if "Title" in new_df.columns:
+        new_df.drop("Title", axis=1, inplace=True)
+    if "Deck" in new_df.columns:
+        new_df.drop("Deck", axis=1, inplace=True)
+    if "Pclass" in new_df.columns:
+        new_df.drop("Pclass", axis=1, inplace=True)
+        
+    # Dropping custom columns according to which features we want to include in a model
+    new_df.drop(drop_columns,axis =1, inplace=True)
+    
+    return pd.DataFrame(new_df)
+```
+
+This gave a final dataset of: 
+```python
+# Custom columns to drop in the function prepare_dataframe
+drop_columns = ["Embarked", "Ticket", "Name"]
+new_train_df = prepare_dataframe(train_df, drop_columns)
+# display(new_train_df)
+print(new_train_df.columns)
+new_train_df['Age'].isna().sum()
+new_train_df
+```
+ <img src="/files/titanic_project/prepared_dataset.png" width="auto" height="300"> 
+Some notes:
+
+It is not immediately clear of the cause for the missing age values. As it is such a useful predictor we want to keep this column. Imputing using the median age would not give the best predictor for age since there are other variables which we can use to predict age such as their title or number of siblings (children are more likely to travel with siblings than adults are). For this reason I decided to use a k-nearest neighbour algorithm to accurately predict the 
 
 
 
