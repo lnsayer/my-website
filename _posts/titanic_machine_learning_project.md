@@ -509,7 +509,16 @@ We will go into scoring the test set later but for now let's see how this model 
 - Submitting based on gender (predicting male = dead, female = surived) gives an accuracy score of 0.766
 
 Originally I tested this classifier without the newly engineered columns and imputing the age with the median age. This gave a score of 0.768, only a slight improvement!
-A lot of work for 0.02 increase in accuracy score. Scoring with the newly engineered columns gives 0.746, a disappointing and confusing score considering we can do better with just the gender submission. 
+A lot of work for 0.02 increase in accuracy score. Scoring with the newly engineered columns gives 0.746, a disappointing and confusing score considering we can do better with just the gender submission. This might be down to overfitting, let's perform some cross validation and hyperparameter tuning to find out if we can improve these scores. We still do not have a lot of features (at least compared to the dataset) and we know that random forests are quite good at performing feature selection. 
 
-Let's 
+### 4. Cross Validation and Hyperparameter tuning
+
+The hyperparameters of the network are like the dials on our models which we can tune to improve the learning process. An analogy is using a microwave to heat up your food: you can change the power of the microwave, the time period of heating, whether the food turns inside the microwave etc. The model itself will decide for itself all the decisions of the tree but we can tune this to make better decisions. For example we could increase the number of trees in our forest, or the minimum number of passengers needed to perform a further split based on one of the features. 
+
+Cross validation is a way to choose between these models but in a way that prevents the model from overperforming on the training set and underperforming on the test. It does this by splitting our training data into a smaller training set and 'validation' set. The model trains on the training set but is scored on the validation set. We split up the whole training set *k* number of times to do this, so that the validation set is different each time, and calculate an average of the accuracy score of those *k* iterations. This is called cross-validation and it is much easier to visualise like this: 
+
+ <img src="/files/titanic_project/K-fold_cross_validation.svg" width="auto" height="300"> 
+
+The advantages of cross validation is that we can pick which model from hyperparameter tuning is best whilst knowing it won't overfit the data since the accuracy is scored on unseen data. Normally the test set is meant to represent unseen data so we do not want to improve our models on it otherwise we risk overfitting. This project is unusual in that the test data is actually from the same distribution (i.e. the same ship) 
+
 
