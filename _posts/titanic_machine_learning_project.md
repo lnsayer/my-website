@@ -513,12 +513,74 @@ A lot of work for 0.02 increase in accuracy score. Scoring with the newly engine
 
 ### 4. Cross Validation and Hyperparameter tuning
 
-The hyperparameters of the network are like the dials on our models which we can tune to improve the learning process. An analogy is using a microwave to heat up your food: you can change the power of the microwave, the time period of heating, whether the food turns inside the microwave etc. The model itself will decide for itself all the decisions of the tree but we can tune this to make better decisions. For example we could increase the number of trees in our forest, or the minimum number of passengers needed to perform a further split based on one of the features. 
+The hyperparameters of the network are like the dials on our models which we can tune to improve the learning process. An analogy is using a microwave to heat up your food: you can change the power of the microwave, the time period of heating, whether the food turns inside the microwave etc. The model will decide for itself all the decisions of the tree but we can tune this to make better decisions. For example, we could increase the number of trees in our forest, or the minimum number of passengers needed to perform a further split based on one of the features. 
 
-Cross validation is a way to choose between these models but in a way that prevents the model from overperforming on the training set and underperforming on the test. It does this by splitting our training data into a smaller training set and 'validation' set. The model trains on the training set but is scored on the validation set. We split up the whole training set *k* number of times to do this, so that the validation set is different each time, and calculate an average of the accuracy score of those *k* iterations. This is called cross-validation and it is much easier to visualise like this: 
+Cross validation is a way to choose between these models but in a way that prevents the model from overperforming on the training set and underperforming on the test. It does this by splitting our training data into a smaller training set and 'validation' set. The model trains on the training set but is scored on the validation set. We split up the whole training set *k* number of times to do this, so that the validation set is different each time, and calculate an average of the accuracy score of those *k* iterations. This is called k-folds cross-validation and it is much easier to visualise like this: 
 
  <img src="/files/titanic_project/K-fold_cross_validation.svg" width="auto" height="300"> 
 
-The advantages of cross validation is that we can pick which model from hyperparameter tuning is best whilst knowing it won't overfit the data since the accuracy is scored on unseen data. Normally the test set is meant to represent unseen data so we do not want to improve our models on it otherwise we risk overfitting. This project is unusual in that the test data is actually from the same distribution (i.e. the same ship) 
+The advantages of cross validation is that we can pick which model from hyperparameter tuning is best whilst knowing it won't overfit the data since the accuracy is scored on unseen data. Normally the test set is meant to represent unseen data so we do not want to improve our models on it otherwise we risk overfitting. This project is unusual in that the test data is actually from the same distribution (i.e. the same ship).
 
+Luckily Scikit-learn has some functions so that we can do this automatically with `GridSearchCV` and `RandomizedSearchCV`. `GridSearchCV` takes a dictionary of hyperparameters and exhaustively tries every single one to find the best cross validation score (which we will do with k-folds). `RandomizedSearchCV` also takes a dictionary of hyperparameters but randomly tries a pre-set number of different combinations. It has been shown that `RandomizedSearchCV` performs better with fewer iterations but that `GridSearchCV` will find the optimal hyperparameters given enough iterations. 
 
+``` python
+# Setup the random seed 
+np.random.seed(42)
+
+# # Random forest model discluding all the features below
+drop_columns_decks = ["Embarked", "Ticket", "Name", 'PassengerId']
+
+# Print which columns we are including 
+print(set(train_df.columns)-set(drop_columns_decks))
+
+# Grid of hyperparameters to sample from
+grid = {
+    'n_estimators': [100, 500, 1000],
+    'max_depth': [None, 10, 20, 40],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 4, 10],
+    'max_features': ['sqrt'],
+    'bootstrap': [True, False]
+}
+
+# Creating dataframes discluding the titles
+x_train_decks = prepare_dataframe(train_df, drop_columns_decks).drop(["Survived"], axis=1)
+y_train = new_train_df["Survived"]
+x_test_decks = prepare_dataframe(test_df, drop_columns_decks)
+
+# Instantiating the Random Forest Classifier
+clf = RandomForestClassifier(n_jobs = 1)
+
+# Setting up randomised search of hyperparameters (considers 10 combinations) with cross validation
+'''
+rs_clf_decks = RandomizedSearchCV(estimator = clf, param_distributions=grid,
+                       n_iter = 10, # number of models to try
+                       cv = 5, # Setting the test set as the validation set
+                       verbose =2 # Prints out information as it is running
+                       )
+'''
+
+# Setting up exhaustive grid search of hyperparameters (considers 288 combinations) with cross validation
+gs_clf_decks = GridSearchCV(estimator = clf, param_grid=grid,
+                       cv = 5, # Setting the test set as the validation set
+                       verbose =1 # Prints out information as it is running
+                       )
+
+# Fit the classifier
+gs_clf_decks.fit(x_train_decks, y_train);
+# Best parameters of the 10 iterations
+best_params_decks = gs_clf_decks.best_params_
+# Dataframe of the results of each hyperparameter combination
+cv_results_decks = gs_clf_decks.cv_results_
+```
+Initially we ran some randomised searches to find good general hyperparameters and then searched the space exhaustively. 
+
+These are our cross validated results: 
+
+| Model | Default hyperparameters | Best hyperparameters |
+| ------ | ----------- | ---|
+| Age imputed with median | 0.802 | 0.816 |
+| Age imputed with KNN    | 0.800 | 0.829 |
+| Age imputed with KNN along with test data  | 0.805 | 0.826 |
+
+As we can see the cross validated accuracy scores generally increase with the 
