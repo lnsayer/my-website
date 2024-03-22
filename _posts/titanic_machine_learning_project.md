@@ -430,15 +430,8 @@ print(train_df["Age"].isna().sum())
 
 ### 3. Quick Modelling to see feature importance
 
-We can quickly model the data using a Random forest classifier. Random forests are a good choice for several reasons:
-- They are accurate
-- They are less influenced by outliers
-- Less prone to overfitting by using enough trees
-- Automatically perform feature selection, both ignoring less useful features and handling features with colinearity well. If two features are strongly correlated then the tree will pick the feature with the most information gain, and this in turn will decrease further information gain from the other. Linear models like linear regression or logistic regression can have varying solutions with colinear variables. Although we did not investigate this explicity it is likely some of our features are colinear. For example Age and titles (e.g. Mr) or fare price and passenger class. We will see later how our feature importances change.
+To train our first model we have to split up the data into our features (all the independent variables such as age, sex columns etc.) and the target (the survived column). In this case we have imputed the data separately but we will change this later on.
 
-Random forests have a few drawbacks however: 
-
-  
 ```python
 # Setup the random seed
 np.random.seed(42)
@@ -447,21 +440,76 @@ np.random.seed(42)
 new_train_df = prepare_dataframe(train_df, drop_columns)
 new_test_df = prepare_dataframe(test_df, drop_columns)
 
-# First RandomForestClassifier 
-
 # Split up into feature variables and target variables
 x_train = new_train_df.drop(["Survived"], axis=1)
 y_train = new_train_df["Survived"]
-x_test = new_test_df
+```
 
+We can quickly model the data using a Random forest classifier, which aggregates the predictions of many decision trees (for example 100). A single decision tree looks like this: 
+
+<img src="/files/titanic_project/Decision_Tree.jpg" width="auto" height="450">  
+
+Random forests are a good choice for several reasons:
+- They are accurate
+- They are less influenced by outliers
+- Less prone to overfitting by using enough trees
+- Automatically perform feature selection, both ignoring less useful features and handling features with colinearity well. If two features are strongly correlated then the tree will pick the feature with the most information gain, and this in turn will decrease further information gain from the other. Linear models like linear regression or logistic regression can have varying solutions with colinear variables. Although we did not investigate this explicity it is likely some of our features are colinear. For example Age and titles (e.g. Mr) or fare price and passenger class. We will see later how our feature importances change.
+
+Random forests have a few drawbacks however: 
+- Although a single tree is easy to interpret, it is not so easy for a whole forest, particularly when using many trees
+- They are time consuming since each decision tree has to be trained or run to make a prediction
+
+  
+```python
 # Instantiate the classifier
-clf = RandomForestClassifier(n_estimators=100)
+clf = RandomForestClassifier()
 clf.fit(x_train, y_train)
 
 # Predictions of the training data
 y_preds = clf.predict(x_train)
 
 print(accuracy_score(y_preds, y_train))
-print(clf.get_params())
 ```
+```python
+0.9854096520763187
+```
+This is a very high accuracy score but is to be expected for the training set. Here we have used the default parameters which actually perform reasonably well. 
+
+We can visualise the feature importances of the model easily:
+```python
+# Gives the importance of different features of the model
+importance = clf.feature_importances_
+
+# Shortened columns to appear on one plot
+columns = x_train.columns
+
+# The importance of the different feautures according to the model
+importance_dictionary = {columns[i] : importance[i] for i in range(len(importance)) }
+importance
+
+keys = importance_dictionary.keys()
+values = importance_dictionary.values()
+
+# Plotting the feature importance
+plt.figure(figsize=(16, 6))
+plt.bar(keys, values)
+plt.xlabel('Features', size=14)
+plt.ylabel('Feature Importances', size=14)
+plt.xticks(rotation=45)
+plt.show()
+```
+ <img src="/files/titanic_project/default_clf_feature_importances.png" width="auto" height="450"> 
+
+We can see the feature selection at play with the random forest clearly prioritising features over others. As expected, some of the most important features were those we investigated at the start. Age, Fare, Title_Mr and Sex are the most important. Most of the decks are unimportant but Deck_U is more important than the rest which partially supports our theory that a missing deck may have been been caused by the death of a passenger. 
+
+**How is feature importance calculated?** Whenever a decision is made by the tree, we work out how well the decision splits the data into survived and died. This is done using the Gini index which measures this impurity (splitting up efficacy) based on the probabilities of the outcomes from a split. For example a perfect decision will split the data into survived and died perfectly, however the worst decision will split the data into a perfect mix (50/50). The feature_importances measures how much each attribute contributes to decreasing the impurity. 
+
+We will go into scoring the test set later but for now let's see how this model performs with the test set. For reference:
+- Submitting all dead gives a score of 0.622
+- Submitting based on gender (predicting male = dead, female = surived) gives an accuracy score of 0.766
+
+Originally I tested this classifier without the newly engineered columns and imputing the age with the median age. This gave a score of 0.768, only a slight improvement!
+A lot of work for 0.02 increase in accuracy score. Scoring with the newly engineered columns gives 0.746, a disappointing and confusing score considering we can do better with just the gender submission. 
+
+Let's 
 
