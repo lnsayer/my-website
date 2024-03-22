@@ -430,4 +430,38 @@ print(train_df["Age"].isna().sum())
 
 ### 3. Quick Modelling to see feature importance
 
+We can quickly model the data using a Random forest classifier. Random forests are a good choice for several reasons:
+- They are accurate
+- They are less influenced by outliers
+- Less prone to overfitting by using enough trees
+- Automatically perform feature selection, both ignoring less useful features and handling features with colinearity well. If two features are strongly correlated then the tree will pick the feature with the most information gain, and this in turn will decrease further information gain from the other. Linear models like linear regression or logistic regression can have varying solutions with colinear variables. Although we did not investigate this explicity it is likely some of our features are colinear. For example Age and titles (e.g. Mr) or fare price and passenger class. We will see later how our feature importances change.
+
+Random forests have a few drawbacks however: 
+
+  
+```python
+# Setup the random seed
+np.random.seed(42)
+
+# Prepare dataframes
+new_train_df = prepare_dataframe(train_df, drop_columns)
+new_test_df = prepare_dataframe(test_df, drop_columns)
+
+# First RandomForestClassifier 
+
+# Split up into feature variables and target variables
+x_train = new_train_df.drop(["Survived"], axis=1)
+y_train = new_train_df["Survived"]
+x_test = new_test_df
+
+# Instantiate the classifier
+clf = RandomForestClassifier(n_estimators=100)
+clf.fit(x_train, y_train)
+
+# Predictions of the training data
+y_preds = clf.predict(x_train)
+
+print(accuracy_score(y_preds, y_train))
+print(clf.get_params())
+```
 
