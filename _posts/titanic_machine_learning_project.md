@@ -617,6 +617,20 @@ plt.xticks(rotation=45)
 plt.show()
 ```
 
- <img src="/files/titanic_project/best_hyperparameters.png" width="auto" height="450">  
+ <img src="/files/titanic_project/best_hyperparameters.png" width="1010" height="auto">  
 
  <img src="/files/titanic_project/best_hyperparameter_feature_importances.png" width="auto" height="450">  
+
+ As you can see in the top image we have the best hyperparameters in a dictionary and the results are shown in a dataframe. It turns out the best hyperparameters are pretty similar to the default hyperparameters, only two hyperparameters were changed minimally, but this gives quite an improvement. We are also given the accuracy score for the test set of each of the five folds. The highest score (0.854) is 5.55% more accurate than the lowest score (0.809)! The cross validation modules in scikit-learn are pretty handy!
+
+It is also interesting to look at how the feature importances change by selecting the hyperparameters. For the default hyperparameters Age was the most important feature with a value of 0.21 but this decreases to 0.07 for the best hyperparameters and the Title_Mr becomes the most important feature with a value of 0.21. This shows how random forests can deal with colinear variables: they are good at selecting the most important features, and naturally other features encapsulating similar information (e.g. age) become less important. The fare price and sex which probably are not as strongly colinear to other variables remain important to both forests. 
+
+Another way in which we can compare our models is by using a ROC(Receiver Operator Characteristic Curve) and calculating the AUC (area under the curve). 
+These are ways in which we can visualise how the true positive rate and false negative rate are affected by changing the classification threshold of our predictions. 
+
+ <img src="/files/titanic_project/Binary_confusion_matrix.png" width="auto" height="150">  
+ 
+When we pass a passenger's information through our models, the model returns a number between 0 and 1 which indicates how likely it thinks the passenger has survived. The classification threshold is a number which determines whether the model then predicts the passenger as surviving or not. For example, if the classification threshold is 0.5 then a passenger with a predicted probability of 0.4 would be predicted as having died and passenger with a predicted probability of 0.6 would be predicted as having survived. 
+
+Ideally we want the true positive rate to be as high as 
+
