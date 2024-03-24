@@ -583,4 +583,40 @@ These are our cross validated results:
 | Age imputed with KNN    | 0.800 | 0.829 |
 | Age imputed with KNN along with test data  | 0.805 | 0.826 |
 
-As we can see the cross validated accuracy scores generally increase with the 
+As we can see the cross validated accuracy scores improves with using the KNN imputation technique. Imputing with the test set data appears to give very similar results to imputing with just the training set. However, when evaluating model on the test set this is almost certainly going to give an advantage, as we will see later. As mentioned before, normally imputing with the test set data is a crime on data but since we are making predictions on the same distribution (i.e. the same ship) we are fitting better to the required distribution. 
+
+We can see the best hyperparameters, results for all the hyperparameter combinations and feature importance of the best performing classifier like so: 
+```python
+# Results of the cross validation
+print(best_params_decks)
+print(cv_results_decks["mean_test_score"].mean())
+
+# Dataframe results of the 10 iterations
+cv_results_decks_df = pd.DataFrame(cv_results_decks)
+display(cv_results_decks_df)
+
+importance = clf_decks.best_estimator_.feature_importances_
+
+# Custom columns to fit in the plot (previous labels too long)
+columns = x_train_decks.columns
+
+# Feature importances according to the classifier
+importance_dictionary = {columns[i] : importance[i] for i in range(len(importance)) }
+importance
+
+keys = importance_dictionary.keys()
+values = importance_dictionary.values()
+
+# Plot the feature importance
+plt.figure(figsize=(17, 6))
+plt.bar(keys, values)
+plt.xlabel('Features', size=12)
+plt.ylabel('Feature Importances', size=12)
+plt.title('Feature importance', size=12)
+plt.xticks(rotation=45)
+plt.show()
+```
+
+ <img src="/files/titanic_project/best_hyperparameters.png" width="auto" height="450">  
+
+ <img src="/files/titanic_project/best_hyperparameter_feature_importances.png" width="auto" height="450">  
