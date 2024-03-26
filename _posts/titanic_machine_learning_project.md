@@ -632,5 +632,8 @@ These are ways in which we can visualise how the true positive rate and false ne
  
 When we pass a passenger's information through our models, the model returns a number between 0 and 1 which indicates how likely it thinks the passenger has survived. The classification threshold is a number which determines whether the model then predicts the passenger as surviving or not. For example, if the classification threshold is 0.5 then a passenger with a predicted probability of 0.4 would be predicted as having died and passenger with a predicted probability of 0.6 would be predicted as having survived. 
 
-Ideally we want the true positive rate to be as high as 
+Ideally we want the true positive (TP) rate to be as high as possible and the false positive (FP) rate to be as low as possible. There is a trade off between these however, since decreasing the classification threshold lead to all the actual positive values being predicted correctly (1) but all the actual negative values being predicted incorrectly. An ROC curve shows the TP and FP rates for different classification thresholds and we can compare models this way:
 
+ <img src="/files/titanic_project/ideal_roc_curve.png" width="auto" height="450">   
+
+The area under the curve (AOC) indicates the quality of the model and a perfect model will have a score of 1. 
