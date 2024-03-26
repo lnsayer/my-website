@@ -636,4 +636,84 @@ Ideally we want the true positive (TP) rate to be as high as possible and the fa
 
  <img src="/files/titanic_project/ideal_roc_curve.png" width="auto" height="450">   
 
-The area under the curve (AOC) indicates the quality of the model and a perfect model will have a score of 1. 
+The area under the curve (AOC) indicates the quality of the model and a perfect model will have a score of 1 while a random model will have a score of 0.5. Since we do not know the true values of the test set I decided to use the validation sets to evaluate upon. However the Scikit-Learn cross_val function does not give us the probability scores of each of its 5 folds so I created a function to perform basic cross-validation with k-folds: 
+
+```python
+# Setup random seed
+np.random.seed(42)
+
+# Function to divide a dataframe into validation and training sets with cross validation (k-folds). Returns the desired fold  
+def cross_val_index(k_folds, dataframe, fold_number):
+    dataframe.sample(frac=1)
+    x_dataframe = dataframe.drop(["Survived"], axis=1)
+    y_dataframe = dataframe["Survived"]
+    
+    index = round(len(x_dataframe)/k_folds)
+    start_index, end_index = [], []
+    for i in range(k_folds):
+                start_index.append(i * index)
+                end_index.append((i + 1) * index if i < k_folds - 1 else len(x_dataframe))
+    print(start_index[fold_number-1], end_index[fold_number-1])
+    X_train = pd.concat([x_dataframe[:start_index[fold_number-1]], x_dataframe[end_index[fold_number-1]:]])
+    y_train = pd.concat([y_dataframe[:start_index[fold_number-1]], y_dataframe[end_index[fold_number-1]:]])
+    X_valid = x_dataframe[start_index[fold_number-1]:end_index[fold_number-1]]
+    y_valid = y_dataframe[start_index[fold_number-1]:end_index[fold_number-1]]
+    print(len(X_valid), len(y_valid))
+    
+    return X_train, y_train, X_valid, y_valid
+```
+We can split up the data with as many ```k-folds``` as desired and can ask for any of folds of the training and validation sets of a dataset with the parameter ```fold_number```. 
+
+Then we can train the best model and worst model on the respective training set and predict on the validation set. 
+
+```python
+# Columns to drop
+drop_columns = ["Embarked", "Ticket", "Name", "PassengerId"]
+
+# Setting up validation dataframes
+new_train_df = prepare_dataframe(train_df, drop_columns)
+
+# Calling the function to get the folded dataframes
+cross_val_dataframes = cross_val_index(5, new_train_df, 5)
+
+# Calculating the probabilities of prediction with the best RandomForestClassifier
+best_clf = RandomForestClassifier( **{'bootstrap': True, 'max_depth': 10, 'max_features': 'sqrt',
+                                      'min_samples_leaf': 4, 'min_samples_split': 2, 'n_estimators': 100})
+best_clf.fit(cross_val_dataframes[0], cross_val_dataframes[1])
+best_y_valid_preds = best_clf.predict(cross_val_dataframes[2])
+best_y_valids_proba = best_clf.predict_proba(cross_val_dataframes[2])
+best_y_valids_proba_pos = best_y_valids_proba[:, 1]
+print(accuracy_score(best_y_valid_preds, cross_val_dataframes[3]))
+
+# Calculating the probabilities of prediction with the worst RandomForestClassifier
+worst_clf = RandomForestClassifier( **{'n_estimators': 500, 'min_samples_split': 2, 'min_samples_leaf': 1, 'max_features': 'sqrt', 'max_depth': 40, 'bootstrap': False})
+worst_clf.fit(cross_val_dataframes[0], cross_val_dataframes[1])
+worst_y_valid_preds = worst_clf.predict(cross_val_dataframes[2])
+worst_y_valids_proba = worst_clf.predict_proba(cross_val_dataframes[2])
+worst_y_valids_proba_pos = worst_y_valids_proba[:, 1]
+print(accuracy_score(worst_y_valid_preds, cross_val_dataframes[3]))
+
+# Calculating the rates and thresholds for the two classifiers
+best_fpr, best_tpr, best_thresholds = roc_curve(cross_val_dataframes[3].values, best_y_valids_proba_pos)
+worst_fpr, worst_tpr, worst_thresholds = roc_curve(cross_val_dataframes[3].values, worst_y_valids_proba_pos)
+
+print(roc_auc_score(cross_val_dataframes[3].values, best_y_valids_proba_pos))
+print(roc_auc_score(cross_val_dataframes[3].values, worst_y_valids_proba_pos))
+```
+The best model gives an accuracy score of 0.85 and the worst model gives a score of 0.81. I am unsure as to why these are higher than Scikit-Learn's own cross validation, I am shuffling the data. Let me know if you can see why. The area under the curve for the best model is 0.92 and for the worst model it is 0.88. The true positive rates and false positive rates are calculated for various classification thresholds and we can plot these for each respective model. 
+
+```python
+# Plotting the ROC curves fo rhte best and worst classifiers 
+plt.figure(figsize=(6,4))
+plt.plot(best_fpr, best_tpr, color='orange', label='Best model')
+plt.plot(worst_fpr, worst_tpr, color='green', label='Worst model')
+plt.xlabel('False positive rate (fpr)', size=12)
+plt.ylabel('True positive rate (tpr)', size=12)
+plt.title('Receiver Operating Characteristic (ROC) curve')
+plt.legend()
+plt.show()
+```
+ <img src="/files/titanic_project/roc_curve_best_and_worst_rf_classifier.png" width="auto" height="450">  
+
+
+The true positive rates and false positive rates are calculated for various classification thresholds and we can plot these for both the best and worst model. 
