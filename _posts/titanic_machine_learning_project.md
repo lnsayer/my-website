@@ -11,7 +11,7 @@ This notebook also serves as a guide for people new to machine learning. Please 
 2. Data cleaning, feature selection and engineering
 3. Quick Modelling to see feature importance
 4. Cross Validation and Hyperparameter tuning
-5. Testing different classifiers
+5. Testing different classifiers and submitting a prediction
 
 First a little history. RMS (Royal Mail Ship) Titanic was the largest ocean liner in 1912 when she famously sank 370 miles off the coast of Newfoundland, after hitting an iceberg. Out of the 2,200 people onboard, more than 1,500 are estimated to have died in the disaster. Survival rates were starkly different between different passengers, with age, passenger class and sex playing key factors. 
 
@@ -715,5 +715,94 @@ plt.show()
 ```
  <img src="/files/titanic_project/roc_curve_best_and_worst_rf_classifier.png" width="auto" height="450">  
 
+As we can see, the best model is almost always above the worst model, particularly for a false positive rate at around 0.2 Visualising the ROC and using the AUC as a metric is important for two reasons:
+- They are scale-invariant: they measure how well predictions are ranked, rather than their absolute values
+- They are classification-threshold-invariant: They measure the quality of a model's predictions irrespective of what classification is chosen.
+It is good to see that our grid search is finding better hyperparameters and therefore better models.
 
-The true positive rates and false positive rates are calculated for various classification thresholds and we can plot these for both the best and worst model. 
+### 5. Testing different classifiers
+
+Although I was happy with my results using the Random Forest Classifier, I also hyperparameter tuned a Logistic Regression classifier. Luckily for us, Scikit-Learn's models are called, tuned and fitted in very similar ways so it only required looking at which hyperparameters we wanted to tune. I will not go into the detail of this but will show the process for hyperparameter tuning which is almost exactly the same as for the Random Forest:
+
+```python
+# Setup random seed 
+np.random.seed(42)
+
+# Discluding these features
+drop_columns_decks = ["Embarked", "Ticket", "Name", "PassengerId"]
+
+# Logistic regression hyperparameters to sample from 
+log_grid = {
+    'penalty': ['l1', 'l2'],
+    'C': [0.5, 1, 2, 3],
+    'solver': ['liblinear'],
+    'class_weight': [None, 'balanced'],
+    'max_iter': [2000, 4000],
+    'tol': [0.0001, 0.001, 0.01],
+    'multi_class': ['ovr']
+}
+
+# Creating dataframes
+x_train_decks = prepare_dataframe(train_df, drop_columns_decks).drop(["Survived"], axis=1)
+y_train = prepare_dataframe(train_df, drop_columns_decks)['Survived']
+x_test_decks = prepare_dataframe(test_df, drop_columns_decks)
+
+# Instantiating the Logistic regression classifier
+log_clf = LogisticRegression()
+
+# Setting up randomised search of hyperparameters (considers 10 combinations) with cross validation
+gs_log_clf_decks = GridSearchCV(estimator = log_clf, param_grid=log_grid,
+                       cv = 5, # Setting the test set as the validation set
+                       verbose =1 # Prints out information as it is running
+                       )
+```
+The main differences are the hyperparameters, which are completely different. It is a *generalised* linear model and uses an algorithm in its optimisation, in our case we have chosen 'liblinear' which works well for small datasets. 
+
+We found the optimal hyperparameters in exactly the same way with GridSearchCV and we were then able to submit some predictions!
+
+I initially used the Random Forest Classifier to make our predictions and found that imputing the data altogether gave a better accuracy score: 
+```python
+# Dropping only unnecessary columns
+drop_columns = ["Embarked", "Ticket", "Name", "PassengerId"]
+
+# Preparing dataframes with combined imputing
+new_train_df = prepare_dataframe(combined_df, drop_columns)
+x_train = new_train_df.drop(["Survived"], axis=1)[:891]
+y_train = new_train_df["Survived"][:891]
+x_test = new_train_df.drop(["Survived"], axis=1)[891:]
+
+# Instantiate Random Forest Classifier with best hyperparameters
+best_clf = RandomForestClassifier( **{'bootstrap': True, 'max_depth': 10, 'max_features': 'sqrt',
+                                      'min_samples_leaf': 4, 'min_samples_split': 2, 'n_estimators': 100})
+
+# Fit the classifier and make predictions
+best_clf.fit(x_train, y_train)
+best_y_preds = best_clf.predict(x_test).astype(int)
+
+# Create a csv file with the predictions
+output = gender_submission.copy(deep=True)
+output['Survived']=best_y_preds
+print(output)
+output.to_csv('submission.csv', index=False)
+print("Your submission was successfully saved!")
+```
+The result:
+```python
+PassengerId  Survived
+0            892         0
+1            893         0
+2            894         0
+3            895         0
+4            896         1
+..           ...       ...
+413         1305         0
+414         1306         1
+415         1307         0
+416         1308         0
+417         1309         1
+
+[418 rows x 2 columns]
+Your submission was successfully saved!
+```
+This saves the submission file to our ```/kaggle/working``` directory where we can download our submission file in csv format and submit on the Titanic Machine Learning page. 
+
