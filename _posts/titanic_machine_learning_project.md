@@ -632,10 +632,17 @@ plt.show()
 
 It is also interesting to look at how the feature importances change by selecting the hyperparameters. For the default hyperparameters Age was the most important feature with a value of 0.21 but this decreases to 0.07 for the best hyperparameters and the Title_Mr becomes the most important feature with a value of 0.21. This shows how random forests can deal with colinear variables: they are good at selecting the most important features, and naturally other features encapsulating similar information (e.g. age) become less important. The fare price and sex which probably are not as strongly colinear to other variables remain important to both forests. 
 
+We can compare different metrics for our models as well. Accuracy is the proportion of correct identifications but we can also look at precision or recall. Firstly it is useful to understand the four categories our predictions can fall into:
+
+ <img src="/files/titanic_project/ConfusionMatrixRedBlue.png" width="auto" height="200">
+
+Accuracy is given by $$\frac{TP+FP}{TP+FP+TN+FN}$$
+
+which is the most important metric for our project since the submission score uses accuracy. However, we may be interested in how well our models fair for different predictions types. For example, if we had a model predicting the presence of cancer we would want to minimise the number of false negatives as missing a true case of cancer is really dangerous. This comes at the expense of predicting a lot of false positives but it is worth it. For youtube recommendations false negatives are not so important (you can afford to not recommend really great videos) because you want to minimise the number of false positives (recommending bad videos will bore someone). 
+
 Another way in which we can compare our models is by using a ROC(Receiver Operator Characteristic Curve) and calculating the AUC (area under the curve). 
 These are ways in which we can visualise how the true positive rate and false negative rate are affected by changing the classification threshold of our predictions. 
-
- <img src="/files/titanic_project/Binary_confusion_matrix.png" width="auto" height="150">  
+  
  
 When we pass a passenger's information through our models, the model returns a number between 0 and 1 which indicates how likely it thinks the passenger has survived. The classification threshold is a number which determines whether the model then predicts the passenger as surviving or not. For example, if the classification threshold is 0.5 then a passenger with a predicted probability of 0.4 would be predicted as having died and passenger with a predicted probability of 0.6 would be predicted as having survived. 
 
