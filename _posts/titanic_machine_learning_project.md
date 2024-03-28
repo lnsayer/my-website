@@ -65,7 +65,7 @@ train_df = pd.DataFrame(train_data)
 test_df = pd.DataFrame(test_data)
 combined_df = pd.concat([train_df,test_df], ignore_index=True)
 
-# Set how many rows are set in the dataframe
+# Set how many rows are shown in the dataframe
 pd.set_option('display.min_rows', 10) 
 pd.set_option('display.max_rows', 10) 
 
@@ -77,7 +77,7 @@ display(combined_df)
 We've got 12 columns with 10 usable features. 
 - PassengerId is an index
 - The Survived is 1 if they survived or 0 if they died
-- The PClass columnn shows the passenger class (1st, 2nd or 3rd)
+- The PClass column shows the passenger class (1st, 2nd or 3rd)
 - The name column gives their full name and title
 - Sex is either male or female
 - Age in years
@@ -89,6 +89,10 @@ We've got 12 columns with 10 usable features.
 - Embarked gives their port of departure: S: Southampton, C: Cherbourg, Q: Queenstown
 
 Let's look at the data types and what we are missing:
+
+```python
+combined_df.info()
+```
 
 ```python
 <class 'pandas.core.frame.DataFrame'>
@@ -110,7 +114,7 @@ Data columns (total 12 columns):
  11  Embarked     1307 non-null   object 
 dtypes: float64(3), int64(4), object(5)
 ```
-We mostly have integers and strings, with some objects which are strings. We are missing data in the Age (263), Cabin (1014), Fare (1) and Embarked (2) columns. We will have to do some imputation (filling in missing values) and encoding (converting the strings to numerical data which the models can handle).
+We mostly have integers and objects, which are strings. We are missing data in the Age (263), Cabin (1014), Fare (1) and Embarked (2) columns. We will have to do some imputation (filling in missing values) and encoding (converting the strings to numerical data which the models can handle).
 
 Since we have combined the training and test set into one dataframe we can see all the missing data, e.g. if we had only looked at the training set we would miss the missing fare entry in the test set. Normally we want to impute the training and test set separately since our test set represents future data we want to predict. However, as this is the same ship with the same distribution it is okay to impute altogether. It also makes our life easier to do so. 
 
@@ -204,6 +208,9 @@ ax.set_xlabel("Passenger Class", size =14)
 ax.set_ylabel("Number of people", size =14) 
 ax.legend(["Survived", "Died"], fontsize =12)
 ```
+
+Note, I have since realised you can compare different feautures by plotting directly with the dataframe using Crosstab which is a lot easier, e.g. crosstab = pd.crosstab(train_df.Surived, df.PClass) then plot = crosstab.plot(kind='bar', rot = 0, figsize=(10,6) )
+
 <img src="/files/titanic_project/survival_rate_passenger_class.png" width="auto" height="450">  
 
 Again, better passenger class corresponds to a higher chance of survival. On the Titanic, you can put a price on life.
@@ -211,7 +218,7 @@ Again, better passenger class corresponds to a higher chance of survival. On the
 ### 2. Data cleaning, feature selection and engineering
 
 Now let's try and make some other features useful and even create a new feature. 
-First we will extract all the titles of the passengers. These might be useful since it can explicity tell the model the age and sex of a passenger, as well as their marital status. This code makes a new column 'Title' which returns the string following a comma and space and then a full stop e.g. for `, Mr.` it returns `Mr`. We can see how many entries have each title with `value_counts`. 
+First, we will extract all the titles of the passengers. These might be useful since it can explicity tell the model the age and sex of a passenger, as well as their marital status. This code makes a new column 'Title' which returns the string following a comma and space and then a full stop e.g. for `, Mr.` it returns `Mr`. We can see how many of the original entries have each title with `value_counts`. 
 
 ```python
 pd.set_option("display.max_rows", None)
@@ -243,7 +250,7 @@ Don               1
 Jonkheer          1
 Name: count, dtype: int64
 ```
-We can see there are several unusual titles, let's transfer them to some of the more common titles with this function which can appply it to any dataframe:
+We can see there are several unusual titles, let's transfer them to some of the more common titles with this function:
 
 ```python
 # Function to allocate uncommon titles to broader title categories
@@ -263,7 +270,7 @@ def replace_titles(x):
     else:
         return title
 ```
-In hindsight we could have considered putting these in a special column but for now we will leave it. Next we are going to extract the deck of their cabin with another function: 
+In hindsight, we could have considered putting these in a special column but for now we will leave it. Next we will extract the deck of the passenger cabins with another function: 
 ```python
 # Function to replace the cabin code with their deck section, denoted by a letter
 def replace_cabin(x):
@@ -804,5 +811,10 @@ PassengerId  Survived
 [418 rows x 2 columns]
 Your submission was successfully saved!
 ```
-This saves the submission file to our ```/kaggle/working``` directory where we can download our submission file in csv format and submit on the Titanic Machine Learning page. 
+This saves the submission file to our ```/kaggle/working``` directory where we can download our submission file in csv format and submit on the Titanic Machine Learning page. These were my best scores:
+
+| Model | Default hyperparameters | Best hyperparameters |
+| ------ | ----------- | ---|
+| Age imputed with KNN along with test data  | 0.775 | 0.792 |
+| Logistic Regression | 0.773 | 0.775 |
 
