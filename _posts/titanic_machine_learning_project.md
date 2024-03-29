@@ -630,29 +630,31 @@ plt.show()
 
  As you can see in the top image we have the best hyperparameters in a dictionary and the results are shown in a dataframe. It turns out the best hyperparameters are pretty similar to the default hyperparameters, only two hyperparameters were changed minimally, but this gives quite an improvement. We are also given the accuracy score for the test set of each of the five folds. The highest score (0.854) is 5.55% more accurate than the lowest score (0.809)! The cross validation modules in scikit-learn are pretty handy!
 
-It is also interesting to look at how the feature importances change by selecting the hyperparameters. For the default hyperparameters Age was the most important feature with a value of 0.21 but this decreases to 0.07 for the best hyperparameters and the Title_Mr becomes the most important feature with a value of 0.21. This shows how random forests can deal with colinear variables: they are good at selecting the most important features, and naturally other features encapsulating similar information (e.g. age) become less important. The fare price and sex which probably are not as strongly colinear to other variables remain important to both forests. 
+It is also interesting to look at how the feature importances change by selecting the hyperparameters. For the default hyperparameters Age was the most important feature with a value of 0.21 but this decreases to 0.07 for the best hyperparameters and the Title_Mr becomes the most important feature with a value of 0.21. This shows how random forests can deal with colinear variables: they are good at selecting the most important features, and naturally other features encapsulating similar information (e.g. Age) become less important. The Fare and Sex which probably are not as strongly colinear to other variables remain important to both forests. 
 
-We can compare different metrics for our models as well. Accuracy is the proportion of correct identifications but we can also look at precision or recall. Firstly it is useful to understand the four categories our predictions can fall into:
+### Metrics 
+
+We can compare different metrics for our models as well. Accuracy is very important since it's the proportion of correct identifications but we can also look at precision or recall. Firstly it is useful to understand the four categories our predictions can fall into:
 
  <img src="/files/titanic_project/ConfusionMatrixRedBlue.png" width="auto" height="200">
 
 Accuracy is given by 
 
-$$ Accuracy = \frac{TP+FP}{TP+FP+TN+FN}$$
+$$ Accuracy = \frac{TP+TN}{TP+FP+TN+FN}$$
 
 which is the most important metric for our project since the submission score uses accuracy. However, we may be interested in how well our models fair with different metrics. 
 
-Two other important metrics in machine learning are precision and recall, which are important in different scenarios. Precision indicates the proportion of positive identifications which were actually correct:
+Two other important metrics in machine learning are precision and recall, which are important in different scenarios. Precision indicates the proportion of positive predictions which were actually correct:
 
 $$Precision = \frac{TP}{TP+FP}$$
 
-Precision is important when you want to minimise the number of false positives. For example, a Youtube recommendation algorithm would want to minimise the number of bad videos recommended (false positives).
+Precision is important when you want to minimise the number of false positives or maximise the number of true positives. For example, a Youtube recommendation algorithm would want to minimise the number of bad videos recommended (false positives) and maximise the recommendation very good videos (true positives).
 
 Recall on the other hand is defined as: 
 
 $$Recall = \frac{TP}{TP+FN}$$
 
-Recall is important when you want to minimise the number of false negatives. For example, a rare cancer screening model would want to minimise the number of true cancer cases it categorises as negative (false negatives). Missing a cancer case could prove lethal for the patient. 
+Recall is important when you want to minimise the number of false negatives and maximise the true negatives. For example, a rare cancer screening model would want to minimise the number of true cancer cases it categorises as negative (false negatives). Missing a cancer case could prove lethal for the patient. 
 
 Luckily for us, SciKit-Learn has an in-built function for calculating these metrics, along with some others which we will leave for now. We cannot evaluate these metrics for the test set since we do not know their actual values. I wanted to use the validation sets from the GridSearchCV but I could not access the individual predictions, therefore I made my own cross-validation function:
 
@@ -736,7 +738,7 @@ Worst model report:
    macro avg       0.80      0.80      0.80       179
 weighted avg       0.81      0.82      0.81       179
 ```
-
+The accuracy for the best model is 0.85, 0.03 higher than the worst model with an accuracy of 0.82. The precision and recall are quite evenly matched, which is fine since we have no preference over the other for this project. However, the metrics are higher for the negative case (i.e. when a passenger died) than the positive case (i.e. when a passenger survived). This shows the model may be a little biased towards the negative case (with higher observations) and treating the survived case more as noise. Precision and recall are more important when there are higher benefits or costs to one of the classification types. 
 
 Another way in which we can compare our models is by using a ROC(Receiver Operator Characteristic Curve) and calculating the AUC (area under the curve). 
 These are ways in which we can visualise how the true positive rate and false negative rate are affected by changing the classification threshold of our predictions. 
@@ -748,7 +750,7 @@ Ideally we want the true positive (TP) rate to be as high as possible and the fa
  <img src="/files/titanic_project/ideal_roc_curve.png" width="auto" height="450">   
 
 The area under the curve (AOC) indicates the quality of the model and a perfect model will have a score of 1 while a random model will have a score of 0.5.
-
+```python
 # Calculating the rates and thresholds for the two classifiers
 best_fpr, best_tpr, best_thresholds = roc_curve(cross_val_dataframes[3].values, best_y_valids_proba_pos)
 worst_fpr, worst_tpr, worst_thresholds = roc_curve(cross_val_dataframes[3].values, worst_y_valids_proba_pos)
