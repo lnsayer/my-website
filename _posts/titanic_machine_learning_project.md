@@ -880,4 +880,8 @@ This saves the submission file to our ```/kaggle/working``` directory where we c
 | Logistic Regression | 0.773 | 0.775 |
 
 
-The highest score was 0.792, which I was happy with. I think 
+The highest score was 0.792, which I was happy with. There were, however, several areas I could have explored to try to improve my score:
+- Impute the missing ages with 0. A friend mentioned this to me after discussing the dataset and it could have informed the network about the missing data. Or even impute the data but keep a binary column indicating whether the value had been imputed or not.
+- I did not use the ticket feature at all, perhaps this could have been useful after performing some feature engineering.
+- I should have left the Deck column as the class categories and not one-hot encoded it since this only made the dataset more sparse.
+- My workflow of the project could have been improved, I should have spent more time at the beginning performing the EDA since this would have saved time from not implementing features and scoring often. 
