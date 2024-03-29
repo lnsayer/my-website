@@ -634,7 +634,7 @@ It is also interesting to look at how the feature importances change by selectin
 
 ### Metrics 
 
-We can compare different metrics for our models as well. Accuracy is very important since it's the proportion of correct identifications but we can also look at precision or recall. Firstly it is useful to understand the four categories our predictions can fall into:
+We can compare different metrics for our models as well. Accuracy is very important since it is the proportion of correct identifications but we can also look at precision or recall. Firstly, it is useful to understand the four categories our predictions can fall into:
 
  <img src="/files/titanic_project/ConfusionMatrixRedBlue.png" width="auto" height="200">
 
@@ -648,15 +648,15 @@ Two other important metrics in machine learning are precision and recall, which 
 
 $$Precision = \frac{TP}{TP+FP}$$
 
-Precision is important when you want to minimise the number of false positives or maximise the number of true positives. For example, a Youtube recommendation algorithm would want to minimise the number of bad videos recommended (false positives) and maximise the recommendation very good videos (true positives).
+Precision is important when you want to minimise the number of false positives or maximise the number of true positives. For example, a Youtube recommendation algorithm would want to minimise the number of bad videos recommended (false positives) and maximise the recommendation of very good videos (true positives).
 
 Recall on the other hand is defined as: 
 
 $$Recall = \frac{TP}{TP+FN}$$
 
-Recall is important when you want to minimise the number of false negatives and maximise the true negatives. For example, a rare cancer screening model would want to minimise the number of true cancer cases it categorises as negative (false negatives). Missing a cancer case could prove lethal for the patient. 
+Recall is important when you want to minimise the number of false negatives or maximise the number of true negatives. For example, a rare cancer screening model would want to minimise the number of true cancer cases it categorises as negative (false negatives). Missing a cancer case could prove lethal for the patient. We would really want to be sure the patient does not have cancer if we were to predict negative. This is at the expense of increasing the number of false positives but the cost of life is higher than the cost of a second cancer screening.
 
-Luckily for us, SciKit-Learn has an in-built function for calculating these metrics, along with some others which we will leave for now. We cannot evaluate these metrics for the test set since we do not know their actual values. I wanted to use the validation sets from the GridSearchCV but I could not access the individual predictions, therefore I made my own cross-validation function:
+Luckily for us, SciKit-Learn has an in-built function for calculating these metrics (along with some others). We cannot evaluate these metrics for the test set since we do not know their actual values. I wanted to use the validation sets from the GridSearchCV but I could not access the individual predictions, therefore I made my own cross-validation function:
 
 ```python
 # Setup random seed
@@ -683,7 +683,7 @@ def cross_val_index(k_folds, dataframe, fold_number):
 ```
 We can split up the data with as many ```k-folds``` as desired and can ask for any of folds of the training and validation sets of a dataset with the parameter ```fold_number```. 
 
-Then we can train the best model and worst model on the respective training set and predict on the validation set. 
+Then we can train the best model and worst model (from the random forest hyperparameter tuning) on the respective training set and predict on the validation set. 
 
 ```python
 # Columns to drop
@@ -738,18 +738,22 @@ Worst model report:
    macro avg       0.80      0.80      0.80       179
 weighted avg       0.81      0.82      0.81       179
 ```
-The accuracy for the best model is 0.85, 0.03 higher than the worst model with an accuracy of 0.82. The precision and recall are quite evenly matched, which is fine since we have no preference over the other for this project. However, the metrics are higher for the negative case (i.e. when a passenger died) than the positive case (i.e. when a passenger survived). This shows the model may be a little biased towards the negative case (with higher observations) and treating the survived case more as noise. Precision and recall are more important when there are higher benefits or costs to one of the classification types. 
+For now ignore the f1-score, macro avg and weighted avg. We will focus on the accuracy, precision and recall scores. The accuracy for the best model is 0.85, 0.03 higher than the worst model with an accuracy of 0.82. I am unsure as to why these are higher than Scikit-Learn's own cross validation, I am shuffling the data. Let me know if you can see why.
 
-Another way in which we can compare our models is by using a ROC(Receiver Operator Characteristic Curve) and calculating the AUC (area under the curve). 
+The precision and recall are quite evenly matched, which is fine since we have no preference over the other for this project. However, the metrics are higher for the negative case (i.e. when a passenger died) than the positive case (i.e. when a passenger survived). This shows the model may be a little biased towards the negative cases (with higher observations) and treating the survived cases more as noise. Precision and recall are more important when there are higher benefits or costs to one of the classification types. 
+
+### ROC curves and the AUC
+
+Another way in which we can compare our models is by using a ROC (Receiver Operator Characteristic Curve) and calculating the AUC (area under the curve). 
 These are ways in which we can visualise how the true positive rate and false negative rate are affected by changing the classification threshold of our predictions. 
  
 When we pass a passenger's information through our models, the model returns a number between 0 and 1 which indicates how likely it thinks the passenger has survived. The classification threshold is a number which determines whether the model then predicts the passenger as surviving or not. For example, if the classification threshold is 0.5 then a passenger with a predicted probability of 0.4 would be predicted as having died and passenger with a predicted probability of 0.6 would be predicted as having survived. 
 
-Ideally we want the true positive (TP) rate to be as high as possible and the false positive (FP) rate to be as low as possible. There is a trade off between these however, since decreasing the classification threshold lead to all the actual positive values being predicted correctly (1) but all the actual negative values being predicted incorrectly. An ROC curve shows the TP and FP rates for different classification thresholds and we can compare models this way:
+Ideally we want the true positive rate to be as high as possible and the false positive rate to be as low as possible. There is a trade off between these however, e.g. decreasing the classification threshold leads to all the actual positive values being predicted correctly but all the actual negative values being predicted incorrectly. An ROC curve shows the TP and FP rates for different classification thresholds and we can compare models this way:
 
  <img src="/files/titanic_project/ideal_roc_curve.png" width="auto" height="450">   
 
-The area under the curve (AOC) indicates the quality of the model and a perfect model will have a score of 1 while a random model will have a score of 0.5.
+The area under the curve (AUC) indicates the quality of the model and a perfect model will have a score of 1 while a random model will have a score of 0.5. Let's calculate our prediction probabilities and the area under the curve: 
 ```python
 # Calculating the rates and thresholds for the two classifiers
 best_fpr, best_tpr, best_thresholds = roc_curve(cross_val_dataframes[3].values, best_y_valids_proba_pos)
@@ -758,10 +762,14 @@ worst_fpr, worst_tpr, worst_thresholds = roc_curve(cross_val_dataframes[3].value
 print(roc_auc_score(cross_val_dataframes[3].values, best_y_valids_proba_pos))
 print(roc_auc_score(cross_val_dataframes[3].values, worst_y_valids_proba_pos))
 ```
-The best model gives an accuracy score of 0.85 and the worst model gives a score of 0.81. I am unsure as to why these are higher than Scikit-Learn's own cross validation, I am shuffling the data. Let me know if you can see why. The area under the curve for the best model is 0.92 and for the worst model it is 0.88. The true positive rates and false positive rates are calculated for various classification thresholds and we can plot these for each respective model. 
+```python
+0.9203125000000001
+0.8805027173913044
+```
+The area under the curve for the best model is 0.92 and for the worst model it is 0.88. The true positive rates and false positive rates are calculated for various classification thresholds and we can plot these for each respective model:
 
 ```python
-# Plotting the ROC curves fo rhte best and worst classifiers 
+# Plotting the ROC curves for the best and worst classifiers 
 plt.figure(figsize=(6,4))
 plt.plot(best_fpr, best_tpr, color='orange', label='Best model')
 plt.plot(worst_fpr, worst_tpr, color='green', label='Worst model')
@@ -773,14 +781,14 @@ plt.show()
 ```
  <img src="/files/titanic_project/roc_curve_best_and_worst_rf_classifier.png" width="auto" height="450">  
 
-As we can see, the best model is almost always above the worst model, particularly for a false positive rate at around 0.2 Visualising the ROC and using the AUC as a metric is important for two reasons:
+As we can see, the best model is almost always above the worst model, particularly for a false positive rate at around 0.2. Visualising the ROC and using the AUC as a metric is important for two reasons:
 - They are scale-invariant: they measure how well predictions are ranked, rather than their absolute values
 - They are classification-threshold-invariant: They measure the quality of a model's predictions irrespective of what classification is chosen.
 It is good to see that our grid search is finding better hyperparameters and therefore better models.
 
-### 5. Testing different classifiers
+### 5. Testing different classifiers and submitting predictions
 
-Although I was happy with my results using the Random Forest Classifier, I also hyperparameter tuned a Logistic Regression classifier. Luckily for us, Scikit-Learn's models are called, tuned and fitted in very similar ways so it only required looking at which hyperparameters we wanted to tune. I will not go into the detail of this but will show the process for hyperparameter tuning which is almost exactly the same as for the Random Forest:
+Although I was happy with my results using the Random Forest Classifier, I also hyperparameter tuned a Logistic Regression classifier. Luckily for us, Scikit-Learn's models are called, tuned and fitted in very similar ways so it only required looking at which hyperparameters we wanted to tune. I will not go into the details of this but will show the process for hyperparameter tuning which is almost exactly the same as for the Random Forest:
 
 ```python
 # Setup random seed 
@@ -818,7 +826,9 @@ The main differences are the hyperparameters, which are completely different. It
 
 We found the optimal hyperparameters in exactly the same way with GridSearchCV and we were then able to submit some predictions!
 
-I initially used the Random Forest Classifier to make our predictions and found that imputing the data altogether gave a better accuracy score: 
+### Submitting predictions
+
+I initially used the Random Forest Classifier to make predictions and found that imputing the data altogether gave a better accuracy score: 
 ```python
 # Dropping only unnecessary columns
 drop_columns = ["Embarked", "Ticket", "Name", "PassengerId"]
@@ -862,10 +872,12 @@ PassengerId  Survived
 [418 rows x 2 columns]
 Your submission was successfully saved!
 ```
-This saves the submission file to our ```/kaggle/working``` directory where we can download our submission file in csv format and submit on the Titanic Machine Learning page. These were my best scores:
+This saves the submission file to our ```/kaggle/working``` directory where we can download our submission file in csv format and submit on the Titanic Machine Learning page. We can change the hyperparameters used and also submit scores for out logistic regression model. After submitting the results of these models I received the following scores!
 
 | Model | Default hyperparameters | Best hyperparameters |
 | ------ | ----------- | ---|
 | Age imputed with KNN along with test data  | 0.775 | 0.792 |
 | Logistic Regression | 0.773 | 0.775 |
 
+
+The highest score was 0.792, which I was happy with. I think 
