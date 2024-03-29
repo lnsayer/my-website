@@ -636,21 +636,25 @@ We can compare different metrics for our models as well. Accuracy is the proport
 
  <img src="/files/titanic_project/ConfusionMatrixRedBlue.png" width="auto" height="200">
 
-Accuracy is given by $$\frac{TP+FP}{TP+FP+TN+FN}$$
+Accuracy is given by 
 
-which is the most important metric for our project since the submission score uses accuracy. However, we may be interested in how well our models fair for different predictions types. For example, if we had a model predicting the presence of cancer we would want to minimise the number of false negatives as missing a true case of cancer is really dangerous. This comes at the expense of predicting a lot of false positives but it is worth it. For youtube recommendations false negatives are not so important (you can afford to not recommend really great videos) because you want to minimise the number of false positives (recommending bad videos will bore someone). 
+$$ Accuracy = \frac{TP+FP}{TP+FP+TN+FN}$$
 
-Another way in which we can compare our models is by using a ROC(Receiver Operator Characteristic Curve) and calculating the AUC (area under the curve). 
-These are ways in which we can visualise how the true positive rate and false negative rate are affected by changing the classification threshold of our predictions. 
-  
- 
-When we pass a passenger's information through our models, the model returns a number between 0 and 1 which indicates how likely it thinks the passenger has survived. The classification threshold is a number which determines whether the model then predicts the passenger as surviving or not. For example, if the classification threshold is 0.5 then a passenger with a predicted probability of 0.4 would be predicted as having died and passenger with a predicted probability of 0.6 would be predicted as having survived. 
+which is the most important metric for our project since the submission score uses accuracy. However, we may be interested in how well our models fair with different metrics. 
 
-Ideally we want the true positive (TP) rate to be as high as possible and the false positive (FP) rate to be as low as possible. There is a trade off between these however, since decreasing the classification threshold lead to all the actual positive values being predicted correctly (1) but all the actual negative values being predicted incorrectly. An ROC curve shows the TP and FP rates for different classification thresholds and we can compare models this way:
+Two other important metrics in machine learning are precision and recall, which are important in different scenarios. Precision indicates the proportion of positive identifications which were actually correct:
 
- <img src="/files/titanic_project/ideal_roc_curve.png" width="auto" height="450">   
+$$Precision = \frac{TP}{TP+FP}$$
 
-The area under the curve (AOC) indicates the quality of the model and a perfect model will have a score of 1 while a random model will have a score of 0.5. Since we do not know the true values of the test set I decided to use the validation sets to evaluate upon. However the Scikit-Learn cross_val function does not give us the probability scores of each of its 5 folds so I created a function to perform basic cross-validation with k-folds: 
+Precision is important when you want to minimise the number of false positives. For example, a Youtube recommendation algorithm would want to minimise the number of bad videos recommended (false positives).
+
+Recall on the other hand is defined as: 
+
+$$Recall = \frac{TP}{TP+FN}$$
+
+Recall is important when you want to minimise the number of false negatives. For example, a rare cancer screening model would want to minimise the number of true cancer cases it categorises as negative (false negatives). Missing a cancer case could prove lethal for the patient. 
+
+Luckily for us, SciKit-Learn has an in-built function for calculating these metrics, along with some others which we will leave for now. We cannot evaluate these metrics for the test set since we do not know their actual values. I wanted to use the validation sets from the GridSearchCV but I could not access the individual predictions, therefore I made my own cross-validation function:
 
 ```python
 # Setup random seed
@@ -667,12 +671,11 @@ def cross_val_index(k_folds, dataframe, fold_number):
     for i in range(k_folds):
                 start_index.append(i * index)
                 end_index.append((i + 1) * index if i < k_folds - 1 else len(x_dataframe))
-    print(start_index[fold_number-1], end_index[fold_number-1])
+    # print(start_index[fold_number-1], end_index[fold_number-1])
     X_train = pd.concat([x_dataframe[:start_index[fold_number-1]], x_dataframe[end_index[fold_number-1]:]])
     y_train = pd.concat([y_dataframe[:start_index[fold_number-1]], y_dataframe[end_index[fold_number-1]:]])
     X_valid = x_dataframe[start_index[fold_number-1]:end_index[fold_number-1]]
     y_valid = y_dataframe[start_index[fold_number-1]:end_index[fold_number-1]]
-    print(len(X_valid), len(y_valid))
     
     return X_train, y_train, X_valid, y_valid
 ```
@@ -697,7 +700,7 @@ best_clf.fit(cross_val_dataframes[0], cross_val_dataframes[1])
 best_y_valid_preds = best_clf.predict(cross_val_dataframes[2])
 best_y_valids_proba = best_clf.predict_proba(cross_val_dataframes[2])
 best_y_valids_proba_pos = best_y_valids_proba[:, 1]
-print(accuracy_score(best_y_valid_preds, cross_val_dataframes[3]))
+# print(accuracy_score(best_y_valid_preds, cross_val_dataframes[3]))
 
 # Calculating the probabilities of prediction with the worst RandomForestClassifier
 worst_clf = RandomForestClassifier( **{'n_estimators': 500, 'min_samples_split': 2, 'min_samples_leaf': 1, 'max_features': 'sqrt', 'max_depth': 40, 'bootstrap': False})
@@ -705,7 +708,46 @@ worst_clf.fit(cross_val_dataframes[0], cross_val_dataframes[1])
 worst_y_valid_preds = worst_clf.predict(cross_val_dataframes[2])
 worst_y_valids_proba = worst_clf.predict_proba(cross_val_dataframes[2])
 worst_y_valids_proba_pos = worst_y_valids_proba[:, 1]
-print(accuracy_score(worst_y_valid_preds, cross_val_dataframes[3]))
+# print(accuracy_score(worst_y_valid_preds, cross_val_dataframes[3]))
+
+# print classification reports for the best and worst validation predictions
+print(classification_report(best_y_valid_preds, cross_val_dataframes[3]))
+print(classification_report(worst_y_valid_preds, cross_val_dataframes[3]))
+```
+
+```
+Best model report: 
+               precision    recall  f1-score   support
+
+           0       0.90      0.88      0.89       117
+           1       0.78      0.81      0.79        62
+
+    accuracy                           0.85       179
+   macro avg       0.84      0.84      0.84       179
+weighted avg       0.86      0.85      0.86       179
+
+Worst model report: 
+               precision    recall  f1-score   support
+
+           0       0.84      0.87      0.85       112
+           1       0.77      0.73      0.75        67
+
+    accuracy                           0.82       179
+   macro avg       0.80      0.80      0.80       179
+weighted avg       0.81      0.82      0.81       179
+```
+
+
+Another way in which we can compare our models is by using a ROC(Receiver Operator Characteristic Curve) and calculating the AUC (area under the curve). 
+These are ways in which we can visualise how the true positive rate and false negative rate are affected by changing the classification threshold of our predictions. 
+ 
+When we pass a passenger's information through our models, the model returns a number between 0 and 1 which indicates how likely it thinks the passenger has survived. The classification threshold is a number which determines whether the model then predicts the passenger as surviving or not. For example, if the classification threshold is 0.5 then a passenger with a predicted probability of 0.4 would be predicted as having died and passenger with a predicted probability of 0.6 would be predicted as having survived. 
+
+Ideally we want the true positive (TP) rate to be as high as possible and the false positive (FP) rate to be as low as possible. There is a trade off between these however, since decreasing the classification threshold lead to all the actual positive values being predicted correctly (1) but all the actual negative values being predicted incorrectly. An ROC curve shows the TP and FP rates for different classification thresholds and we can compare models this way:
+
+ <img src="/files/titanic_project/ideal_roc_curve.png" width="auto" height="450">   
+
+The area under the curve (AOC) indicates the quality of the model and a perfect model will have a score of 1 while a random model will have a score of 0.5.
 
 # Calculating the rates and thresholds for the two classifiers
 best_fpr, best_tpr, best_thresholds = roc_curve(cross_val_dataframes[3].values, best_y_valids_proba_pos)
