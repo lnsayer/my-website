@@ -155,7 +155,7 @@ ax1.set_ylabel('Number of people', fontsize = 12)
 
 <img src="/files/titanic_project/survival_rate_age_sex.png" width="auto" height="450"> 
 
-These are quite stark results with the men much more likely to die than women. Age does not appear to affect survival rates amongst adults, however children are more likely to survive than die. The famous unofficial code of conduct 'Women and children first" is confirmed in use by these plots.
+These are quite stark results with the men much more likely to die than women. Age does not appear to affect survival rates amongst women, however young men are much more likely to survive than older men. The famous unofficial code of conduct 'Women and children first" is confirmed in use by these plots.
 
 We can also plot the survival rates according to fare price:
 
@@ -400,7 +400,7 @@ new_train_df
  <img src="/files/titanic_project/prepared_dataset.png" width="auto" height="300"> 
 Some notes:
 
-- It is not immediately clear of the cause for the missing age values. This is something we could have investigated further. We do not want to remove this column as it is such a useful predictor. Imputing using the median age would not give the best estimate for age since there are other variables which we can use to predict the missing values such as their title or number of siblings (children are more likely to travel with siblings than adults are). For this reason I decided to use a k-nearest neighbour algorithm because it is accurate, simple and fast. Imputing the missing ages gave a similar distribution compared to the original non-missing data: 
+- It is not immediately clear of the cause for the missing age values. This is something we could have investigated further. We do not want to remove this column as it is such auseful predictor. Imputing using the median age would not give the best estimate for age since the ages of passengers vary depending on their passenger class, fare etc. There are other variables which we can use to predict the missing values such as their title or number of siblings (children are more likely to travel with siblings than adults are). For this reason I decided to use a k-nearest neighbour algorithm because it is accurate, simple and fast. Imputing the missing ages gave a similar distribution compared to the original non-missing data: 
 
 ```python
 # Columns to drop in preparing the dataframes
@@ -510,6 +510,8 @@ plt.show()
 We can see the feature selection at play with the random forest clearly prioritising features over others. As expected, some of the most important features were those we investigated at the start. Age, Fare, Title_Mr and Sex are the most important. Most of the decks are unimportant but Deck_U is more important than the rest which partially supports our theory that a missing deck may have been been caused by the death of a passenger. 
 
 **How is feature importance calculated?** Whenever a decision is made by the tree, we work out how well the decision splits the data into survived and died. This is done using the Gini index which measures this impurity (splitting up efficacy) based on the probabilities of the outcomes from a split. For example a perfect decision will split the data into survived and died perfectly, however the worst decision will split the data into a perfect mix (50/50). The feature_importances measures how much each attribute contributes to decreasing the impurity. 
+
+**Note:** I have since learnt that Sklearn's `feature_importances_` is biased towards features with high cardinality (number of possible values) such as the Age column. This is because the more splitting points we have, the higher the probability that a split could reduce the impurity. A more effective measure of feature importance is permutation importance which iteratively scrambles one of the features and measures the corresponding decrease in accuracy. However, this is more computationally expensive since each feature needs to be scrambled and the model needs to be scored several times. 
 
 We will go into scoring the test set later but for now let's see how this model performs with the test set. For reference:
 - Submitting all dead gives a score of 0.622
@@ -880,8 +882,22 @@ This saves the submission file to our ```/kaggle/working``` directory where we c
 | Logistic Regression | 0.773 | 0.775 |
 
 
-The highest score was 0.792, which I was happy with. There were, however, several areas I could have explored to try to improve my score:
+The highest score was 0.792, which I was happy with ranked me within the top 0.73% of submissions. There were, however, several areas I could have explored to try to improve my score:
 - Impute the missing ages with 0. A friend mentioned this to me after discussing the dataset and it could have informed the network about the missing data. Or even impute the data but keep a binary column indicating whether the value had been imputed or not.
 - I did not use the ticket feature at all, perhaps this could have been useful after performing some feature engineering.
 - I should have left the Deck column as the class categories and not one-hot encoded it since this only made the dataset more sparse.
-- My workflow of the project could have been improved, I should have spent more time at the beginning performing the EDA since this would have saved time from not implementing features and scoring often. 
+- My workflow of the project could have been improved, I should have spent more time at the beginning performing the EDA since this would have saved time from not implementing features and scoring often.
+- I could have tried selecting features and eliminating ones which were less important. Simple models are quicker and better (Occam's razor https://en.wikipedia.org/wiki/Occam%27s_razor)
+- I have recently learnt that XGBoost is particularly effective for machine learning competitions. Using it may not have significantly my understanding but it would have improved my score!
+- 
+
+If you have reached this point of my article then thank you so much for taking the time to read through it all! Do not hesitate to send me a message with questions, any thoughts and especially if you see something wrong! 
+
+Some more resources for this projects:
+I learnt how to code with Sklearn using the Complete A.I. & Machine Learning, Data Science Bootcamp from Andrei Neagoie and Daniel Bourke on udemy https://www.udemy.com/course/complete-machine-learning-and-data-science-zero-to-mastery/ . Shoutout to Daniel for his enthusiasm and making me passionate about machine learning. 
+You can also check out some other tutorials with Python:
+- https://www.kaggle.com/competitions/titanic/code
+- https://www.ahmedbesbes.com/blog/kaggle-titanic-competition
+- https://www.ultravioletanalytics.com/blog/kaggle-titanic-competition-part-i-intro/
+- The Sklearn documentation is fantastic and a great place to learn more about machine learning: https://scikit-learn.org/stable/
+
