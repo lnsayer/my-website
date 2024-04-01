@@ -6,20 +6,20 @@ This was my first end-to-end machine learning project on the famous Titanic data
 
 This notebook also serves as a guide for people new to machine learning. Please do not hesitate to get in contact if you have any questions, or even more so if you spot anything incorrect!
 
-### The plan:
+### What we will cover:
 1. Data exploration and visualisation
 2. Data cleaning, feature selection and engineering
 3. Quick Modelling to see feature importance
 4. Cross Validation and Hyperparameter tuning
 5. Testing different classifiers and submitting a prediction
 
-First a little history. RMS (Royal Mail Ship) Titanic was the largest ocean liner in 1912 when she famously sank 370 miles off the coast of Newfoundland, after hitting an iceberg. Out of the 2,200 people onboard, more than 1,500 are estimated to have died in the disaster. Survival rates were starkly different between different passengers, with age, passenger class and sex playing key factors. 
+First a little history. RMS (Royal Mail Ship) Titanic was the largest ocean liner in 1912 when she famously sank 370 miles off the coast of Newfoundland, after hitting an iceberg. Out of the 2,200 people onboard, more than 1,500 are estimated to have died in the disaster. Survival rates were starkly different between different passengers, with age, passenger class and sex playing key factors. We will predict from these factors, along with others, which passengers survived or died. 
 
 In this project we have access to two datasets: the training set containing 891 passengers (whose survival or death we know) and the test set containing 418 passengers (whose survival or death we must predict).
 
 ### 1. Data exploration and visualisation
 
-Before anything let's import the necessary libraries and functions for our project 
+Before anything else let's import the necessary libraries and functions for this project 
 
 ``` python
 import numpy as np
@@ -76,10 +76,10 @@ display(combined_df)
 
 We've got 12 columns with 10 usable features. 
 - PassengerId is an index
-- The Survived is 1 if they survived or 0 if they died
-- The PClass column shows the passenger class (1st, 2nd or 3rd)
-- The name column gives their full name and title
-- Sex is either male or female
+- Survived is 1 if they survived or 0 if they died
+- PClass shows the passenger class (1st, 2nd or 3rd)
+- Name gives their full name and title
+- Sex, male or female
 - Age in years
 - SibSp is number of siblings/spouses on the ship
 - Parch is number of parents/children on the ship
@@ -93,7 +93,7 @@ Let's look at the data types and what we are missing:
 ```python
 combined_df.info()
 ```
-
+returns 
 ```python
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 1309 entries, 0 to 1308
@@ -116,9 +116,9 @@ dtypes: float64(3), int64(4), object(5)
 ```
 We mostly have integers and objects, which are strings. We are missing data in the Age (263), Cabin (1014), Fare (1) and Embarked (2) columns. We will have to do some imputation (filling in missing values) and encoding (converting the strings to numerical data which the models can handle).
 
-Since we have combined the training and test set into one dataframe we can see all the missing data, e.g. if we had only looked at the training set we would miss the missing fare entry in the test set. Normally we want to impute the training and test set separately since our test set represents future data we want to predict. However, as this is the same ship with the same distribution it is okay to impute altogether. It also makes our life easier to do so. 
+Since we have combined the training and test set into one dataframe we can see all the missing data, e.g. if we had only looked at the training set we would miss the missing fare entry in the test set. Normally we would impute the training and test set separately since our test set represents future data we want to predict. However, as this is the same ship with the same distribution it is okay to impute altogether. It also makes our life easier to do so. 
 
-Let's explore how different features might affect survival rates. We can display the survival rate based on age and sex at the same time. 
+Let's explore how different features might affect survival rates. We can display the survival rate based on age and sex at the same time with some plots:
 ``` python
 # Dataframes of male and female survivals
 male_train_df = train_df.loc[train_df['Sex'] == 'male']
@@ -155,7 +155,7 @@ ax1.set_ylabel('Number of people', fontsize = 12)
 
 <img src="/files/titanic_project/survival_rate_age_sex.png" width="auto" height="450"> 
 
-These are quite stark results with the men much more likely to die than women. Age does not appear to affect survival rates amongst women, however young men are much more likely to survive than older men. The famous unofficial code of conduct 'Women and children first" is confirmed in use by these plots.
+These are quite stark results with the men much more likely to die than women. Age does not appear to affect survival rates amongst women, however young men are much more likely to survive than older men. The famous unofficial code of conduct 'Women and children first" is confirmed by these plots.
 
 We can also plot the survival rates according to fare price:
 
@@ -209,7 +209,7 @@ ax.set_ylabel("Number of people", size =14)
 ax.legend(["Survived", "Died"], fontsize =12)
 ```
 
-Note, I have since realised you can compare different feautures by plotting directly with the dataframe using Crosstab which is a lot easier, e.g. crosstab = pd.crosstab(train_df.Surived, df.PClass) then plot = crosstab.plot(kind='bar', rot = 0, figsize=(10,6) )
+Note, I have since realised you can compare different features by plotting directly with the Pandas' dataframe using Crosstab which is a lot easier, e.g. `crosstab = pd.crosstab(train_df.Surived, df.PClass)` then `plot = crosstab.plot(kind='bar', rot = 0, figsize=(10,6) )`
 
 <img src="/files/titanic_project/survival_rate_passenger_class.png" width="auto" height="450">  
 
@@ -217,8 +217,8 @@ Again, better passenger class corresponds to a higher chance of survival. On the
 
 ### 2. Data cleaning, feature selection and engineering
 
-Now let's try and make some other features useful and even create a new feature. 
-First, we will extract all the titles of the passengers. These might be useful since it can explicity tell the model the age and sex of a passenger, as well as their marital status. This code makes a new column 'Title' which returns the string following a comma and space and then a full stop e.g. for `, Mr.` it returns `Mr`. We can see how many of the original entries have each title with `value_counts`. 
+Let's try and make some other features useful and even create a new feature. 
+First, we will extract all the titles of the passengers. These might be useful since it can explicity tell the model whether a passenger is an adult or child, as well as their marital status. This code makes a new column 'Title' which returns the string following a comma and space and then a full stop e.g. for `, Mr.` it returns `Mr`. We can see how many of the original entries have each title with `value_counts`. 
 
 ```python
 pd.set_option("display.max_rows", None)
@@ -270,7 +270,7 @@ def replace_titles(x):
     else:
         return title
 ```
-In hindsight, we could have considered putting these in a special column but for now we will leave it. Next we will extract the deck of the passenger cabins with another function: 
+In hindsight, we could have considered putting some of these in a special column but we will leave that for further work. Next we will extract the deck of the passenger cabins with another function: 
 ```python
 # Function to replace the cabin code with their deck section, denoted by a letter
 def replace_cabin(x):
@@ -284,7 +284,7 @@ def replace_cabin(x):
 ```
 We will fill empty cabin entries with `U`. Perhaps some areas of the boat were able to evacuate more easily than others. The boat hit the iceberg at 11:40pm so it is likely the passengers were inside their cabins at this time. 
 
-Finally we will make a family_size attribute which takes gives the family size of each passenger:
+Finally, we will make a family_size attribute which gives the family size of each passenger:
 ```python
 # Function to define a person's family size
 def add_family(x):
@@ -294,24 +294,24 @@ def add_family(x):
 Let's check all these are working with our training dataset: 
 ```python
 # Show the new altered dataframes with 'Title', 'Deck' and 'Familysize' columns
-new_train_df['Title']=new_train_df.apply(replace_titles, axis=1)
-new_train_df= replace_cabin(new_train_df)
+new_train_df['Title'] = new_train_df.apply(replace_titles, axis=1)
+new_train_df = replace_cabin(new_train_df)
 new_train_df = add_family(new_train_df)
 
 new_train_df
 ```
  <img src="/files/titanic_project/new_features.png" width="auto" height="400">   
 
- Next we are going to impute our data and one hot encode categorical data. For this I created a function `prepare_dataframe` which can do this to any dataframe we like and can also drop columns we are not interested in using. It does the following:
+ Next we are going to impute our data and one hot encode the categorical data. For this I created a function `prepare_dataframe` which can do this to any chosen dataframe and can also drop columns we are not interested in using. It does the following:
  - Converts the sex column into binary (0 and 1s)
- - Replace the Name column with Title
+ - Replaces the Name column with Title
  - Replaces the Cabin column with Deck
- - Add family size
+ - Adds family size
  - Imputes Fare with the median value
  - One hot encodes Embarked, Title, Deck and Pclass
  - Imputes the Age column using a KNN algorithm
  - Renames engineered columns
- - Drop any columns which are requested
+ - Drops any columns which are requested
 
 ```python
 def prepare_dataframe(df, drop_columns):
@@ -392,15 +392,15 @@ This gave a final dataset of:
 # Custom columns to drop in the function prepare_dataframe
 drop_columns = ["Embarked", "Ticket", "Name"]
 new_train_df = prepare_dataframe(train_df, drop_columns)
-# display(new_train_df)
 print(new_train_df.columns)
 new_train_df['Age'].isna().sum()
 new_train_df
 ```
  <img src="/files/titanic_project/prepared_dataset.png" width="auto" height="300"> 
-Some notes:
 
-- It is not immediately clear of the cause for the missing age values. This is something we could have investigated further. We do not want to remove this column as it is such auseful predictor. Imputing using the median age would not give the best estimate for age since the ages of passengers vary depending on their passenger class, fare etc. There are other variables which we can use to predict the missing values such as their title or number of siblings (children are more likely to travel with siblings than adults are). For this reason I decided to use a k-nearest neighbour algorithm because it is accurate, simple and fast. Imputing the missing ages gave a similar distribution compared to the original non-missing data: 
+Some notes:
+ - The custom dropped columns could have been dropped automatically in the `prepare_dataframe` function since their features had been imputed or one-hot encoded. When I was experimenting with using different features I used this quite a lot.
+ -  It is not immediately clear of the cause for the missing age values (missing at random or not at random [1]). This is something we could have investigated further. We do not want to remove this column as it is such a useful predictor. Imputing using the median age would not give the best estimate for age since the passengers' ages vary depending on their passenger class, fare etc. There are other variables which we can use to predict the missing values such as their title or number of siblings (children are more likely to travel with siblings than adults are). For this reason I decided to use a k-nearest neighbour algorithm because it is accurate, simple and fast. Imputing the missing ages gave a similar distribution compared to the original non-missing data: 
 
 ```python
 # Columns to drop in preparing the dataframes
@@ -900,4 +900,8 @@ You can also check out some other tutorials with Python:
 - https://www.ahmedbesbes.com/blog/kaggle-titanic-competition
 - https://www.ultravioletanalytics.com/blog/kaggle-titanic-competition-part-i-intro/
 - The Sklearn documentation is fantastic and a great place to learn more about machine learning: https://scikit-learn.org/stable/
+
+References: 
+
+[1] https://www.analyticsvidhya.com/blog/2021/10/handling-missing-value/
 
