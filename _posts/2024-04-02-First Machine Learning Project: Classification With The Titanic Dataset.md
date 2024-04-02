@@ -8,6 +8,7 @@ share-img: /assets/img/path.jpg
 tags: [Machine Learning, Classification, Tutorial]
 author: Louis Sayer
 mathjax: true
+full-width: true
 ---
 
 [1]
