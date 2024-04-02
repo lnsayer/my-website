@@ -904,7 +904,6 @@ There were several areas I could have explored to try to improve my score:
 - My workflow of the project could have been improved, I should have spent more time at the beginning performing the EDA since this would have saved time from not implementing features and scoring often.
 - I could have tried selecting features and eliminating ones which were less important. Simple models are quicker and better (Occam's razor https://en.wikipedia.org/wiki/Occam%27s_razor)
 - I have recently learnt that XGBoost is particularly effective for machine learning competitions. Using it may not have significantly my understanding but it would have improved my score!
-- 
 
 If you have reached this point of my article then thank you so much for taking the time to read through it all! Do not hesitate to send me a message with questions, any thoughts and especially if you see something wrong! 
 
