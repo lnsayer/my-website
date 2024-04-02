@@ -81,7 +81,7 @@ pd.set_option('display.max_rows', 10)
 # Show the dataframe
 display(combined_df)
 ```
-<img src="/files/titanic_project/combined_df.png" width="844" height="350"> 
+<img src="/my-website/files/titanic_project/combined_df.png" width="844" height="350"> 
 
 Note, NaN means not a number.
 
