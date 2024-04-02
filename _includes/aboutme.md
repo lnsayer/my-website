@@ -1,8 +1,3 @@
----
-layout: page
-title: About me
-subtitle:
----
 
 ## Hi there, I'm Louis Sayer 
 
