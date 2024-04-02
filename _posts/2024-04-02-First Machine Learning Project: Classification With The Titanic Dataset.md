@@ -7,6 +7,7 @@ thumbnail-img: /files/titanic_project/Stöwer_Titanic.jpg
 share-img: /assets/img/path.jpg
 tags: [Machine Learning, Classification, Tutorial]
 author: Louis Sayer
+mathjax: true
 ---
 
 [1]
