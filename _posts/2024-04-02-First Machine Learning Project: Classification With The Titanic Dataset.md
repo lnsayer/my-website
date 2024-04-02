@@ -164,7 +164,7 @@ ax1.set_xlabel('Age (yrs)', fontsize = 12)
 ax1.set_ylabel('Number of people', fontsize = 12)
 ```
 
-<img src="/files/titanic_project/survival_rate_age_sex.png" width="auto" height="450"> 
+<img src="/my-website/files/titanic_project/survival_rate_age_sex.png" width="auto" height="450"> 
 
 These are quite stark results with the men much more likely to die than women. Age does not appear to affect survival numbers amongst women, however young men are much more likely to survive than older men. The famous unofficial code of conduct 'Women and children first" is confirmed by these plots.
 
@@ -188,7 +188,7 @@ ax.legend()
 ax.set_xlabel('Fare ($)', fontsize = 12)
 ax.set_ylabel('Number of people', fontsize = 12)
 ```
-<img src="/files/titanic_project/survival_rate_fare_price.png" width="auto" height="450">  
+<img src="/my-website/files/titanic_project/survival_rate_fare_price.png" width="auto" height="450">  
 
 The tail of the survivors is longer showing that people who paid a higher fare were more likely to survive. However, this is not strictly the case, some passengers who bought an expensive ticket also died. 
 
@@ -222,7 +222,7 @@ ax.legend(["Survived", "Died"], fontsize =12)
 
 Note, I have since realised you can compare different features by plotting directly with the Pandas' dataframe using Crosstab which is a lot easier, e.g. `crosstab = pd.crosstab(train_df.Survived, df.PClass)` then `plot = crosstab.plot(kind='bar', rot = 0, figsize=(10,6) )`
 
-<img src="/files/titanic_project/survival_rate_passenger_class.png" width="auto" height="450">  
+<img src="/my-website/files/titanic_project/survival_rate_passenger_class.png" width="auto" height="450">  
 
 Again, better passenger class corresponds to a higher chance of survival. On the Titanic, you can put a price on life.
 
@@ -311,7 +311,7 @@ new_train_df = add_family(new_train_df)
 
 new_train_df
 ```
- <img src="/files/titanic_project/new_features.png" width="auto" height="400">   
+ <img src="/my-website/files/titanic_project/new_features.png" width="auto" height="400">   
 
  Next we are going to impute our data and one hot encode the categorical data. For this I created a function `prepare_dataframe` which can do this to any chosen dataframe and can also drop columns we are not interested in using. It does the following:
  - Converts the sex column into binary (0 and 1s)
@@ -407,7 +407,7 @@ print(new_train_df.columns)
 new_train_df['Age'].isna().sum()
 new_train_df
 ```
- <img src="/files/titanic_project/prepared_dataset.png" width="auto" height="300"> 
+ <img src="/my-website/files/titanic_project/prepared_dataset.png" width="auto" height="300"> 
 
 Some notes:
  - The custom dropped columns could have been dropped automatically in the `prepare_dataframe` function since all those features had been imputed or one-hot encoded. When I was experimenting with using different features I used this quite a lot.
@@ -438,7 +438,7 @@ print(new_train_df["Age"].isna().sum())
 print(train_df["Age"].isna().sum())
 ```
 
- <img src="/files/titanic_project/imputed_age.png" width="auto" height="450">  
+ <img src="/my-website/files/titanic_project/imputed_age.png" width="auto" height="450">  
 
  - Another option for imputing the age would have been to set the missing values as 0. It might have been the case that passengers had a missing age *because* they had died and their records were not kept. Setting the missing values as 0 might have been able to capture this. Further work could explore the effect of this. 
 
@@ -465,7 +465,7 @@ y_train = new_train_df["Survived"]
 
 We can quickly model the data using a Random forest classifier, which aggregates the predictions of many decision trees (for example 100). A single decision tree looks like this: 
 
-<img src="/files/titanic_project/Decision_Tree.jpg" width="auto" height="450">  
+<img src="/my-website/files/titanic_project/Decision_Tree.jpg" width="auto" height="450">  
 [3]
 
 
@@ -517,7 +517,7 @@ plt.ylabel('Feature Importances', size=14)
 plt.xticks(rotation=45)
 plt.show()
 ```
- <img src="/files/titanic_project/default_clf_feature_importances.png" width="auto" height="450"> 
+ <img src="/my-website/files/titanic_project/default_clf_feature_importances.png" width="auto" height="450"> 
 
 We can see the feature selection at play with the random forest clearly prioritising some features over others. As expected, some of the most important features were those we investigated at the start. Age, Fare, Title_Mr and Sex are the most important. Most of the Decks are unimportant but Deck_U is more important than the rest which partially supports our theory that a missing deck may have been been caused by the death of a passenger. 
 
@@ -538,7 +538,7 @@ The hyperparameters of the network are like the dials on our models which we can
 
 Cross validation is a way to choose between these models but in a way that prevents the model from overperforming on the training set and underperforming on the test. It does this by splitting our training data into a smaller training set and 'validation' set. The model trains on the training set but is scored on the validation set. We split up the whole training set *k* number of times to do this, so that the validation set is different each time, and calculate an average of the accuracy score of those *k* iterations. This is called k-folds cross-validation and it is much easier to visualise like this: 
 
- <img src="/files/titanic_project/k-folds_cross_validation.png" width="auto" height="300"> 
+ <img src="/my-website/files/titanic_project/k-folds_cross_validation.png" width="auto" height="300"> 
 
  [4]
 
@@ -642,9 +642,9 @@ plt.xticks(rotation=45)
 plt.show()
 ```
 
- <img src="/files/titanic_project/best_hyperparameters.png" width="1010" height="auto">  
+ <img src="/my-website/files/titanic_project/best_hyperparameters.png" width="1010" height="auto">  
 
- <img src="/files/titanic_project/best_hyperparameter_feature_importances.png" width="auto" height="450">  
+ <img src="/my-website/files/titanic_project/best_hyperparameter_feature_importances.png" width="auto" height="450">  
 
  As you can see in the top image we have the best hyperparameters in a dictionary and the results are shown in a dataframe. It turns out the best hyperparameters are pretty similar to the default hyperparameters, only two hyperparameters were changed minimally, but this gives quite an improvement. We are also given the accuracy score for the test set of each of the five folds. The highest score (0.854) is 5.55% more accurate than the lowest score (0.809)! The cross validation modules in scikit-learn are pretty useful.
 
@@ -654,7 +654,7 @@ It is also interesting to look at how the feature importances change by selectin
 
 We can compare different metrics for our models as well. Accuracy is very important since it is the proportion of correct identifications but we can also look at precision or recall. Firstly, it is useful to understand the four categories our predictions can fall into:
 
- <img src="/files/titanic_project/ConfusionMatrixRedBlue.png" width="auto" height="200">
+ <img src="/my-website/files/titanic_project/ConfusionMatrixRedBlue.png" width="auto" height="200">
 
  [6]
 
@@ -773,7 +773,7 @@ When we pass a passenger's information through our models, the model returns a n
 
 Ideally, we would like the true positive rate to be as high as possible and the false positive rate to be as low as possible. There is a trade off between these however, e.g. decreasing the classification threshold leads to all the actual positive values being predicted correctly but all the actual negative values being predicted incorrectly. An ROC curve shows the TP and FP rates for different classification thresholds and we can compare models this way:
 
- <img src="/files/titanic_project/ideal_roc_curve.png" width="auto" height="450">   
+ <img src="/my-website/files/titanic_project/ideal_roc_curve.png" width="auto" height="450">   
 
  [7]
 
@@ -803,7 +803,7 @@ plt.title('Receiver Operating Characteristic (ROC) curve')
 plt.legend()
 plt.show()
 ```
- <img src="/files/titanic_project/roc_curve_best_and_worst_rf_classifier.png" width="auto" height="450"> 
+ <img src="/my-website/files/titanic_project/roc_curve_best_and_worst_rf_classifier.png" width="auto" height="450"> 
 
 As we can see, the best model is almost always above the worst model, particularly for a false positive rate at around 0.2. Visualising the ROC and using the AUC as a metric is important for two reasons:
 - They are scale-invariant: they measure how well predictions are ranked, rather than their absolute values
