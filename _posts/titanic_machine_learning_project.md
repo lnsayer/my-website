@@ -4,7 +4,7 @@
 
 [1]
 
-This was my first end-to-end machine learning project on the famous Titanic dataset. It is a classification problem in which we predict which passengers survived the sinking of the Titanic. I have implemented several machine learning techniques during this project and gained a respectable position in the leaderboard, within the top 7% of users. This project is particularly interesting because it demonstrates the biases which machine learning models can exhibit.
+This was my first end-to-end machine learning project on the famous Titanic dataset. It is a classification problem in which we predict which passengers survived the sinking of the Titanic. I have implemented several machine learning techniques during this project and gained a respectable position in the leaderboard, within the top 7.3% of users. This project is particularly interesting because it demonstrates the biases which machine learning models can exhibit.
 
 This notebook also serves as a guide for people new to machine learning. Please do not hesitate to get in contact if you have any questions, or even more so if you spot anything incorrect!
 
@@ -54,7 +54,7 @@ This shows our input data files
 /kaggle/input/titanic/gender_submission.csv
 ```
 
-We've got three files: the training set, test set and gender submission which is a practice submission file (makes predictions based on the sex of the passenger). Let's load these data and take a look at our features.
+We've got three files: the training set file, test set file and gender submission file which is a practice submission file (makes predictions based on the sex of the passenger). Let's load these data and take a look at our features.
 
 ``` python
 # Load the data
@@ -76,6 +76,8 @@ display(combined_df)
 ```
 <img src="/files/titanic_project/combined_df.png" width="844" height="350"> 
 
+Note, NaN means not a number.
+
 We've got 12 columns with 10 usable features. 
 - PassengerId is an index
 - Survived is 1 if they survived or 0 if they died
@@ -88,7 +90,7 @@ We've got 12 columns with 10 usable features.
 - Ticket shows their ticket code
 - Fare in dollars
 - Cabin, with deck classification
-- Embarked gives their port of departure: S: Southampton, C: Cherbourg, Q: Queenstown
+- Embarked gives their port of embarkation: S: Southampton, C: Cherbourg, Q: Queenstown
 
 Let's look at the data types and what we are missing:
 
@@ -116,11 +118,11 @@ Data columns (total 12 columns):
  11  Embarked     1307 non-null   object 
 dtypes: float64(3), int64(4), object(5)
 ```
-We mostly have integers and objects, which are strings. We are missing data in the Age (263), Cabin (1014), Fare (1) and Embarked (2) columns. We will have to do some imputation (filling in missing values) and encoding (converting the strings to numerical data which the models can handle).
+We mostly have integers and objects, which are strings. We are missing data in the Age (263 missing), Cabin (1014), Fare (1) and Embarked (2) columns. We will have to do some imputation (filling in missing values) and encoding (converting the strings to numerical data which the models can handle).
 
-Since we have combined the training and test set into one dataframe we can see all the missing data, e.g. if we had only looked at the training set we would miss the missing fare entry in the test set. Normally we would impute the training and test set separately since our test set represents future data we want to predict. However, as this is the same ship with the same distribution it is okay to impute altogether. It also makes our life easier to do so. 
+Since we have combined the training and test set into one dataframe we can see all the missing data. If we had only looked at the training set we would miss the missing fare entry in the test set. Normally we would impute the training and test set separately since our test set represents future data we want to predict. However, as this is the same ship with the same distribution it is okay to impute altogether. It also makes our life easier to do so. 
 
-Let's explore how different features might affect survival rates. We can display the survival rate based on age and sex at the same time with some plots:
+Let's explore how different features might affect survival numbers. We can display the survival rate based on age and sex at the same time with some plots:
 ``` python
 # Dataframes of male and female survivals
 male_train_df = train_df.loc[train_df['Sex'] == 'male']
@@ -157,9 +159,9 @@ ax1.set_ylabel('Number of people', fontsize = 12)
 
 <img src="/files/titanic_project/survival_rate_age_sex.png" width="auto" height="450"> 
 
-These are quite stark results with the men much more likely to die than women. Age does not appear to affect survival rates amongst women, however young men are much more likely to survive than older men. The famous unofficial code of conduct 'Women and children first" is confirmed by these plots.
+These are quite stark results with the men much more likely to die than women. Age does not appear to affect survival numbers amongst women, however young men are much more likely to survive than older men. The famous unofficial code of conduct 'Women and children first" is confirmed by these plots.
 
-We can also plot the survival rates according to fare price:
+We can also plot the survival numbers according to fare price:
 
 ```python
 # Plot histograms of the number who survived/died according to fare price
@@ -181,9 +183,9 @@ ax.set_ylabel('Number of people', fontsize = 12)
 ```
 <img src="/files/titanic_project/survival_rate_fare_price.png" width="auto" height="450">  
 
-The tail of the survivors is longer showing that people who paid a higher fare were more likely to survive. However, this is not strict, some passengers who bought an expensive ticket also died. 
+The tail of the survivors is longer showing that people who paid a higher fare were more likely to survive. However, this is not strictly the case, some passengers who bought an expensive ticket also died. 
 
-Finally let's look at the survival rates amongst different passenger classes. 
+Finally let's look at the survival numbers amongst different passenger classes. 
 
 ```python
 pclass1_survive = train_df.loc[(train_df['Survived'] == 1) & (train_df['Pclass'] ==1 )]
@@ -211,7 +213,7 @@ ax.set_ylabel("Number of people", size =14)
 ax.legend(["Survived", "Died"], fontsize =12)
 ```
 
-Note, I have since realised you can compare different features by plotting directly with the Pandas' dataframe using Crosstab which is a lot easier, e.g. `crosstab = pd.crosstab(train_df.Surived, df.PClass)` then `plot = crosstab.plot(kind='bar', rot = 0, figsize=(10,6) )`
+Note, I have since realised you can compare different features by plotting directly with the Pandas' dataframe using Crosstab which is a lot easier, e.g. `crosstab = pd.crosstab(train_df.Survived, df.PClass)` then `plot = crosstab.plot(kind='bar', rot = 0, figsize=(10,6) )`
 
 <img src="/files/titanic_project/survival_rate_passenger_class.png" width="auto" height="450">  
 
@@ -284,7 +286,7 @@ def replace_cabin(x):
     
     return x
 ```
-We will fill empty cabin entries with `U`. Perhaps some areas of the boat were able to evacuate more easily than others. The boat hit the iceberg at 11:40pm so it is likely the passengers were inside their cabins at this time. 
+We will fill empty cabin entries with `U` for unknown. Perhaps some areas of the boat were able to evacuate more easily than others. The boat hit the iceberg at 11:40pm so it is likely the passengers were inside their cabins at this time. 
 
 Finally, we will make a family_size attribute which gives the family size of each passenger:
 ```python
@@ -402,7 +404,7 @@ new_train_df
 
 Some notes:
  - The custom dropped columns could have been dropped automatically in the `prepare_dataframe` function since all those features had been imputed or one-hot encoded. When I was experimenting with using different features I used this quite a lot.
- -  It is not immediately clear of the cause for the missing age values (missing at random or not at random [2]). This is something we could have investigated further. I did not want to remove this column as it is such a useful predictor. Imputing using the median age would not give the best estimate for age since the passengers' ages vary depending on their passenger class, fare etc. There are other variables we can use to predict the missing values such as their title or number of siblings (children are more likely to travel with siblings than adults are). For this reason I decided to use a k-nearest neighbour algorithm because it is accurate, simple and fast. See my possible improvements at the bottom of the article for more information. Imputing the missing ages gave a similar distribution compared to the original non-missing data: 
+ -  The cause of the missing age values is not immediately clear (missing at random or not at random [2]). This is something we could have investigated further. I did not want to remove this column as it is such a useful predictor. Imputing using the median age would not give the best estimate for age since the passengers' ages vary depending on their passenger class, fare etc. There are other variables we can use to predict the missing values such as their title or number of siblings (children are more likely to travel with siblings than adults are). For this reason I decided to use a k-nearest neighbour algorithm because it is accurate, simple and fast. See my possible improvements at the bottom of the article for more information. Imputing the missing ages gave a similar distribution compared to the original non-missing data: 
 
 ```python
 # Columns to drop in preparing the dataframes
@@ -433,7 +435,7 @@ print(train_df["Age"].isna().sum())
 
  - Another option for imputing the age would have been to set the missing values as 0. It might have been the case that passengers had a missing age *because* they had died and their records were not kept. Setting the missing values as 0 might have been able to capture this. Further work could explore the effect of this. 
 
-- For the deck code we decided to keep the missing values as a new column because like age the missing values might have been caused a passenger dying. We will see how this column turned out to be important in the models' feature importances.
+- For the deck code we decided to keep the missing values as a new column because like age the missing values might have been caused by a passenger dying. We will see how this column turned out to be important in the models' feature importances.
 - Since there is only one missing feature from the Fare column we imputed this with the median.
 - We decided to one-hot encode the Pclass column but in fact this was unnecessary and only made the dataframe more sparse. We could have kept this in its original form. 
 
@@ -463,8 +465,8 @@ We can quickly model the data using a Random forest classifier, which aggregates
 Random forests are a good choice for several reasons:
 - They are accurate
 - They are less influenced by outliers
-- Less prone to overfitting by using enough trees
-- Automatically perform feature selection, both ignoring less useful features and handling features with colinearity well. If two features are strongly correlated then the tree will pick the feature with the most information gain, and this in turn will decrease further information gain from the other. Linear models like linear regression or logistic regression can have varying solutions with colinear variables. Although we did not investigate this explicity it is likely some of our features are colinear. For example Age and titles (e.g. Mr) or fare price and passenger class. We will see later how our feature importances change.
+- They are less prone to overfitting by using enough trees
+- They automatically perform feature selection, both ignoring less useful features and handling features with colinearity well. If two features are strongly correlated then the tree will pick the feature with the most information gain, and this in turn will decrease further information gain from the other. Linear models like linear regression or logistic regression can have varying solutions with colinear variables. Although we did not investigate this explicity it is likely some of our features are colinear. For example Age and titles (e.g. Mr) or fare price and passenger class. We will see later how our feature importances change.
 
 Random forests have a few drawbacks however: 
 - Although a single tree is easy to interpret, it is not so easy for a whole forest, particularly when using many trees
@@ -518,7 +520,7 @@ We can see the feature selection at play with the random forest clearly prioriti
 
 We will go into scoring the test set later but for now let's see how this model performs with the test set. For reference:
 - Submitting all dead gives a score of 0.622
-- Submitting based on gender (predicting male = dead, female = surived) gives an accuracy score of 0.766
+- Submitting based on gender (predicting male = dead, female = survived) gives an accuracy score of 0.766
 
 Originally I tested this classifier without the newly engineered columns and imputing the age with the median age. This gave a score of 0.768, only a slight improvement!
 A lot of work for 0.02 increase in accuracy score. Scoring with the newly engineered columns gives 0.746, a disappointing and confusing score considering we can do better with just the gender submission. This might be down to overfitting, or even a bug. Let's perform some cross validation and hyperparameter tuning to find out if we can improve these scores. We still do not have a lot of features (at least compared to the dataset) and we know that random forests are quite good at performing feature selection. 
@@ -753,7 +755,7 @@ For now ignore the f1-score, macro avg and weighted avg. We will focus on the ac
 
 The accuracy for the best model is 0.85, 0.03 higher than the worst model with an accuracy of 0.82. I am unsure as to why these are higher than Scikit-Learn's own cross validation, I am shuffling the data. Let me know if you can see why.
 
-The precision and recall are quite evenly matched, which is fine since we have no preference over the other for this project. However, the metrics are higher for the negative case (i.e. when a passenger died) than the positive case (i.e. when a passenger survived). This shows the model may be a little biased towards the negative cases (with higher observations) and treating the survived cases more as noise. Precision and recall are more important when there are higher benefits or costs to one of the classification types. 
+The precision and recall are quite evenly matched, which is fine since we have no preference for one or the other for this project. However, the metrics are higher for the negative case (i.e. when a passenger died) than the positive case (i.e. when a passenger survived). This shows the model may be a little biased towards the negative cases (with higher observations) and treating the survived cases more as noise. Precision and recall are more important when there are higher benefits or costs to one of the classification types. 
 
 ### ROC curves and the AUC
 
@@ -895,7 +897,7 @@ This saves the submission file to our ```/kaggle/working``` directory where we c
 | Logistic Regression | 0.773 | 0.775 |
 
 
-The highest score was 0.792, which I was happy with ranked me within the top 0.73% of submissions. 
+The highest score was 0.792, which I was happy with ranked me within the top 7.3% of submissions. 
 
 There were several areas I could have explored to try to improve my score:
 - Impute the missing ages with 0. A friend mentioned this to me after discussing the dataset and it could have informed the network about the missing data. Or even impute the data but keep a binary column indicating whether the value had been imputed or not.
