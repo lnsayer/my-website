@@ -1,4 +1,13 @@
-# First Machine Learning Project: Classification With The Titanic Dataset
+---
+layout: post
+title: First Machine Learning Project
+subtitle: Classification with the Titanic dataset
+cover-img: /assets/img/path.jpg
+thumbnail-img: /assets/img/thumb.png
+share-img: /assets/img/path.jpg
+tags: [books, test]
+author: Sharon Smith and Barry Simpson
+---
 
 <img src="/files/titanic_project/Stöwer_Titanic.jpg" width="500" height="350">
 
