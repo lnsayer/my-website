@@ -24,6 +24,9 @@ navbar-links:
   Projects: "blog"
   Uni projects: "uniprojects"
 
+url: 'https://lnsayer.github.io/'
+baseurl: 'my-website/' 
+
 ################
 # --- Logo --- #
 ################
