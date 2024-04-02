@@ -2,6 +2,8 @@
 
 <img src="/files/titanic_project/Stöwer_Titanic.jpg" width="500" height="350">
 
+[1]
+
 This was my first end-to-end machine learning project on the famous Titanic dataset. It is a classification problem in which we predict which passengers survived the sinking of the Titanic. I have implemented several machine learning techniques during this project and gained a respectable position in the leaderboard, within the top 7% of users. This project is particularly interesting because it demonstrates the biases which machine learning models can exhibit.
 
 This notebook also serves as a guide for people new to machine learning. Please do not hesitate to get in contact if you have any questions, or even more so if you spot anything incorrect!
@@ -400,7 +402,7 @@ new_train_df
 
 Some notes:
  - The custom dropped columns could have been dropped automatically in the `prepare_dataframe` function since all those features had been imputed or one-hot encoded. When I was experimenting with using different features I used this quite a lot.
- -  It is not immediately clear of the cause for the missing age values (missing at random or not at random [1]). This is something we could have investigated further. I did not want to remove this column as it is such a useful predictor. Imputing using the median age would not give the best estimate for age since the passengers' ages vary depending on their passenger class, fare etc. There are other variables we can use to predict the missing values such as their title or number of siblings (children are more likely to travel with siblings than adults are). For this reason I decided to use a k-nearest neighbour algorithm because it is accurate, simple and fast. See my possible improvements at the bottom of the article for more information. Imputing the missing ages gave a similar distribution compared to the original non-missing data: 
+ -  It is not immediately clear of the cause for the missing age values (missing at random or not at random [2]). This is something we could have investigated further. I did not want to remove this column as it is such a useful predictor. Imputing using the median age would not give the best estimate for age since the passengers' ages vary depending on their passenger class, fare etc. There are other variables we can use to predict the missing values such as their title or number of siblings (children are more likely to travel with siblings than adults are). For this reason I decided to use a k-nearest neighbour algorithm because it is accurate, simple and fast. See my possible improvements at the bottom of the article for more information. Imputing the missing ages gave a similar distribution compared to the original non-missing data: 
 
 ```python
 # Columns to drop in preparing the dataframes
@@ -455,6 +457,8 @@ y_train = new_train_df["Survived"]
 We can quickly model the data using a Random forest classifier, which aggregates the predictions of many decision trees (for example 100). A single decision tree looks like this: 
 
 <img src="/files/titanic_project/Decision_Tree.jpg" width="auto" height="450">  
+[3]
+
 
 Random forests are a good choice for several reasons:
 - They are accurate
@@ -527,9 +531,11 @@ Cross validation is a way to choose between these models but in a way that preve
 
  <img src="/files/titanic_project/k-folds_cross_validation.png" width="auto" height="300"> 
 
-The advantages of cross validation is that we can pick which model from hyperparameter tuning is best whilst knowing it won't overfit the data since the accuracy is scored on unseen data. Normally the test set is meant to represent unseen data so we do not want to improve our models on it otherwise we risk overfitting. This project is unusual in that the test data is actually from the same distribution (i.e. the same ship).
+ [4]
 
-Luckily Scikit-learn has some functions so that we can do this automatically with `GridSearchCV` and `RandomizedSearchCV`. `GridSearchCV` takes a dictionary of hyperparameters and exhaustively tries every single one to find the best cross validation score (which we will do with k-folds). `RandomizedSearchCV` also takes a dictionary of hyperparameters but randomly tries a pre-set number of different combinations. It has been shown that `RandomizedSearchCV` performs better with fewer iterations but that `GridSearchCV` will find the optimal hyperparameters given enough iterations. 
+The advantage of cross validation is that we can pick which model from hyperparameter tuning is best whilst knowing it will not overfit the data since the accuracy is scored on unseen data. Normally the test set is meant to represent unseen data so we do not want to improve our models on it otherwise we risk overfitting. This project is unusual in that the test data is actually from the same distribution (i.e. the same ship).
+
+Luckily Scikit-learn has some functions so that we can do this automatically with `GridSearchCV` and `RandomizedSearchCV`. `GridSearchCV` takes a dictionary of hyperparameters and exhaustively tries every single one to find the best cross validation score (which we will do with k-folds). `RandomizedSearchCV` also takes a dictionary of hyperparameters but randomly tries a pre-set number of different combinations. It has been shown that `RandomizedSearchCV` performs better with fewer iterations but that `GridSearchCV` will find the optimal hyperparameters given enough iterations [5]. 
 
 ``` python
 # Setup the random seed 
@@ -581,6 +587,8 @@ best_params_decks = gs_clf_decks.best_params_
 # Dataframe of the results of each hyperparameter combination
 cv_results_decks = gs_clf_decks.cv_results_
 ```
+This gives a trained model `gs_clf_decks` with the best hyperparameters. We will see some results shortly. 
+
 Initially we ran some randomised searches to find good general hyperparameters and then searched the space exhaustively. 
 
 These are our cross validated results: 
@@ -591,7 +599,7 @@ These are our cross validated results:
 | Age imputed with KNN    | 0.800 | 0.829 |
 | Age imputed with KNN along with test data  | 0.805 | 0.826 |
 
-As we can see the cross validated accuracy scores improves with using the KNN imputation technique. Imputing with the test set data appears to give very similar results to imputing with just the training set. However, when evaluating model on the test set this is almost certainly going to give an advantage, as we will see later. As mentioned before, normally imputing with the test set data is a crime on data but since we are making predictions on the same distribution (i.e. the same ship) we are fitting better to the required distribution. 
+As we can see the cross validated accuracy scores improves with using the KNN imputation technique. Imputing with the test set data appears to give very similar results to imputing with just the training set. However, when evaluating the model on the test set this is almost certainly going to give an advantage, as we will see later. As mentioned before, normally imputing with the test set data is poor practice but since we are making predictions on the same distribution (i.e. the same ship) we are fitting better to the required distribution. 
 
 We can see the best hyperparameters, results for all the hyperparameter combinations and feature importance of the best performing classifier like so: 
 ```python
@@ -629,7 +637,7 @@ plt.show()
 
  <img src="/files/titanic_project/best_hyperparameter_feature_importances.png" width="auto" height="450">  
 
- As you can see in the top image we have the best hyperparameters in a dictionary and the results are shown in a dataframe. It turns out the best hyperparameters are pretty similar to the default hyperparameters, only two hyperparameters were changed minimally, but this gives quite an improvement. We are also given the accuracy score for the test set of each of the five folds. The highest score (0.854) is 5.55% more accurate than the lowest score (0.809)! The cross validation modules in scikit-learn are pretty handy!
+ As you can see in the top image we have the best hyperparameters in a dictionary and the results are shown in a dataframe. It turns out the best hyperparameters are pretty similar to the default hyperparameters, only two hyperparameters were changed minimally, but this gives quite an improvement. We are also given the accuracy score for the test set of each of the five folds. The highest score (0.854) is 5.55% more accurate than the lowest score (0.809)! The cross validation modules in scikit-learn are pretty useful.
 
 It is also interesting to look at how the feature importances change by selecting the hyperparameters. For the default hyperparameters Age was the most important feature with a value of 0.21 but this decreases to 0.07 for the best hyperparameters and the Title_Mr becomes the most important feature with a value of 0.21. This shows how random forests can deal with colinear variables: they are good at selecting the most important features, and naturally other features encapsulating similar information (e.g. Age) become less important. The Fare and Sex which probably are not as strongly colinear to other variables remain important to both forests. 
 
@@ -638,6 +646,8 @@ It is also interesting to look at how the feature importances change by selectin
 We can compare different metrics for our models as well. Accuracy is very important since it is the proportion of correct identifications but we can also look at precision or recall. Firstly, it is useful to understand the four categories our predictions can fall into:
 
  <img src="/files/titanic_project/ConfusionMatrixRedBlue.png" width="auto" height="200">
+
+ [6]
 
 Accuracy is given by 
 
@@ -682,9 +692,9 @@ def cross_val_index(k_folds, dataframe, fold_number):
     
     return X_train, y_train, X_valid, y_valid
 ```
-We can split up the data with as many ```k-folds``` as desired and can ask for any of folds of the training and validation sets of a dataset with the parameter ```fold_number```. 
+We can split up the data with as many ```k-folds``` as desired and can ask for any folds of the training and validation sets of a dataset with the parameter ```fold_number```. 
 
-Then we can train the best model and worst model (from the random forest hyperparameter tuning) on the respective training set and predict on the validation set. 
+Then we can train the best model and worst model (from the random forest hyperparameter tuning) on the respective training set and predict on the validation set. In retrospect I should have compared the models in closer contention such as the default vs best hyperparameters or differing imputing methods. However comparing these models gives clearer differences in their metrics. 
 
 ```python
 # Columns to drop
@@ -739,20 +749,24 @@ Worst model report:
    macro avg       0.80      0.80      0.80       179
 weighted avg       0.81      0.82      0.81       179
 ```
-For now ignore the f1-score, macro avg and weighted avg. We will focus on the accuracy, precision and recall scores. The accuracy for the best model is 0.85, 0.03 higher than the worst model with an accuracy of 0.82. I am unsure as to why these are higher than Scikit-Learn's own cross validation, I am shuffling the data. Let me know if you can see why.
+For now ignore the f1-score, macro avg and weighted avg. We will focus on the accuracy, precision and recall scores. Normally, we consider recall and precision for the positive case (predicting 1) but we can also calculate it for the negative case. Scikit-Learn's classification reports gives both. 
+
+The accuracy for the best model is 0.85, 0.03 higher than the worst model with an accuracy of 0.82. I am unsure as to why these are higher than Scikit-Learn's own cross validation, I am shuffling the data. Let me know if you can see why.
 
 The precision and recall are quite evenly matched, which is fine since we have no preference over the other for this project. However, the metrics are higher for the negative case (i.e. when a passenger died) than the positive case (i.e. when a passenger survived). This shows the model may be a little biased towards the negative cases (with higher observations) and treating the survived cases more as noise. Precision and recall are more important when there are higher benefits or costs to one of the classification types. 
 
 ### ROC curves and the AUC
 
-Another way in which we can compare our models is by using a ROC (Receiver Operator Characteristic Curve) and calculating the AUC (area under the curve). 
+Another way in which we can compare our models is by using a ROC (Receiver Operator Characteristic) Curve and calculating the AUC (area under the curve). 
 These are ways in which we can visualise how the true positive rate and false negative rate are affected by changing the classification threshold of our predictions. 
  
 When we pass a passenger's information through our models, the model returns a number between 0 and 1 which indicates how likely it thinks the passenger has survived. The classification threshold is a number which determines whether the model then predicts the passenger as surviving or not. For example, if the classification threshold is 0.5 then a passenger with a predicted probability of 0.4 would be predicted as having died and passenger with a predicted probability of 0.6 would be predicted as having survived. 
 
-Ideally we want the true positive rate to be as high as possible and the false positive rate to be as low as possible. There is a trade off between these however, e.g. decreasing the classification threshold leads to all the actual positive values being predicted correctly but all the actual negative values being predicted incorrectly. An ROC curve shows the TP and FP rates for different classification thresholds and we can compare models this way:
+Ideally, we would like the true positive rate to be as high as possible and the false positive rate to be as low as possible. There is a trade off between these however, e.g. decreasing the classification threshold leads to all the actual positive values being predicted correctly but all the actual negative values being predicted incorrectly. An ROC curve shows the TP and FP rates for different classification thresholds and we can compare models this way:
 
  <img src="/files/titanic_project/ideal_roc_curve.png" width="auto" height="450">   
+
+ [7]
 
 The area under the curve (AUC) indicates the quality of the model and a perfect model will have a score of 1 while a random model will have a score of 0.5. Let's calculate our prediction probabilities and the area under the curve: 
 ```python
@@ -780,7 +794,7 @@ plt.title('Receiver Operating Characteristic (ROC) curve')
 plt.legend()
 plt.show()
 ```
- <img src="/files/titanic_project/roc_curve_best_and_worst_rf_classifier.png" width="auto" height="450">  
+ <img src="/files/titanic_project/roc_curve_best_and_worst_rf_classifier.png" width="auto" height="450"> 
 
 As we can see, the best model is almost always above the worst model, particularly for a false positive rate at around 0.2. Visualising the ROC and using the AUC as a metric is important for two reasons:
 - They are scale-invariant: they measure how well predictions are ranked, rather than their absolute values
@@ -823,7 +837,7 @@ gs_log_clf_decks = GridSearchCV(estimator = log_clf, param_grid=log_grid,
                        verbose =1 # Prints out information as it is running
                        )
 ```
-The main differences are the hyperparameters, which are completely different. It is a *generalised* linear model and uses an algorithm in its optimisation, in our case we have chosen 'liblinear' which works well for small datasets. 
+The main differences are the hyperparameters, which are completely different. It is a *generalised* linear model and uses an algorithm in its optimisation, in our case we have chosen 'liblinear' which works well for small datasets [8]. 
 
 We found the optimal hyperparameters in exactly the same way with GridSearchCV and we were then able to submit some predictions!
 
@@ -855,7 +869,7 @@ print(output)
 output.to_csv('submission.csv', index=False)
 print("Your submission was successfully saved!")
 ```
-The result:
+which returns 
 ```python
 PassengerId  Survived
 0            892         0
@@ -873,15 +887,17 @@ PassengerId  Survived
 [418 rows x 2 columns]
 Your submission was successfully saved!
 ```
-This saves the submission file to our ```/kaggle/working``` directory where we can download our submission file in csv format and submit on the Titanic Machine Learning page. We can change the hyperparameters used and also submit scores for out logistic regression model. After submitting the results of these models I received the following scores!
+This saves the submission file to our ```/kaggle/working``` directory where we can download our submission file in csv format and submit on the Titanic Machine Learning page. We can change the hyperparameters used and also submit scores for our logistic regression model. After submitting the results of these models I received the following scores:
 
 | Model | Default hyperparameters | Best hyperparameters |
 | ------ | ----------- | ---|
-| Age imputed with KNN along with test data  | 0.775 | 0.792 |
+| Random Forest, Age imputed with KNN along with test data  | 0.775 | 0.792 |
 | Logistic Regression | 0.773 | 0.775 |
 
 
-The highest score was 0.792, which I was happy with ranked me within the top 0.73% of submissions. There were, however, several areas I could have explored to try to improve my score:
+The highest score was 0.792, which I was happy with ranked me within the top 0.73% of submissions. 
+
+There were several areas I could have explored to try to improve my score:
 - Impute the missing ages with 0. A friend mentioned this to me after discussing the dataset and it could have informed the network about the missing data. Or even impute the data but keep a binary column indicating whether the value had been imputed or not.
 - I did not use the ticket feature at all, perhaps this could have been useful after performing some feature engineering.
 - I should have left the Deck column as the class categories and not one-hot encoded it since this only made the dataset more sparse.
@@ -893,14 +909,31 @@ The highest score was 0.792, which I was happy with ranked me within the top 0.7
 If you have reached this point of my article then thank you so much for taking the time to read through it all! Do not hesitate to send me a message with questions, any thoughts and especially if you see something wrong! 
 
 Some more resources for this projects:
-I learnt how to code with Sklearn using the Complete A.I. & Machine Learning, Data Science Bootcamp from Andrei Neagoie and Daniel Bourke on udemy https://www.udemy.com/course/complete-machine-learning-and-data-science-zero-to-mastery/ . Shoutout to Daniel for his enthusiasm and making me passionate about machine learning. 
-You can also check out some other tutorials with Python:
+
+I learnt how to use Sklearn using the Complete A.I. & Machine Learning, Data Science Bootcamp from Andrei Neagoie and Daniel Bourke on udemy https://www.udemy.com/course/complete-machine-learning-and-data-science-zero-to-mastery/ . Shoutout to Daniel for his enthusiasm and making me passionate about machine learning. 
+You can also check out some other Titanic dataset tutorials with Python:
 - https://www.kaggle.com/competitions/titanic/code
 - https://www.ahmedbesbes.com/blog/kaggle-titanic-competition
 - https://www.ultravioletanalytics.com/blog/kaggle-titanic-competition-part-i-intro/
 - The Sklearn documentation is fantastic and a great place to learn more about machine learning: https://scikit-learn.org/stable/
 
-References: 
+### References: 
 
-[1] https://www.analyticsvidhya.com/blog/2021/10/handling-missing-value/
+[1] Wikimedia Commons contributors, "File:Stöwer Titanic.jpg," Wikimedia Commons, https://commons.wikimedia.org/w/index.php?title=File:St%C3%B6wer_Titanic.jpg&oldid=845574585 (accessed April 2, 2024)
+
+[2] Effective Strategies for Handling Missing Values in Data Analysis by Nasima Tamboli, https://www.analyticsvidhya.com/blog/2021/10/handling-missing-value/
+
+[3] Wikimedia Commons contributors, "File:Decision Tree - survival of passengers on the Titanic.jpg," Wikimedia Commons, https://commons.wikimedia.org/w/index.php?title=File:Decision_Tree_-_survival_of_passengers_on_the_Titanic.jpg&oldid=469537604 (accessed April 2, 2024).
+
+[4] Wikimedia Commons contributors, "File:K-fold cross validation EN.svg," Wikimedia Commons, https://commons.wikimedia.org/w/index.php?title=File:K-fold_cross_validation_EN.svg&oldid=852533300 (accessed April 2, 2024). Image edited by me. 
+
+[5] Intro to Model Tuning: Grid and Random Search by Will Koerhsen, https://www.kaggle.com/code/willkoehrsen/intro-to-model-tuning-grid-and-random-search
+
+[6] Wikimedia Commons contributors, "File:ConfusionMatrixRedBlue.png," Wikimedia Commons, https://commons.wikimedia.org/w/index.php?title=File:ConfusionMatrixRedBlue.png&oldid=505414509 (accessed April 2, 2024).
+
+[7] Wikimedia Commons contributors, "File:Roc curve.svg," Wikimedia Commons, https://commons.wikimedia.org/w/index.php?title=File:Roc_curve.svg&oldid=790154745 (accessed April 2, 2024).
+
+[8] Sklearn's Logistic Regression classifier, https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
+
+
 
