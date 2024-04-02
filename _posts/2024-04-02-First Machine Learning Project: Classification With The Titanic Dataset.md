@@ -661,19 +661,19 @@ We can compare different metrics for our models as well. Accuracy is very import
 
 Accuracy is given by 
 
-$$ Accuracy = \\frac{TP+TN}{TP+FP+TN+FN}$$
+$$ Accuracy = \frac{TP+TN}{TP+FP+TN+FN}$$
 
 which is the most important metric for our project since the submission score uses accuracy. However, we may be interested in how well our models fair with different metrics. 
 
 Two other important metrics in machine learning are precision and recall, which are important in different scenarios. Precision indicates the proportion of positive predictions which were actually correct:
 
-$$Precision = \\frac{TP}{TP+FP}$$
+$$Precision = \frac{TP}{TP+FP}$$
 
 Precision is important when you want to minimise the number of false positives or maximise the number of true positives. For example, a Youtube recommendation algorithm would want to minimise the number of bad videos recommended (false positives) and maximise the recommendation of very good videos (true positives).
 
 Recall on the other hand is defined as: 
 
-$$Recall = \\frac{TP}{TP+FN}$$
+$$Recall = \frac{TP}{TP+FN}$$
 
 Recall is important when you want to minimise the number of false negatives or maximise the number of true negatives. For example, a rare cancer screening model would want to minimise the number of true cancer cases it categorises as negative (false negatives). Missing a cancer case could prove lethal for the patient. We would really want to be sure the patient does not have cancer if we were to predict negative. This is at the expense of increasing the number of false positives but the cost of life is higher than the cost of a second cancer screening.
 
