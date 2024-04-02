@@ -2,11 +2,11 @@
 layout: post
 title: First Machine Learning Project
 subtitle: Classification with the Titanic dataset
-cover-img: /assets/img/path.jpg
-thumbnail-img: /assets/img/thumb.png
+cover-img: /files/titanic_project/Stöwer_Titanic.jpg
+thumbnail-img: /files/titanic_project/Stöwer_Titanic.jpg
 share-img: /assets/img/path.jpg
 tags: [books, test]
-author: Sharon Smith and Barry Simpson
+author: Louis Sayer
 ---
 
 <img src="/files/titanic_project/Stöwer_Titanic.jpg" width="500" height="350">
