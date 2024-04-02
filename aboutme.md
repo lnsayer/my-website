@@ -1,16 +1,11 @@
 ---
 layout: page
 title: About me
-subtitle: Why you'd want to go on a date with me
+subtitle:
 ---
 
-My name is Inigo Montoya. I have the following qualities:
+## Hi there, I'm Louis Sayer 
 
-- I rock a great mustache
-- I'm extremely loyal to my family
+### I am a physics graduate and aspiring data scientist. I am really interested in how AI can understand and contribute to science, particularly biology.
 
-What else do you need?
-
-### My story
-
-To be honest, I'm having some trouble remembering right now, so why don't you just watch [my movie](https://en.wikipedia.org/wiki/The_Princess_Bride_%28film%29) and it will answer **all** your questions.
+I graduated from Durham University with an integrated master’s degree in physics. This is when I first gained exposure to machine learning as my master’s project used a deep convolutional neural network to predict and understand protein transition states. I have developed a keen interest in this area ever since!
