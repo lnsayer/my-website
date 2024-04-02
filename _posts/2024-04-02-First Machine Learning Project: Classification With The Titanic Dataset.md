@@ -8,7 +8,6 @@ share-img: /assets/img/path.jpg
 tags: [Machine Learning, Classification, Tutorial]
 author: Louis Sayer
 mathjax: true
-full-width: true
 ---
 
 [1]
@@ -83,7 +82,7 @@ pd.set_option('display.max_rows', 10)
 # Show the dataframe
 display(combined_df)
 ```
-<img src="https://lnsayer.github.io/my-website/files/titanic_project/combined_df.png" alt="Untitled" width="844" height="350"/>
+<img src="https://lnsayer.github.io/my-website/files/titanic_project/combined_df.png" alt="Untitled" width=100% height=auto/>
 
 Note, NaN means not a number.
 
