@@ -5,11 +5,9 @@ subtitle: Classification with the Titanic dataset
 cover-img: /files/titanic_project/Stöwer_Titanic.jpg
 thumbnail-img: /files/titanic_project/Stöwer_Titanic.jpg
 share-img: /assets/img/path.jpg
-tags: [books, test]
+tags: [Machine Learning, Classification, Tutorial]
 author: Louis Sayer
 ---
-
-<img src="/files/titanic_project/Stöwer_Titanic.jpg" width="500" height="350">
 
 [1]
 
