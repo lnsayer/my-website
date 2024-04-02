@@ -399,12 +399,12 @@ new_train_df
  <img src="/files/titanic_project/prepared_dataset.png" width="auto" height="300"> 
 
 Some notes:
- - The custom dropped columns could have been dropped automatically in the `prepare_dataframe` function since their features had been imputed or one-hot encoded. When I was experimenting with using different features I used this quite a lot.
- -  It is not immediately clear of the cause for the missing age values (missing at random or not at random [1]). This is something we could have investigated further. We do not want to remove this column as it is such a useful predictor. Imputing using the median age would not give the best estimate for age since the passengers' ages vary depending on their passenger class, fare etc. There are other variables which we can use to predict the missing values such as their title or number of siblings (children are more likely to travel with siblings than adults are). For this reason I decided to use a k-nearest neighbour algorithm because it is accurate, simple and fast. Imputing the missing ages gave a similar distribution compared to the original non-missing data: 
+ - The custom dropped columns could have been dropped automatically in the `prepare_dataframe` function since all those features had been imputed or one-hot encoded. When I was experimenting with using different features I used this quite a lot.
+ -  It is not immediately clear of the cause for the missing age values (missing at random or not at random [1]). This is something we could have investigated further. I did not want to remove this column as it is such a useful predictor. Imputing using the median age would not give the best estimate for age since the passengers' ages vary depending on their passenger class, fare etc. There are other variables we can use to predict the missing values such as their title or number of siblings (children are more likely to travel with siblings than adults are). For this reason I decided to use a k-nearest neighbour algorithm because it is accurate, simple and fast. See my possible improvements at the bottom of the article for more information. Imputing the missing ages gave a similar distribution compared to the original non-missing data: 
 
 ```python
 # Columns to drop in preparing the dataframes
-drop_columns = ["Embarked", "Ticket", "Name", 'PassengerId']
+drop_columns = ["Embarked", "Ticket", "Name", "PassengerId"]
 
 new_train_df = prepare_dataframe(train_df, drop_columns)
 new_test_df = prepare_dataframe(test_df, drop_columns)
@@ -431,13 +431,13 @@ print(train_df["Age"].isna().sum())
 
  - Another option for imputing the age would have been to set the missing values as 0. It might have been the case that passengers had a missing age *because* they had died and their records were not kept. Setting the missing values as 0 might have been able to capture this. Further work could explore the effect of this. 
 
-- For the deck code we decided to keep the missing values as a new column because like age the missing values might have been caused a passenger dying. We will see this column turned out to be pretty important in the models' feature importances.
+- For the deck code we decided to keep the missing values as a new column because like age the missing values might have been caused a passenger dying. We will see how this column turned out to be important in the models' feature importances.
 - Since there is only one missing feature from the Fare column we imputed this with the median.
 - We decided to one-hot encode the Pclass column but in fact this was unnecessary and only made the dataframe more sparse. We could have kept this in its original form. 
 
 ### 3. Quick Modelling to see feature importance
 
-To train our first model we have to split up the data into our features (all the independent variables such as age, sex columns etc.) and the target (the survived column). In this case we have imputed the data separately but we will change this later on.
+To train our first model we have to split up the data into the independent features `x_train` (all the independent variables such as age, sex columns etc.) and the dependent target `y_train` (the survived column). In this case we have imputed the data separately but we will change this later on.
 
 ```python
 # Setup the random seed
@@ -465,7 +465,6 @@ Random forests are a good choice for several reasons:
 Random forests have a few drawbacks however: 
 - Although a single tree is easy to interpret, it is not so easy for a whole forest, particularly when using many trees
 - They are time consuming since each decision tree has to be trained or run to make a prediction
-
   
 ```python
 # Instantiate the classifier
@@ -507,18 +506,18 @@ plt.show()
 ```
  <img src="/files/titanic_project/default_clf_feature_importances.png" width="auto" height="450"> 
 
-We can see the feature selection at play with the random forest clearly prioritising features over others. As expected, some of the most important features were those we investigated at the start. Age, Fare, Title_Mr and Sex are the most important. Most of the decks are unimportant but Deck_U is more important than the rest which partially supports our theory that a missing deck may have been been caused by the death of a passenger. 
+We can see the feature selection at play with the random forest clearly prioritising some features over others. As expected, some of the most important features were those we investigated at the start. Age, Fare, Title_Mr and Sex are the most important. Most of the Decks are unimportant but Deck_U is more important than the rest which partially supports our theory that a missing deck may have been been caused by the death of a passenger. 
 
-**How is feature importance calculated?** Whenever a decision is made by the tree, we work out how well the decision splits the data into survived and died. This is done using the Gini index which measures this impurity (splitting up efficacy) based on the probabilities of the outcomes from a split. For example a perfect decision will split the data into survived and died perfectly, however the worst decision will split the data into a perfect mix (50/50). The feature_importances measures how much each attribute contributes to decreasing the impurity. 
+**How is feature importance calculated?** Whenever a decision is made by the tree, we work out how well the decision splits the data into survived and died. This is done using the Gini index which measures this impurity (splitting up efficacy) based on the probabilities of the outcomes from a split. For example a perfect decision will split the data into survived and died perfectly, however the worst decision will split the data into a perfect mix (50/50). The feature_importances measures how much, on average, each attribute contributes to decreasing the impurity - this is why it is called MDI (Mean Decrease in Impurity)
 
-**Note:** I have since learnt that Sklearn's `feature_importances_` is biased towards features with high cardinality (number of possible values) such as the Age column. This is because the more splitting points we have, the higher the probability that a split could reduce the impurity. A more effective measure of feature importance is permutation importance which iteratively scrambles one of the features and measures the corresponding decrease in accuracy. However, this is more computationally expensive since each feature needs to be scrambled and the model needs to be scored several times. 
+**Note:** I have since learnt that Sklearn's `feature_importances_` is biased towards features with high cardinality (number of possible values) such as the Age column. This is because the more splitting points we have, the higher the probability that a split could reduce the impurity. A more effective measure of feature importance is permutation importance which iteratively scrambles one of the features and measures the corresponding decrease in accuracy. However, this is more computationally expensive since each feature needs to be scrambled and the model needs to be scored several times. In future work we could implement this instead. 
 
 We will go into scoring the test set later but for now let's see how this model performs with the test set. For reference:
 - Submitting all dead gives a score of 0.622
 - Submitting based on gender (predicting male = dead, female = surived) gives an accuracy score of 0.766
 
 Originally I tested this classifier without the newly engineered columns and imputing the age with the median age. This gave a score of 0.768, only a slight improvement!
-A lot of work for 0.02 increase in accuracy score. Scoring with the newly engineered columns gives 0.746, a disappointing and confusing score considering we can do better with just the gender submission. This might be down to overfitting, let's perform some cross validation and hyperparameter tuning to find out if we can improve these scores. We still do not have a lot of features (at least compared to the dataset) and we know that random forests are quite good at performing feature selection. 
+A lot of work for 0.02 increase in accuracy score. Scoring with the newly engineered columns gives 0.746, a disappointing and confusing score considering we can do better with just the gender submission. This might be down to overfitting, or even a bug. Let's perform some cross validation and hyperparameter tuning to find out if we can improve these scores. We still do not have a lot of features (at least compared to the dataset) and we know that random forests are quite good at performing feature selection. 
 
 ### 4. Cross Validation and Hyperparameter tuning
 
@@ -526,7 +525,7 @@ The hyperparameters of the network are like the dials on our models which we can
 
 Cross validation is a way to choose between these models but in a way that prevents the model from overperforming on the training set and underperforming on the test. It does this by splitting our training data into a smaller training set and 'validation' set. The model trains on the training set but is scored on the validation set. We split up the whole training set *k* number of times to do this, so that the validation set is different each time, and calculate an average of the accuracy score of those *k* iterations. This is called k-folds cross-validation and it is much easier to visualise like this: 
 
- <img src="/files/titanic_project/K-fold_cross_validation.svg" width="auto" height="300"> 
+ <img src="/files/titanic_project/k-folds_cross_validation.png" width="auto" height="300"> 
 
 The advantages of cross validation is that we can pick which model from hyperparameter tuning is best whilst knowing it won't overfit the data since the accuracy is scored on unseen data. Normally the test set is meant to represent unseen data so we do not want to improve our models on it otherwise we risk overfitting. This project is unusual in that the test data is actually from the same distribution (i.e. the same ship).
 
