@@ -21,7 +21,7 @@ author: Louis Sayer
 
 navbar-links:
   About Me: "aboutme"
-  Projects: "blog"
+  Work Projects: "blog"
   Uni projects: "uniprojects"
 
 url: 'https://lnsayer.github.io/'
@@ -51,16 +51,16 @@ round-avatar: true
 # You can change the order that they show up on the page by changing the order here.
 # Uncomment the links you want to show and add your information to each one.
 social-network-links:
-  email: "someone@example.com"
-  rss: true  # remove this line if you don't want to show an RSS link at the bottom
-  facebook: deanattali
-  github: daattali
-  twitter: daattali
-  patreon: DeanAttali
-  youtube: "@daattali"
+  email: "l04sayer@gmail.com"
+#  rss: true  # remove this line if you don't want to show an RSS link at the bottom
+#  facebook: deanattali
+  github: lnsayer
+#  twitter: daattali
+#  patreon: DeanAttali
+#  youtube: "@daattali"
 #  medium: yourname
 #  reddit: yourname
-#  linkedin: daattali
+  linkedin: louis-sayer-384361228
 #  xing: yourname
 #  stackoverflow: "3943160/daattali"
 #  snapchat: deanat78
