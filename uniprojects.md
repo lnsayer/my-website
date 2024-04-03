@@ -2,7 +2,7 @@ These are some of my university project reports, of which I am very proud. I con
 
 🔬 <a href="/files/summative_report.pdf" target="_blank">Using a Neural Network to Explore the Conformational Space of MurD</a>
 
-I used a bespoke CNN to study the conformational states of a bacterial protein, MurD. My project focussed on hyperparameter tuning and changing the input atom conformations to improve the network. 
+I used a bespoke CNN to study the conformational states of a bacterial protein, MurD. My project focussed on hyperparameter tuning and feature engineering the input atom conformations to improve the network. 
 
 <img src="https://lnsayer.github.io/my-website/files/uni_projects/protein.png" width="500" height="350" class="center">
 
