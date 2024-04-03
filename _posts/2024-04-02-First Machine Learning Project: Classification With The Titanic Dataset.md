@@ -310,7 +310,7 @@ new_train_df = add_family(new_train_df)
 
 new_train_df
 ```
- <img src="https://lnsayer.github.io/my-website/files/titanic_project/new_features.png" width="356" height="784">   
+ <img src="https://lnsayer.github.io/my-website/files/titanic_project/new_features.png" width="182" height="400">   
 
  Next we are going to impute our data and one hot encode the categorical data. For this I created a function `prepare_dataframe` which can do this to any chosen dataframe and can also drop columns we are not interested in using. It does the following:
  - Converts the sex column into binary (0 and 1s)
@@ -437,7 +437,7 @@ print(new_train_df["Age"].isna().sum())
 print(train_df["Age"].isna().sum())
 ```
 
- <img src="https://lnsayer.github.io/my-website/files/titanic_project/imputed_age.png" alt="Untitled" width="601" height="604">  
+ <img src="https://lnsayer.github.io/my-website/files/titanic_project/imputed_age.png" alt="Untitled" width="500" height="362">  
 
  - Another option for imputing the age would have been to set the missing values as 0. It might have been the case that passengers had a missing age *because* they had died and their records were not kept. Setting the missing values as 0 might have been able to capture this. Further work could explore the effect of this. 
 
@@ -653,7 +653,7 @@ It is also interesting to look at how the feature importances change by selectin
 
 We can compare different metrics for our models as well. Accuracy is very important since it is the proportion of correct identifications but we can also look at precision or recall. Firstly, it is useful to understand the four categories our predictions can fall into:
 
- <img src="https://lnsayer.github.io/my-website/files/titanic_project/ConfusionMatrixRedBlue.png" alt="Untitled" style="height:auto;">
+ <img src="https://lnsayer.github.io/my-website/files/titanic_project/ConfusionMatrixRedBlue.png" height="301" width="300">
  
 
  [6]
@@ -773,7 +773,7 @@ When we pass a passenger's information through our models, the model returns a n
 
 Ideally, we would like the true positive rate to be as high as possible and the false positive rate to be as low as possible. There is a trade off between these however, e.g. decreasing the classification threshold leads to all the actual positive values being predicted correctly but all the actual negative values being predicted incorrectly. An ROC curve shows the TP and FP rates for different classification thresholds and we can compare models this way:
 
- <img src="https://lnsayer.github.io/my-website/files/titanic_project/ideal_roc_curve.png" alt="Untitled" style="height:auto;">   
+ <img src="https://lnsayer.github.io/my-website/files/titanic_project/ideal_roc_curve.png" height="500" width="500">   
  
 
  [7]
