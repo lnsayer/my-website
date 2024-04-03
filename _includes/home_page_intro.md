@@ -1,4 +1,4 @@
-## Hi there, I'm Louis Sayer 
+# Hi there, I'm Louis Sayer 
 
 ### I am a physics graduate and aspiring data scientist. I am really interested in how AI can understand and contribute to science, particularly biology.
 
