@@ -1,4 +1,4 @@
-These are some of my university project reports, of which I am very proud. I consistently received top marks in projects for my content verbal and written communication.
+These are some of my university project reports, of which I am very proud. I consistently received top marks in projects for my content verbal and written communication. I would love it if you gave them a read, particularly my master's project!
 
 🔬 <a href="/files/summative_report.pdf" target="_blank">Using a Neural Network to Explore the Conformational Space of MurD</a>
 
