@@ -4,8 +4,11 @@ title: About me
 subtitle:
 ---
 
-## Hi there, I'm Louis Sayer 
+<img src="https://lnsayer.github.io/my-website/assets/img/nepal_profile_pic.png" alt="Untitled" class="center" >
 
-### I am a physics graduate and aspiring data scientist. I am really interested in how AI can understand and contribute to science, particularly biology.
+I graduated from Durham University with a First class degree in physics in 2022. I learnt how to code for my physics projects in which I analysed and visualised data for various experiments. In my master's project I used a bespoke convolutional neural network to predict the transition states of a bacterical ligase. I really enjoyed this project, which combined physics, biology and computer science all in one. I would love to work in this area in the future but am also interested in the applications of machine learning to many problems. 
 
-I graduated from Durham University with an integrated master’s degree in physics. This is when I first gained exposure to machine learning as my master’s project used a deep convolutional neural network to predict and understand protein transition states. I have developed a keen interest in this area ever since!
+Currently I am completing a machine learning and data science course covering shallow and deep learning with classification and regression problems. After learning the basics of Sklearn I undertook a classification challenge with the Titanic dataset, achieving a score within the top 7.3% of submissions. Right now I am learning Pytorch and hope to start a project with that soon. 
+
+In my spare time I love rock climbing and playing touch rugby. At university I captained the university touch rugby team (DUTRC) in my final year. I also volunteer at my local rugby club helping to coach the U15s. 
+
