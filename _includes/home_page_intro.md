@@ -4,6 +4,6 @@
 
 I am really interested in how AI can understand and contribute to science, particularly biology. This stemmed from my master's project on proteins, which you can check out on my Uni Projects. I am looking for work, so get in touch!
 
-When I am not working, I love being in nature and going on adventures. Also, I am learning French, on pourrais parler en Français?
+When I am not working, I love being in nature and going on adventures. Also, I am learning French, on pourrait parler en Français?
 
 Thanks for visiting!
