@@ -1,3 +1,5 @@
+These are some of my university project reports, of which I am very proud. I consistently received top marks in projects for my content verbal and written communication.
+
 🔬 <a href="/files/summative_report.pdf" target="_blank">Using a Neural Network to Explore the Conformational Space of MurD</a>
 
 I used a bespoke CNN to study the conformational states of a bacterial protein, MurD. My project focussed on hyperparameter tuning and changing the input atom conformations to improve the network. 
