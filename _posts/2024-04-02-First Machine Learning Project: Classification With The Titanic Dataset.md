@@ -310,7 +310,7 @@ new_train_df = add_family(new_train_df)
 
 new_train_df
 ```
- <img src="https://lnsayer.github.io/my-website/files/titanic_project/new_features.png" width="182" height="400">   
+ <img src="https://lnsayer.github.io/my-website/files/titanic_project/new_features.png" width="182" height="400" class="center">   
 
  Next we are going to impute our data and one hot encode the categorical data. For this I created a function `prepare_dataframe` which can do this to any chosen dataframe and can also drop columns we are not interested in using. It does the following:
  - Converts the sex column into binary (0 and 1s)
