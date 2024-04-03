@@ -4,7 +4,7 @@ title: About me
 subtitle:
 ---
 
-<img src="https://lnsayer.github.io/my-website/assets/img/nepal_profile_pic.png" alt="Untitled" class="center" >
+<img src="https://lnsayer.github.io/my-website/assets/img/nepal_profile_pic.png" alt="Untitled" class="center" width="406" height="400">
 
 I graduated from Durham University with a First class degree in physics in 2022. I learnt how to code for my physics projects in which I analysed and visualised data for various experiments. In my master's project I used a bespoke convolutional neural network to predict the transition states of a bacterical ligase. I really enjoyed this project, which combined physics, biology and computer science all in one. I would love to work in this area in the future but am also interested in the applications of machine learning to many problems. 
 
