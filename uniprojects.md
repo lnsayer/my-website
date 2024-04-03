@@ -26,4 +26,4 @@ Recently, I have been following a machine learning and data science course on ud
 
 💧<a href="/files/Water Viscosity Report 2.pdf" target="_blank">Determining the dynamic viscosity of water using the Poiseuille Equation</a> I determined the viscosity of water by measuring the flow rate of water from a capillary tube. 
 
-<img src="https://lnsayer.github.io/my-website/files/uniprojects/water_visc.png" width="400" height="250" class="center"> 
+<img src="https://lnsayer.github.io/my-website/files/uni_projects/water_visc.png" width="400" height="250" class="center"> 
