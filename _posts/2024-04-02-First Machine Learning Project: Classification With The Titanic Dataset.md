@@ -653,7 +653,7 @@ It is also interesting to look at how the feature importances change by selectin
 
 We can compare different metrics for our models as well. Accuracy is very important since it is the proportion of correct identifications but we can also look at precision or recall. Firstly, it is useful to understand the four categories our predictions can fall into:
 
- <img src="https://lnsayer.github.io/my-website/files/titanic_project/ConfusionMatrixRedBlue.png" height="301" width="300">
+ <img src="https://lnsayer.github.io/my-website/files/titanic_project/ConfusionMatrixRedBlue.png" height="301" width="300" class="center">
  
 
  [6]
