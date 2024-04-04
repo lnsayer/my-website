@@ -124,9 +124,9 @@ Data columns (total 12 columns):
  11  Embarked     1307 non-null   object 
 dtypes: float64(3), int64(4), object(5)
 ```
-We mostly have integers and objects, which are strings. We are missing data in the Age (263 missing), Cabin (1014), Fare (1) and Embarked (2) columns. We will have to do some imputation (filling in missing values) and encoding (converting the strings to numerical data which the models can handle).
+We mostly have integers and objects, which are strings. We are missing data in the Age (263 missing), Cabin (1014), Fare (1) and Embarked (2) columns. We will have to do some imputation (filling in missing values using a number of different approaches) and encoding (converting the strings to numerical data which the models can handle).
 
-Since we have combined the training and test set into one dataframe we can see all the missing data. If we had only looked at the training set we would miss the missing fare entry in the test set. Normally we would impute the training and test set separately since our test set represents future data we want to predict. However, as this is the same ship with the same distribution it is okay to impute altogether. It also makes our life easier to do so. 
+Since we have combined the training and test set into one dataframe we can see all the missing data. If we had only looked at the training set we would omit the missing fare entry in the test set. Normally, we would impute the training and test set separately since our test set represents future data we want to predict. However, as this is the same ship with the same distribution it is okay to impute altogether.  
 
 Let's explore how different features might affect survival numbers. We can display the survival rate based on age and sex at the same time with some plots:
 ``` python
@@ -223,12 +223,12 @@ Note, I have since realised you can compare different features by plotting direc
 
 <img src="https://lnsayer.github.io/my-website/files/titanic_project/survival_rate_passenger_class.png" alt="Untitled" style="height:auto;">  
 
-Again, better passenger class corresponds to a higher chance of survival. On the Titanic, you can put a price on life.
+Again, better passenger class corresponds to a higher chance of survival. On the Titanic, it seems you can put a price on life.
 
 ### 2. Data cleaning, feature selection and engineering
 
 Let's try and make some other features useful and even create a new feature. 
-First, we will extract all the titles of the passengers. These might be useful since it can explicity tell the model whether a passenger is an adult or child, as well as their marital status. This code makes a new column 'Title' which returns the string following a comma and space and then a full stop e.g. for `, Mr.` it returns `Mr`. We can see how many of the original entries have each title with `value_counts`. 
+First, we will extract all the titles of the passengers. These might be useful since it can explicitly tell the model whether a passenger is an adult or child, as well as their marital status. This code makes a new column 'Title' which returns the string following a comma and space and then a full stop e.g. for `, Mr.` it returns `Mr`. We can see how many of the original entries have each title with `value_counts`. 
 
 ```python
 pd.set_option("display.max_rows", None)
@@ -294,7 +294,7 @@ def replace_cabin(x):
 ```
 We will fill empty cabin entries with `U` for unknown. Perhaps some areas of the boat were able to evacuate more easily than others. The boat hit the iceberg at 11:40pm so it is likely the passengers were inside their cabins at this time. 
 
-Finally, we will make a family_size attribute which gives the family size of each passenger:
+Finally, we will make a Familysize attribute which gives the family size of each passenger:
 ```python
 # Function to define a person's family size
 def add_family(x):
@@ -440,7 +440,6 @@ print(train_df["Age"].isna().sum())
  <img src="https://lnsayer.github.io/my-website/files/titanic_project/imputed_age.png" alt="Untitled" width="500" height="362" class="center">  
 
  - Another option for imputing the age would have been to set the missing values as 0. It might have been the case that passengers had a missing age *because* they had died and their records were not kept. Setting the missing values as 0 might have been able to capture this. Further work could explore the effect of this. 
-
 - For the deck code we decided to keep the missing values as a new column because like age the missing values might have been caused by a passenger dying. We will see how this column turned out to be important in the models' feature importances.
 - Since there is only one missing feature from the Fare column we imputed this with the median.
 - We decided to one-hot encode the Pclass column but in fact this was unnecessary and only made the dataframe more sparse. We could have kept this in its original form. 
@@ -472,7 +471,7 @@ Random forests are a good choice for several reasons:
 - They are accurate
 - They are less influenced by outliers
 - They are less prone to overfitting by using enough trees
-- They automatically perform feature selection, both ignoring less useful features and handling features with colinearity well. If two features are strongly correlated then the tree will pick the feature with the most information gain, and this in turn will decrease further information gain from the other. Linear models like linear regression or logistic regression can have varying solutions with colinear variables. Although we did not investigate this explicity it is likely some of our features are colinear. For example Age and titles (e.g. Mr) or fare price and passenger class. We will see later how our feature importances change.
+- They automatically perform feature selection, both ignoring less useful features and handling features with colinearity well. If two features are strongly correlated then the tree will pick the feature with the most information gain, and this in turn will decrease further information gain from the other. Linear models like linear regression or logistic regression can have varying solutions with colinear variables. Although we did not investigate this explicitly it is likely some of our features are colinear. For example Age and Titles (e.g. Mr) or Fare price and PClass. We will see later how our feature importances change.
 
 Random forests have a few drawbacks however: 
 - Although a single tree is easy to interpret, it is not so easy for a whole forest, particularly when using many trees
