@@ -10,5 +10,5 @@ I graduated from Durham University with a First class degree in physics in 2022.
 
 Currently, I am completing a machine learning and data science course covering shallow and deep learning with classification and regression problems. After learning the basics of Sklearn I undertook a classification challenge with the Titanic dataset, achieving a score within the top 7.3% of submissions (see my work projects). Right now, I am learning more Pytorch and hope to start a bigger project soon. 
 
-In my spare time I love rock climbing and playing touch rugby. At university I captained the university touch rugby team (DUTRC) in my final year. I also volunteer at my local rugby club helping to coach the U15s. 
+In my spare time I love rock climbing, playing touch rugby and travelling. At university I captained the university touch rugby team (DUTRC) in my final year. I took a gap year after university in which I travelled to Asia, Europe and Mexico. I also volunteer at my local rugby club helping to coach the U15s. 
 
