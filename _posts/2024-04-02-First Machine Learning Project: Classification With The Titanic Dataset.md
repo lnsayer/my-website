@@ -12,7 +12,7 @@ mathjax: true
 
 This was my first end-to-end machine learning project on the famous Titanic dataset. It is a classification problem in which we predict which passengers survived the sinking of the Titanic. I have implemented several machine learning techniques during this project and gained a respectable position in the leaderboard, within the top 7.3% of users. This project is particularly interesting because it demonstrates the biases which machine learning models can exhibit. Cover photo [1]
 
-This notebook also serves as a guide for people new to machine learning. Please do not hesitate to get in contact if you have any questions, or even more so if you spot anything incorrect!
+This notebook also serves as a guide for people new to machine learning. Please do not hesitate to get in contact if you have any questions, or even more so if you spot anything incorrect! The full notebook for the project can be found here: https://github.com/lnsayer/kaggle-projects/blob/main/final-titanic-notebook.ipynb. 
 
 ### What we will cover:
 1. Data exploration and visualisation
