@@ -22,7 +22,11 @@ I used Visual Studio Code as my coding editor and created documented, modularise
 Two features unique features I implemented in my code:
 - I created an early stopping protocol since each model architecture took a different amount to optimise its parameters. Running averages of the loss and AUC were calculated from the last ten epochs (e.g if the model was on epoch 53 the average would be calculated from epochs 43-53). The model's parameters were updated if the current moving average (from the test set) was better than all the previous moving averages (i.e if the moving average loss is lower than any previous moving average loss AND the moving average AUC is higher than any previous moving average AUC). This protocol also implemented patience which meant that a training run would wait for a certain number of epochs (e.g. 50) for the metrics to improve before the run was stopped. Therefore the model would always be saved 50 epochs before the total number of epochs. 
 This was very useful as it prevented me from having to manually set the number of epochs to train for and also prevented a model from overfitting.
-- I also saved a random set of indices with which to split the whole dataset into the training set and test set (into a 80-20% split). I used these whenever creating the dataloaders. I could have a random manual seed but this was a more reliable method for producing the same training and test sets.  
+- I also saved a random set of indices with which to split the whole dataset into the training set and test set (into a 80-20% split). I used these whenever creating the dataloaders. I could have used a random manual seed but this was a more reliable method for producing the same training and test sets.
+
+#### Models used: 
+I produced results for three different model architectures: 
+
 
 
 ### Results
