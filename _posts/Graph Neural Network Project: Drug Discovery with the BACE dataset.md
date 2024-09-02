@@ -25,7 +25,12 @@ This was very useful as it prevented me from having to manually set the number o
 - I also saved a random set of indices with which to split the whole dataset into the training set and test set (into a 80-20% split). I used these whenever creating the dataloaders. I could have used a random manual seed but this was a more reliable method for producing the same training and test sets.
 
 #### Models used: 
-I produced results for three different model architectures: 
+I produced results for four different model architectures, which are discussed more in the theory section. 
+
+- GCN (Graph Convolutional Network) - The graph convolutional operator from the [Semi-supervised Classification with Graph Convolutional Networks](https://arxiv.org/abs/1609.02907) paper.
+- GAT (Graph Attention Network) - The graph attentional operator from the [Graph Attention Networks](https://arxiv.org/abs/1710.10903) paper
+- GIN (Graph Isomorphism Network) - The graph isomorphism operator from the [How Powerful are Graph Neural Networks?](paperhttps://arxiv.org/abs/1810.00826) paper
+- GraphConv - graph neural network operator from the [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) paper.
 
 
 
