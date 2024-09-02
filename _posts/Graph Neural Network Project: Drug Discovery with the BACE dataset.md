@@ -17,7 +17,7 @@ I tried to modularise my code within Google Colabs using the magic command `%%wr
 
 As a result I tried to setup the scripts locally on my mac but it proved very difficult to install PyTorch Geometric and DeepChem. I decided to run a dual-boot dual drive on my desktop such that I could use a Linux operating system alongside Windows. On my Linux operating system I installed CUDA for access to my 1060GTX 6GB GPU and cuDNN for accelerating this. It took considerable time to find compatible package versions for PyTorch, PyTorch Geometric, DeepChem and RDKit. 
 
-I use Visual Studio Code for 
+I used Visual Studio Code as my coding editor and created documented, modularised scripts with the different 
 
 
 ### Results
