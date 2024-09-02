@@ -17,7 +17,10 @@ I tried to modularise my code within Google Colabs using the magic command `%%wr
 
 As a result I tried to setup the scripts locally on my mac but it proved very difficult to install PyTorch Geometric and DeepChem. I decided to run a dual-boot dual drive on my desktop such that I could use a Linux operating system alongside Windows. On my Linux operating system I installed CUDA for access to my 1060GTX 6GB GPU and cuDNN for accelerating this. It took considerable time to find compatible package versions for PyTorch, PyTorch Geometric, DeepChem and RDKit. 
 
-I used Visual Studio Code as my coding editor and created documented, modularised scripts with the different 
+I used Visual Studio Code as my coding editor and created documented, modularised scripts for the different functionalities of the project. I was finally able to save the processed data separately and load it in to create dataloaders very quickly. I was also able to save metrics (loss, accuracy and AUC) from training runs in a separate directory to view results whenever required. The modularised scripts can be viewed [here](https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python).
+
+Two features unique features I implemented in my code:
+- I created an early stopping protocol since each model architecture took a different amount to optimise its parameters. Running averages of the loss and AUC were calculated from the last ten epochs (e.g if the model was on epoch 53 the average would be calculated from epochs 43-53). The model's parameters were updated if the current moving average was better than all the previous moving averages (i.e if the moving average loss is lower than any previous moving average AND the moving average AUC is higher than any previous moving average). 
 
 
 ### Results
