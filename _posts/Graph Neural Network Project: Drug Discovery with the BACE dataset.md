@@ -36,18 +36,23 @@ Two features unique features I implemented in my code:
 This was very useful as it prevented me from having to manually set the number of epochs to train for and also prevented a model from overfitting.
 - I also saved a random set of indices with which to split the whole dataset into the training set and test set (into a 80-20% split). I used these whenever creating the dataloaders. I could have used a random manual seed but this was a more reliable method for producing the same training and test sets.
 
-The BACE dataset includes its molecules in SMILES format which I was able to convert into Graph format using DeepChem's MolGraphConvFeaturizer and then into a PyTorch Geometric graph. The number of features of each graph was 30 and the number of edge attributes were 11. Some of the node features were for example atom type and formal charge and some of the edge attributes were for example bond type and whether they were in the same ring. [MolGraphConvFeaturizer](https://deepchem.readthedocs.io/en/latest/api_reference/featurizers.html#molgraphconvfeaturizer)
+The BACE dataset includes its molecules in SMILES format which I was able to convert into Graph format using DeepChem's [MolGraphConvFeaturizer](https://deepchem.readthedocs.io/en/latest/api_reference/featurizers.html#molgraphconvfeaturizer) and then into a PyTorch Geometric graph. The number of features of each graph was 30 and the number of edge attributes were 11. Some of the node features were for example atom type and formal charge and some of the edge attributes were for example bond type and whether they were in the same ring. 
 
-I trained four different model architectures, as described in the introduction: GCN, GAT, GIN and GraphConv. I performd very little hyperparameter tuning and as such my optimiser and loss functions remained unchanged. I used the Adam optimiser since it has adaptive learning rates and the binary cross entropy loss as the loss function. I mostly used a learning rate of 0.001 for Adam but for the GIN models I used 0.0001. 
+I trained four different model architectures, as described in the introduction: GCN, GAT, GIN and GraphConv. I performed very little hyperparameter tuning and as such my optimiser and loss functions remained unchanged. I used the Adam optimiser since it has adaptive learning rates and the binary cross entropy loss as the loss function. I mostly used a learning rate of 0.001 for Adam but for the GIN models I used 0.0001. 
+
+For two of the model architectures, namely GIN and GAT, I was also able to incorporate the edge attributes of the graphs and I called these models GINE and GATE. 
 
 Graph classification was obtained from the node embeddings by using a pooling method. My most used pooling method was the global mean pooling which calculated an average of the nodes' embedded features to produce a single graph embedding. I also briefly tried global max pooling which finds, for each feature of the nodes, the highest value amongst the nodes.
 
-Most of my models had three layers with 128 hidden channels per layer. My models therefore had this number of parameters: 
+Most of my models had 3 layers with 128 hidden channels per layer. My models therefore had this number of parameters: 
 
 - GCN model: 37,250
 - GAT model:  346,754
 - GIN model: 73,858
 - GraphConv model: 104,066
+- GATE model: 346,754
+- GINE model: 107,498
+
 
 These are quite small models and if I choose to tackle a larger dataset I would likely want to increase the model size. 
 
