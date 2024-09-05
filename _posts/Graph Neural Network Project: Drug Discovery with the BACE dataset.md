@@ -22,28 +22,34 @@ I initially worked on the dataset using Google Colabs as it has free GPU-access 
 Google Colabs was very useful at the beginning of the project but some issues arose as I streamlined the project and implemented more models:
 - The notebook became very long with all the models, analysis and random cells used to understand what the code was doing.
 - I had to install PyTorch Geometric, Deepchem and RDKit everytime I loaded the the notebook as these were not pre-installed in Colabs.
-- I had to create the dataset and dataloaders each time I loaded the notebook. I managed to save the processed molecules in my Google Drive but loading these each session from Google drive was longer than performing the processing and saving it in the memory of the session.
+- I had to create the dataset and dataloaders each time I loaded the notebook. I managed to save the processed molecules in my Google Drive but loading these each session was longer than performing the processing and saving it in the memory of the session.
 - GPU-access was limited with the free version, I paid for Colab Pro but it did not suffice for heavy-use.
 
 I tried to modularise my code within Google Colabs using the magic command `%%writefile` which saved a cell as a script so that it could be imported by other cells. This turned out to be less efficient since when importing other scripts, their respective imported modules would have to be imported each time (took ~10 seconds) and this made it very time consuming to make small changes to code. 
 
-As a result I tried to setup the scripts locally on my mac. I decided to run a dual boot dual drive on my desktop such that I could use a Linux operating system alongside Windows. On my Linux operating system I installed CUDA for access to my 1060GTX 6GB GPU and cuDNN for accelerating this. It took considerable time to find compatible package versions for PyTorch, PyTorch Geometric, DeepChem and RDKit. 
+As a result I tried to setup the scripts locally on my mac but it was difficult to install PyTorch Geometric and DeepChem. I decided to run a dual boot dual drive on my desktop such that I could use a Linux operating system alongside Windows. On my Linux operating system I installed CUDA for access to my 1060GTX 6GB GPU and cuDNN for accelerating this. It took considerable time to find compatible package versions for PyTorch, PyTorch Geometric, DeepChem and RDKit. 
 
 I used Visual Studio Code as my coding editor and created documented, modularised scripts for the different functionalities of the project. I was finally able to save the processed data separately and load it in to create dataloaders very quickly. I was also able to save metrics (loss, accuracy and AUC) from training runs in a separate directory to view results whenever required. The modularised scripts can be viewed [here](https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python).
 
 Two features unique features I implemented in my code:
-- I created an early stopping protocol since each model architecture trained optimally in a different amount of time. This worked by calculating averages of the loss and AUC from the last ten epochs (e.g if the model was on epoch 53 the average would be calculated from epochs 43-53). The model's parameters were updated if the current moving average (from the test set) was better than all the previous moving averages (i.e if the moving average loss is lower than any previous moving average loss AND the moving average AUC is higher than any previous moving average AUC). This protocol also implemented patience which meant that a training run would wait for a certain number of epochs (e.g. 50) for the metrics to improve before the run was stopped. Therefore the model would always be finally saved 50 epochs before the total number of epochs. 
+- I created an early stopping protocol since each model architecture trained optimally in a different amount of time. This worked by calculating averages of the loss and AUC from the last ten epochs (e.g if the model was on epoch 53 the average would be calculated from epochs 43-52). The model's parameters were updated if the current moving average (from the test set) was better than all the previous moving averages (i.e if the moving average loss is lower than any previous moving average loss AND the moving average AUC is higher than any previous moving average AUC). This protocol also implemented patience which meant that a training run would wait for a certain number of epochs (e.g. 50) for the metrics to improve before the run was stopped. Therefore the model would always be finally saved 50 epochs before the total number of epochs. 
 This was very useful as it prevented me from having to manually set the number of epochs to train for and also prevented a model from overfitting.
 - I also saved a random set of indices with which to split the whole dataset into the training set and test set (into a 80-20% split). I used these whenever creating the dataloaders. I could have used a random manual seed but this was a more reliable method for producing the same training and test sets.
 
-I trained four different model architectures, as described in the Introduction: GCN, GAT, GIN and GraphConv. I performd very little hyperparameter tuning and as such my optimiser and loss functions remained unchanged. I used the Adam optimiser since it has adaptive learning rates and the binary cross entropy loss as the loss function. I mostly used a learning rate of 0.001 for Adam but for the GIN models I used 0.0001. Graph classification was obtained from the node embeddings by using a pooling method. My most used pooling method was the global mean pooling which calculated an average of the nodes' embedded features to produce a single graph embedding. I also briefly tried global max pooling which finds, for each feature of the nodes, the highest value amongst the nodes.
+The BACE dataset includes its molecules in SMILES format which I was able to convert into Graph format using DeepChem's MolGraphConvFeaturizer and then into a PyTorch Geometric graph. The number of features of each graph was 30 and the number of edge attributes were 11. Some of the node features were for example atom type and formal charge and some of the edge attributes were for example bond type and whether they were in the same ring. [MolGraphConvFeaturizer](https://deepchem.readthedocs.io/en/latest/api_reference/featurizers.html#molgraphconvfeaturizer)
+
+I trained four different model architectures, as described in the introduction: GCN, GAT, GIN and GraphConv. I performd very little hyperparameter tuning and as such my optimiser and loss functions remained unchanged. I used the Adam optimiser since it has adaptive learning rates and the binary cross entropy loss as the loss function. I mostly used a learning rate of 0.001 for Adam but for the GIN models I used 0.0001. 
+
+Graph classification was obtained from the node embeddings by using a pooling method. My most used pooling method was the global mean pooling which calculated an average of the nodes' embedded features to produce a single graph embedding. I also briefly tried global max pooling which finds, for each feature of the nodes, the highest value amongst the nodes.
 
 Most of my models had three layers with 128 hidden channels per layer. My models therefore had this number of parameters: 
 
 - GCN model: 37,250
 - GAT model:  346,754
 - GIN model: 73,858
-- GraphConv model: 104,066 
+- GraphConv model: 104,066
+
+These are quite small models and if I choose to tackle a larger dataset I would likely want to increase the model size. 
 
 
 ## Results
