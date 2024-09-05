@@ -40,7 +40,7 @@ The BACE dataset includes its molecules in SMILES format which I was able to con
 
 I trained four different model architectures, as described in the introduction: GCN, GAT, GIN and GraphConv. I performed very little hyperparameter tuning and as such my optimiser and loss functions remained unchanged. I used the Adam optimiser since it has adaptive learning rates and the binary cross entropy loss as the loss function. I mostly used a learning rate of 0.001 for Adam but for the GIN models I used 0.0001. 
 
-For two of the model architectures, namely GIN and GAT, I was also able to incorporate the edge attributes of the graphs and I called these models GINE and GATE. 
+For two of the model architectures (GIN and GAT) I was also able to incorporate the edge attributes of the graphs and I called these models GINE and GATE. I hoped that predictions quality would improve with this further information. 
 
 Graph classification was obtained from the node embeddings by using a pooling method. My most used pooling method was the global mean pooling which calculated an average of the nodes' embedded features to produce a single graph embedding. I also briefly tried global max pooling which finds, for each feature of the nodes, the highest value amongst the nodes.
 
@@ -53,9 +53,7 @@ Most of my models had 3 layers with 128 hidden channels per layer. My models the
 - GATE model: 346,754
 - GINE model: 107,498
 
-
 These are quite small models and if I choose to tackle a larger dataset I would likely want to increase the model size. 
-
 
 ## Results
 
