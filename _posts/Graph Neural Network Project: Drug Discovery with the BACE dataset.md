@@ -55,16 +55,18 @@ Most of my models had 3 layers with 128 hidden channels per layer. My models the
 
 These are quite small models and if I choose to tackle a larger dataset I would likely want to increase the model size. 
 
-## Results
+## Results and Discussion 
 
-During training runs I saved three different metrics at each epoch to measure the performance of the model: the loss, accuracy and AUC of both the training set and test set. In these results we will use the GCN model as the baseline since it is the most simple and compare it with the GIN (with edge attributes), which was our best model. The metrics results for the GCN model can be seen in Fig. 1: 
+### Loss, Accuracy and AUC curves 
+
+During training runs I saved three different metrics at each epoch to measure the performance of the model: the loss, accuracy and AUC of both the training set and test set. I perfomed five repeats for each model and all metrics are an average of these repeats. In these results we will use the GCN model as the baseline since it is the most simple and compare it with the GIN (with edge attributes), which was our best model. The metrics results for the GCN model can be seen in Fig. 1: 
 
 Figure 1:
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/gcn_loss_acc_auc_plot.png" alt="Untitled" style="height:auto;">
 
 As can be seen in Fig. 1 the loss decreases for both the training set and test set over the epochs. The training set loss probably decreases more smoothly than the test set for several reasons: the training set is four times larger than the test set and this helps to average out fluctuations. Also the loss from the training set directly influences the change in the model parameters and this inherently smoothes the training loss. 
 
-Although the test set loss continues to decrease, the other test set metrics stagnate and this is why the last saved model is at around 150. 
+Although the test set loss continues to decrease, the AUC metric stagnates and this is why the last saved model is at around 150. 
 
 The training set accuracy continues to increase at 200 epochs while the test set accuracy plateaus, which indicates the model is overfitting. The AUC for both the training set and test set plateaus after around 100 epochs. 
 
@@ -75,3 +77,17 @@ Figure 2:
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/gineconv_loss_acc_auc_plots.png" alt="Untitled" style="height:auto;">
 
 The test set loss actually appears to increase after around 40 epochs and the accuracy appears to decrease as well which is classic overfitting. This model seems to be capable of fitting to the data much more effectively than the GCN models. This is supported by the fact that the learning rate was set to 0.0001 for the GIN models, 10x lower than that of the others. 
+
+### Average metric scores
+
+After checking the above metric curves for each set of training runs, I calculated the average results of the five runs. This was done by saving the models and then making predictions on the test set, which were used to calculate the following metrics in Table 1. 
+
+| Metric | GCN | GAT Edge | GAT | GraphConv | GIN Conv	 | GINE Conv|
+| ------- | ------- | ------- | ------- | ------- | -------	 | -------|
+| AUROC | 0.815 | 0.820 | 0.836 | 0.862 | 0.877	 | 0.881 |
+| Precision | 0.752 | 0.764 | 0.765 | 0.784 | 0.802	 | 0.811|
+| Recall | 0.732 | 0.754 | 0.785 | 0.793 | 0.815 | 0.796 |
+| Accuracy | 0.762 | 0.776 | 0.786 | 0.800 | 0.819	 | 0.817 |
+| F-1 Score | 0.761 | 0.775 | 0.784 | 0.800 | 0.819	 | 0.816|
+
+
