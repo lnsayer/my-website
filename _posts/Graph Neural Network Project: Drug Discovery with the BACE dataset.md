@@ -91,13 +91,23 @@ Table 1:
 | Accuracy | 0.762 | 0.776 | 0.786 | 0.800 | 0.819	 | 0.817 |
 | F-1 Score | 0.761 | 0.775 | 0.784 | 0.800 | 0.819	 | 0.816|
 
-As we can see from Table 1 the best performing model over different thresholds was GINE Conv with an AUROC value of 0.881. This is very comparable to the top results in the literature, as reported in PapersWithCode. The highest AUC score in PapersWithCode is 88.40 from MolXPT which uses a language model to leverage information from surrounding text when SMILES molecules are wrapped by text. 
+As we can see from Table 1 the best performing model over different thresholds was GINE Conv with an AUROC value of 0.881. This is very comparable to the top results in the literature, as reported in PapersWithCode. The highest AUC score in [PapersWithCode](https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1) is 88.40 from MolXPT.
 
 The GINE model also has the highest precision score of 0.811. Precision is more important in the latter stages of drug discovery (lead optimisation, preclinical, clinical trials) where the costs and consequences of advancing a false positive are much higher. The GIN Conv model was best at recall with a recall score of 0.815. Recall is more important in the early stages of drug discovery (hit discovery, target identification) when it is crucial to cast a wide net and identify all candidates. We do not want to miss potenitally valuable compounds. 
 
-The GraphConv models are not far behind the GIN models, however the GINE model on average took 2.25x fewer epochs to converge than GraphConv, corresponding to roughly 2.25x less time. It is interesting to see that the GAT Edge models performed worse than the GAT models. This may be because the GAT models have quite a lot of parameters (at least comapted to the GIN models) and they might be overfitting on the training data. It could also be that the edge attributes are irrelevant and just providing noise, however the GINE model would not perform better if that were the case. 
+The GraphConv models are not far behind the GIN models, however the GINE model took on average 2.25x fewer epochs to converge than GraphConv, corresponding to roughly 2.25x less time. It is interesting to see that the GAT Edge models performed worse than the GAT models. This may be because the GAT models have quite a lot of parameters (at least comapted to the GIN models) and they might be overfitting on the training data. It could also be that the edge attributes are irrelevant and just providing noise, however the GINE model would not perform better if that were the case. 
 
+We can see where the models are making incorrect predictions by looking at their confusion matrices. Fig. 3 and Fig. 4 show the confusion matrices for a single GCN and GINE model respectively. 
 
+Figure 3:
+
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/avg_confusion_matrix_gcn_conv.png" alt="Untitled" style="height:auto;">
+
+Figure 4: 
+
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/avg_confusion_matrix_gine_conv.png" alt="Untitled" style="height:auto;">
+
+We can see the main difference between the two models is that the GCN model makes more false positive predictions, i.e. its 
 
 
 
