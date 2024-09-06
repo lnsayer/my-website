@@ -80,7 +80,7 @@ The test set loss actually appears to increase after around 40 epochs and the ac
 
 ### Average metric scores
 
-After checking the above metric curves for each set of training runs, I calculated the average results of the five runs. This was done by saving the models and then making predictions on the test set, which were used to calculate the following metrics in Table 1. 
+After checking the above metric curves (specifically the loss) for each set of training runs, I calculated the average results of the five runs. This was done by saving the models' state dictionaries and then making predictions on the test set, which were used to calculate the following metrics in Table 1. 
 
 Table 1: 
 | Metric | GCN | GAT Edge | GAT | GraphConv | GIN Conv	 | GINE Conv|
@@ -91,7 +91,9 @@ Table 1:
 | Accuracy | 0.762 | 0.776 | 0.786 | 0.800 | 0.819	 | 0.817 |
 | F-1 Score | 0.761 | 0.775 | 0.784 | 0.800 | 0.819	 | 0.816|
 
-As we can see from Table 1 the best performing model over different thresholds was GINE Conv with an AUROC value of 0.881. This model also has the highest precision score of 0.811. Precision is more important in the latter stages of drug discovery (lead optimisation, preclinical, clinical trials) where the costs and consequences of advancing a false positive are much higher. The GIN Conv model was best at recall with a recall score of 0.815. Recall is more important in the early stages of drug discovery (hit discovery, target identification) when it is crucial to cast a wide net and identify all candidates. We do not want to miss potenitally valuable compounds. 
+As we can see from Table 1 the best performing model over different thresholds was GINE Conv with an AUROC value of 0.881. This is very comparable to the top results in the literature, as reported in PapersWithCode. The highest AUC score in PapersWithCode is 88.40 from MolXPT which uses a language model to leverage information from surrounding text when SMILES molecules are wrapped by text. 
+
+The GINE model also has the highest precision score of 0.811. Precision is more important in the latter stages of drug discovery (lead optimisation, preclinical, clinical trials) where the costs and consequences of advancing a false positive are much higher. The GIN Conv model was best at recall with a recall score of 0.815. Recall is more important in the early stages of drug discovery (hit discovery, target identification) when it is crucial to cast a wide net and identify all candidates. We do not want to miss potenitally valuable compounds. 
 
 The GraphConv models are not far behind the GIN models, however the GINE model on average took 2.25x fewer epochs to converge than GraphConv, corresponding to roughly 2.25x less time. It is interesting to see that the GAT Edge models performed worse than the GAT models. This may be because the GAT models have quite a lot of parameters (at least comapted to the GIN models) and they might be overfitting on the training data. It could also be that the edge attributes are irrelevant and just providing noise, however the GINE model would not perform better if that were the case. 
 
