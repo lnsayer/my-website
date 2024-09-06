@@ -127,6 +127,9 @@ Figure 7:
 
 This shows that the GINE model performs much better with the precision being higher at every recall. The sensitivity is roughly the same however as the gradients are very similar. 
 
-One final plot which was 
+One final plot to gauge the model's predictions was by reducing the dimensionality of the graph embeddings iusing t-SNE from 128 (the number of hidden channels) to 2 and seeing how the positive/negative classes clusters. We can see this plot in Figure 8:  
+
+Figure 8: 
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/t-sne_visualisation_graph_embeddings.png" alt="Untitled" style="height:auto;">
 
 
