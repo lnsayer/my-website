@@ -97,7 +97,7 @@ The GINE model also has the highest precision score of 0.811. Precision is more 
 
 The GraphConv models are not far behind the GIN models, however the GINE model took on average 2.25x fewer epochs to converge than GraphConv, corresponding to roughly 2.25x less time. It is interesting to see that the GAT Edge models performed worse than the GAT models. This may be because the GAT models have quite a lot of parameters (at least comapted to the GIN models) and they might be overfitting on the training data. It could also be that the edge attributes are irrelevant and just providing noise, however the GINE model would not perform better if that were the case. 
 
-We can see where the models are making incorrect predictions by looking at their confusion matrices. Fig. 3 and Fig. 4 show the confusion matrices for the average GCN and GINE models respectively (from five repeats)
+We can see where the models are making incorrect predictions by looking at their confusion matrices. Fig. 3 and Fig. 4 show the confusion matrices for the average GCN and GINE models respectively (average of five repeats)
 
 Figure 3:
 
@@ -107,8 +107,26 @@ Figure 4:
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/new_avg_confusion_matrix_gine_conv.png" alt="Untitled" style="height:auto;">
 
-We can see that the main difference between the two models is that the GCN model makes more false positive predictions, i.e. its precision is worse. 
+We can see from the confusion matrices that the two models make incorrect predictions in the same areas. The proportion of false positives between the GCN and GINE models are on average 1.26 (33.6 : 26.6) and the proportion of false negatives between them is on average 1.28 (37.2 : 29.0). The GINE model is therefore just better overall, not in specific areas. 
 
+I also wanted to look at the sensitivity between precision/recall and the classification threshold. Figures 5 and 6 show the precision and recall as a function of the threshold for the GCN models and GINE models respectively (average of five repeats). 
 
+Figure 5:
+
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/precision_recall_threshold_plot_gcn.png" alt="Untitled" style="height:auto;">
+
+Figure 6: 
+
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/precision_recall_threshold_plot_gine.png" alt="Untitled" style="height:auto;">
+
+The GCN model's curve is roughly what we would expect with the precision taking over the recall at 0.4 (near to 0.5). The recall for the GINE model is much more sensitive and weaker overall. It is never higher than the precision, even at low thresholds and decreases quickly. This indicates the model is conservative at lower thresholds and becomes more selective with a higher threshold. The GCN model on the other hand is more likely to predict positives. The choice of the threshold is very much dependent on the requirements of the application and it is very useful to see how these models perform. We can plot the precision and recall curves of the two models on the same plot for direct comparison as can be seen in Fig. 7. 
+
+Figure 7: 
+
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/precision_recall_gine_gcn.png" alt="Untitled" style="height:auto;">
+
+This shows that the GINE model performs much better with the precision being higher at every recall. The sensitivity is roughly the same however as the gradients are very similar. 
+
+One final plot which was 
 
 
