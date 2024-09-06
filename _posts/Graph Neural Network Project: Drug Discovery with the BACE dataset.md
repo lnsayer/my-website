@@ -127,9 +127,12 @@ Figure 7:
 
 This shows that the GINE model performs much better with the precision being higher at every recall. The sensitivity is roughly the same however as the gradients are very similar. 
 
-One final plot to gauge the model's predictions was by reducing the dimensionality of the graph embeddings iusing t-SNE from 128 (the number of hidden channels) to 2 and seeing how the positive/negative classes clusters. We can see this plot in Figure 8:  
+One final plot to gauge the model's predictions was by reducing the dimensionality of the graph embeddings iusing t-SNE from 128 (the number of hidden channels) to 2 and seeing how the positive/negative classes clusters. I used a GINEConv model for this and we can see the plot in Fig. 8:  
 
 Figure 8: 
+
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/t-sne_visualisation_graph_embeddings.png" alt="Untitled" style="height:auto;">
+
+It is clear from Fig. 8 that the model is able to differentiate between the two groups of graphs (positive and negative). It is normal that there are mixed regions for two reasons: the model may not be embedding the graphs perfectly and also t-SNE has some degree dimensionality reduction. The separation might be more distinct in higher dimensions.  
 
 
