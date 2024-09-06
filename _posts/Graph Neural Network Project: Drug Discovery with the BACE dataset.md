@@ -105,7 +105,7 @@ Figure 3:
 
 Figure 4: 
 
-<img src="https://lnsayer.github.io/my-website/files/bace_dataset/avg_confusion_matrix_gine_conv.png" alt="Untitled" style="height:auto;">
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/new_avg_confusion_matrix_gine_conv.png" alt="Untitled" style="height:auto;">
 
 We can see the main difference between the two models is that the GCN model makes more false positive predictions, i.e. its 
 
