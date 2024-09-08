@@ -80,10 +80,10 @@ The test set loss actually appears to increase after around 40 epochs and the ac
 
 ### Average metric scores
 
-After checking the above metric curves (specifically the loss) for each set of training runs, I calculated the average results of the five runs. This was done by saving the models' state dictionaries and then making predictions on the test set, which were used to calculate the following metrics in Table 1. 
+I checked that the above metric curves (specifically the loss) were reasonable for each set of training runs, i.e. they were not overfitting or underfitting. After this I calculated the average results of the five runs. This was done by saving the models' state dictionaries and then making predictions on the test set, which were used to calculate the following metrics in Table 1. 
 
-Table 1: 
-| Metric | GCN | GAT Edge | GAT | GraphConv | GIN Conv	 | GINE Conv|
+Table 1: Five different metrics for each of the four different GNN architectures. Two more models were trained with the edge attributes. These are averages of five repeats. The precision and recall are calculated for the positive class.  
+| Metric | GCN | GAT Edge | GAT | GraphConv | GIN	 | GINE |
 | ------- | ---- | ------- | ------- | ------- | ---- | -------|
 | AUROC | 0.815 | 0.820 | 0.836 | 0.862 | 0.877	 | 0.881 |
 | Precision | 0.752 | 0.764 | 0.765 | 0.784 | 0.802	 | 0.811|
@@ -91,48 +91,48 @@ Table 1:
 | Accuracy | 0.762 | 0.776 | 0.786 | 0.800 | 0.819	 | 0.817 |
 | F-1 Score | 0.761 | 0.775 | 0.784 | 0.800 | 0.819	 | 0.816|
 
-As we can see from Table 1 the best performing model over different thresholds was GINE Conv with an AUROC value of 0.881. This is very comparable to the top results in the literature, as reported in PapersWithCode. The highest AUC score in [PapersWithCode](https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1) is 88.40 from MolXPT.
+As we can see from Table 1 the best performing model over different thresholds was GINE with an AUROC value of 0.881. This is very comparable to the top results in the literature, as reported in PapersWithCode. The highest AUC score in [PapersWithCode](https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1) is 88.40 from MolXPT.
 
-The GINE model also has the highest precision score of 0.811. Precision is more important in the latter stages of drug discovery (lead optimisation, preclinical, clinical trials) where the costs and consequences of advancing a false positive are much higher. The GIN Conv model was best at recall with a recall score of 0.815. Recall is more important in the early stages of drug discovery (hit discovery, target identification) when it is crucial to cast a wide net and identify all candidates. We do not want to miss potenitally valuable compounds. 
+The GINE model also has the highest precision score of 0.811. Precision is more important in the latter stages of drug discovery (lead optimisation, preclinical, clinical trials) where the costs and consequences of advancing a false positive are much higher. The GIN model was best at recall with a recall score of 0.815. Recall is more important in the early stages of drug discovery (hit discovery, target identification) when it is crucial to cast a wide net and identify all candidates. We do not want to miss potenitally valuable compounds. 
 
-The GraphConv models are not far behind the GIN models, however the GINE model took on average 2.25x fewer epochs to converge than GraphConv, corresponding to roughly 2.25x less time. It is interesting to see that the GAT Edge models performed worse than the GAT models. This may be because the GAT models have quite a lot of parameters (at least comapted to the GIN models) and they might be overfitting on the training data. It could also be that the edge attributes are irrelevant and just providing noise, however the GINE model would not perform better if that were the case. 
+The GraphConv models are not far behind the GIN models, however the GINE model took on average 2.25x fewer epochs to converge than GraphConv, corresponding to roughly 2.25x less time. It is interesting to see that the GAT Edge models performed worse than the GAT models. This may be because the GAT models have a lot of parameters (at least comapted to the GIN models) and they might be overfitting on the training data. It could also be that the edge attributes are irrelevant and just providing noise, however the GINE model would not perform better if that were the case. 
 
-We can see where the models are making incorrect predictions by looking at their confusion matrices. Fig. 3 and Fig. 4 show the confusion matrices for the average GCN and GINE models respectively (average of five repeats)
+We can see where the models are making incorrect predictions by looking at their confusion matrices. Fig. 3 and Fig. 4 show the confusion matrices for the average GCN and GINE models respectively (average of five repeats).
 
-Figure 3:
+Figure 3: The confusion matrix for the GCN models. It is an average of the five repeats. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/avg_confusion_matrix_gcn_conv.png" alt="Untitled" style="height:auto;">
 
-Figure 4: 
+Figure 4: The confusion matrix for the GINE models. It is an average of the five repeats. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/new_avg_confusion_matrix_gine_conv.png" alt="Untitled" style="height:auto;">
 
-We can see from the confusion matrices that the two models make incorrect predictions in the same areas. The proportion of false positives between the GCN and GINE models are on average 1.26 (33.6 : 26.6) and the proportion of false negatives between them is on average 1.28 (37.2 : 29.0). The GINE model is therefore just better overall, not in specific areas. 
+We can see from the confusion matrices that the two models make incorrect predictions in the same areas. The proportion of false positives between the GCN and GINE models are on average 1.26 (33.6 : 26.6) and the proportion of false negatives between them is on average 1.28 (37.2 : 29.0). The GINE model is generally better overall, not in specific areas. 
 
 I also wanted to look at the sensitivity between precision/recall and the classification threshold. Figures 5 and 6 show the precision and recall as a function of the threshold for the GCN models and GINE models respectively (average of five repeats). 
 
-Figure 5:
+Figure 5: Precision and recall as a function of the classifcation threshold for the GCN models (average of the five). The precision is shown in blue and the recall in orange. The metrics are calculated for the positive case. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/precision_recall_threshold_plot_gcn.png" alt="Untitled" style="height:auto;">
 
-Figure 6: 
+Figure 6: Precision and recall as a function of the classifcation threshold for the GINE models (average of the five). The precision is shown in blue and the recall in orange. The metrics are calculated for the positive case. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/precision_recall_threshold_plot_gine.png" alt="Untitled" style="height:auto;">
 
-The GCN model's curve is roughly what we would expect with the precision taking over the recall at 0.4 (near to 0.5). The recall for the GINE model is much more sensitive and weaker overall. It is never higher than the precision, even at low thresholds and decreases quickly. This indicates the model is conservative at lower thresholds and becomes more selective with a higher threshold. The GCN model on the other hand is more likely to predict positives. The choice of the threshold is very much dependent on the requirements of the application and it is very useful to see how these models perform. We can plot the precision and recall curves of the two models on the same plot for direct comparison as can be seen in Fig. 7. 
+The GCN model's curve is roughly what we would expect with the precision taking over the recall at 0.4 (near to 0.5). The recall for the GINE model is much more sensitive and weaker overall. It is never higher than the precision, even at low thresholds and decreases quickly. This indicates the model is conservative at lower thresholds and becomes more selective with a higher threshold. The GCN model on the other hand is more likely to predict positives. The choice of the threshold is very much dependent on the requirements of the model application and it is very useful to see how these models perform. We can plot the precision and recall curves of the two models on the same plot for direct comparison as can be seen in Fig. 7. 
 
-Figure 7: 
+Figure 7: Precision as a function of recall. The GINE model results are shown in blue line and the GCN model results are shown in the orange. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/precision_recall_gine_gcn.png" alt="Untitled" style="height:auto;">
 
 This shows that the GINE model performs much better with the precision being higher at every recall. The sensitivity is roughly the same however as the gradients are very similar. 
 
-One final plot to gauge the model's predictions was by reducing the dimensionality of the graph embeddings iusing t-SNE from 128 (the number of hidden channels) to 2 and seeing how the positive/negative classes clusters. I used a GINEConv model for this and we can see the plot in Fig. 8:  
+One final plot to gauge the model's predictions was by reducing the dimensionality of the graph embeddings iusing t-SNE from 128 (the number of hidden channels) to 2 and seeing how the positive/negative classes clusters. I used a GINE model for this and we can see the plot in Fig. 8:  
 
-Figure 8: 
+Figure 8: The dimensionally-reduced graph embeddings for all the positive and negative (predictive) cases of the 1513 molecules in the BACE dataset. The graph embeddings were reduced using t-SNE. The positive classifications are shown in blue and the negative classifications are shown in orange. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/t-sne_visualisation_graph_embeddings.png" alt="Untitled" style="height:auto;">
 
-It is clear from Fig. 8 that the model is able to differentiate between the two groups of graphs (positive and negative). It is normal that there are mixed regions for two reasons: the model may not be embedding the graphs perfectly and also t-SNE has some degree dimensionality reduction. The separation might be more distinct in higher dimensions.  
+It is clear from Fig. 8 that the model is able to differentiate between the two groups of graphs (positive and negative). It is normal that there are mixed regions for two reasons: the model may not be embedding the graphs perfectly and also t-SNE has some degree dimensionality reduction. The separation might be more distinct in higher dimensions however overall this is good clustering. 
 
 
