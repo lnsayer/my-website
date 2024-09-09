@@ -28,6 +28,16 @@ Another application is in protein design. The goal of this is to create proteins
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/GNN-RFDiffusion.png" alt="Untitled" style="height:auto;">
 
+### GNN Theory 
+
+There are several different types of graph neural network tasks [1] and in this project we are interested in graph classification. This means, given a molecule which we can represent as a graph, is this a potential drug? 
+
+A simple model involves using a convolutional layer to share information between the nodes (atoms) in the graph (molecule) and then make a prediction based on the all the nodes in the graph. 
+
+
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/node_features_in_a_graph.png" alt="Untitled" style="height:auto;">
+
+
 #### Models used: 
 I produced results for four different model architectures, which are discussed more in the theory section. 
 
@@ -36,8 +46,6 @@ I produced results for four different model architectures, which are discussed m
 - GIN (Graph Isomorphism Network) - The graph isomorphism operator from the [How Powerful are Graph Neural Networks?](paperhttps://arxiv.org/abs/1810.00826) paper
 - GraphConv - graph neural network operator from the [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) paper.
 
-
-GNN Theory 
 
 ## Implementation/Methodology
 
@@ -163,5 +171,7 @@ Figure 8: The dimensionally-reduced graph embeddings for all the positive and ne
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/t-sne_visualisation_graph_embeddings.png" alt="Untitled" style="height:auto;">
 
 It is clear from Fig. 8 that the model is able to differentiate between the two groups of graphs (positive and negative). It is normal that there are mixed regions for two reasons: the model may not be embedding the graphs perfectly and also t-SNE has some degree dimensionality reduction. The separation might be more distinct in higher dimensions however overall this is good clustering. 
+
+[1] https://www.datacamp.com/tutorial/comprehensive-introduction-graph-neural-networks-gnns-tutorial
 
 
