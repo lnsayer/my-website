@@ -8,6 +8,7 @@ Graph neural networks have emerged as a powerful class of deep learning artifici
 GNNs work on graphs which are non-euclidean data structures composed of nodes and edges, as can be seen in Fig.1 below. 
 
 Figure 1: 
+
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/GraphTypes.png" alt="Untitled" style="height:auto;">
 
 A lot of data are naturally described by graphs.
