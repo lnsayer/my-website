@@ -42,6 +42,8 @@ Figure 2: Node features in a graph in which some are known and unknown.
 
 The node features are updated so that the nodes are represented differently. This occurs through message passing, in which node features are updates as an aggregated function (e.g. mean) of all the neighbour nodes (nodes it is connected to). The aggregation function may be different such as a weighted mean, weighted by the degree of the neighbour nodes. The degree of a node is how many nodes it is connected to. The updated node embedding is then passed through a neural network to reduce its dimensionality. This process of aggregation and passing through a neural network is done several times as required. THe 
 
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/message_passing_gcn.png" alt="Untitled" style="height:auto;">
+
 
 #### Models used: 
 I produced results for four different model architectures, which are discussed more in the theory section. 
