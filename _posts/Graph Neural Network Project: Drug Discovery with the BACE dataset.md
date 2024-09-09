@@ -1,17 +1,31 @@
 ## Introduction/Theory
 
-### GNNs Overview
+### GNN Overview 
+
 
 Graph neural networks have emerged as a powerful class of deep learning artificial networks, which process data structured as graphs. Graph neural networks are effective in many different fields such as recommmendation systems, drug/ protein discovery and fraud detection. 
 
+GNNs work on graphs which are non-euclidean data structures composed of nodes and edges, as can be seen in Fig.1 below. 
+
+Figure 1: 
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/GraphTypes.png" alt="Untitled" style="height:auto;">
+
+A lot of data are naturally described by graphs.
+
+The nodes of a graph represent instances of something such as a person in a social network, a town in a country or an atom in a molecule. Edges represent the connections between these and can be directed, undirected and also weighted. For example one person following another (directed edge), a motorway between town with distance (undirected and weighted) or an atomic bond (unidrected). 
+
+Graphs are very good at describing data with relationships and interactions. They are not that unsimilar to other data types and their corresponding neural networks. Convolutional neural networks for example can be seen as acting on an images whose nodes are the pixels and only adjacent pixels are connected by edges in the graph.  
+
+
+### GNNs Applications 
+
 One fascinating application of GNNs is in weather forecasting. Last year Google Deepmind released GraphCast which is based on a graph neural network and was considered the most accurate 10-day global weather forecasting system in the world. It could make accurate predictions very quickly - a 10 day forecast could be calculated in less than a minute.  Conventional approaches can take hours of computation in a supercomputer with hundreds of machines. This also made it much cheaper in energy efficiency - about 1000x. 
 
-<img src="https://lnsayer.github.io/my-website/files/bace_dataset/graphcast_image.png " alt="Untitled" style="height:auto;">
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/graphcast_image.png" alt="Untitled" style="height:auto;">
 
 Another application is in protein design. The goal of this is to create proteins with desired properties which can be used for drugs, enzymes or materials. RosettaFold Diffusion uses a diffusion model which can generate new proteins from noise. The model is trained to recover corrupted (noised) protein structures and can produce unseen structures by denoising from a random noise input. The model operates via a special type of graph neural network and showed great improvements over its competitors across a broad range of problems. 
 
-
-
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/GNN-RFDiffusion.png" alt="Untitled" style="height:auto;">
 
 #### Models used: 
 I produced results for four different model architectures, which are discussed more in the theory section. 
@@ -21,6 +35,8 @@ I produced results for four different model architectures, which are discussed m
 - GIN (Graph Isomorphism Network) - The graph isomorphism operator from the [How Powerful are Graph Neural Networks?](paperhttps://arxiv.org/abs/1810.00826) paper
 - GraphConv - graph neural network operator from the [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) paper.
 
+
+GNN Theory 
 
 ## Implementation/Methodology
 
