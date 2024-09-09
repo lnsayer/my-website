@@ -35,7 +35,7 @@ There are several different types of graph neural network tasks [1] and in this 
 A simple model involves using a convolutional layer to share information between the nodes (atoms) in the graph (molecule) and then make a prediction based on the all the nodes in the graph. 
 
 
-<img src="https://lnsayer.github.io/my-website/files/bace_dataset/node_features_in_a_graph.png" alt="Untitled" style="height:auto;">
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/new_node_features_in_a_graph.png" alt="Untitled" style="height:auto;">
 
 
 #### Models used: 
