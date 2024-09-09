@@ -2,11 +2,13 @@
 
 ### GNNs Overview
 
-Graph neural networks have emerged as powerful deep learning artificial networks which process data structured as graphs. Graph neural networks are effective in many different fields such as recommmendation systems, drug/ protein discovery and fraud detection. 
+Graph neural networks have emerged as a powerful class of deep learning artificial networks, which process data structured as graphs. Graph neural networks are effective in many different fields such as recommmendation systems, drug/ protein discovery and fraud detection. 
 
-One very interesting recent application was in weather forecasting. Last year Google Deepmind released GraphCast which is based on a graph neural network and was considered the most accurate 10-day global weather forecasting system in the world. It could make accurate predictions very quickly - a 10 day forecast could be calculated in less than a minute.  Conventional approaches can take hours of computation in a supercomputer with hundreds of machines. This also made it much cheaper in energy efficiency - about 1000x. 
+One fascinating application of GNNs is in weather forecasting. Last year Google Deepmind released GraphCast which is based on a graph neural network and was considered the most accurate 10-day global weather forecasting system in the world. It could make accurate predictions very quickly - a 10 day forecast could be calculated in less than a minute.  Conventional approaches can take hours of computation in a supercomputer with hundreds of machines. This also made it much cheaper in energy efficiency - about 1000x. 
 
-Another application was in protein design. The goal of this is to create proteins with desired properties which can be used for drugs, enzymes or materials. RosettaFold Diffusion uses a diffusion model which can generate new proteins from noise. The model is trained to recover corrupted (noised) protein structures and can produce unseen structures by denoising from a random noise input. The model operates via a special type of graph neural network and showed great improvements over its competitors across a broad range of problems. 
+
+
+Another application is in protein design. The goal of this is to create proteins with desired properties which can be used for drugs, enzymes or materials. RosettaFold Diffusion uses a diffusion model which can generate new proteins from noise. The model is trained to recover corrupted (noised) protein structures and can produce unseen structures by denoising from a random noise input. The model operates via a special type of graph neural network and showed great improvements over its competitors across a broad range of problems. 
 
 #### Models used: 
 I produced results for four different model architectures, which are discussed more in the theory section. 
