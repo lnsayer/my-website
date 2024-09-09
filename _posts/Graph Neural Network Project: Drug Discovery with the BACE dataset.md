@@ -32,10 +32,15 @@ Another application is in protein design. The goal of this is to create proteins
 
 There are several different types of graph neural network tasks [1] and in this project we are interested in graph classification. This means, given a molecule which we can represent as a graph, is this a potential drug? 
 
-A simple model involves using a convolutional layer to share information between the nodes (atoms) in the graph (molecule) and then make a prediction based on the all the nodes in the graph. 
+One GNN model involves using a graph convolutional layer to share information between the nodes (atoms) in the graph (molecule) and then make a prediction based on the all the nodes in the graph. 
 
+The nodes contain information about the atoms such as their atom type and formal charge. These are called their node features, which can be seen in Fig. 2.
+
+Figure 2: Node features in a graph in which some are known and unknown. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/new_node_features_in_a_graph.png" alt="Untitled" style="height:auto;">
+
+The node features are updated so that the nodes are represented differently. This occurs through message passing, in which node features are updates as an aggregated function (e.g. mean) of all the neighbour nodes (nodes it is connected to). The aggregation function may be different such as a weighted mean, weighted by the degree of the neighbour nodes. The degree of a node is how many nodes it is connected to. The updated node embedding is then passed through a neural network to reduce its dimensionality. This process of aggregation and passing through a neural network is done several times as required. THe 
 
 
 #### Models used: 
