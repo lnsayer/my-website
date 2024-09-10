@@ -2,47 +2,54 @@
 
 ### GNN Overview 
 
+Graph neural networks have recently emerged as a powerful class of deep learning artificial networks, which process data structured as graphs. Graph neural networks are effective in many different fields such as recommmendation systems, drug/ protein discovery and fraud detection. 
 
-Graph neural networks have emerged as a powerful class of deep learning artificial networks, which process data structured as graphs. Graph neural networks are effective in many different fields such as recommmendation systems, drug/ protein discovery and fraud detection. 
+GNNs process graphs which are non-euclidean data structures composed of nodes and edges, as can be seen in Fig.1 below. 
 
-GNNs work on graphs which are non-euclidean data structures composed of nodes and edges, as can be seen in Fig.1 below. 
-
-Figure 1: 
+Figure 1: The nodes (shown as circles) and edges (lines between the circles) of a graph.
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/GraphTypes.png" alt="Untitled" style="height:auto;">
 
-A lot of data are naturally described by graphs.
+The nodes of a graph represent instances of something such as a person in a social network, a town in a country or an atom in a molecule. Edges represent the connections between these and can be directed, undirected and also weighted. For example one person following another on Instagram (directed edge), a motorway between town with distance (undirected and weighted) or an atomic bond (undirected). 
 
-The nodes of a graph represent instances of something such as a person in a social network, a town in a country or an atom in a molecule. Edges represent the connections between these and can be directed, undirected and also weighted. For example one person following another (directed edge), a motorway between town with distance (undirected and weighted) or an atomic bond (unidrected). 
-
-Graphs are very good at describing data with relationships and interactions. They are not that unsimilar to other data types and their corresponding neural networks. Convolutional neural networks for example can be seen as acting on an images whose nodes are the pixels and only adjacent pixels are connected by edges in the graph.  
+Graphs are very good at describing data with relationships and interactions. They are not that unsimilar to other data types and their corresponding neural networks. Convolutional layers in computer vision for example can be seen as acting on an image whose nodes are the pixels and only adjacent pixels are connected by edges in the graph.  
 
 
-### GNNs Applications 
+### Recent GNNs Applications 
 
-One fascinating application of GNNs is in weather forecasting. Last year Google Deepmind released GraphCast which is based on a graph neural network and was considered the most accurate 10-day global weather forecasting system in the world. It could make accurate predictions very quickly - a 10 day forecast could be calculated in less than a minute.  Conventional approaches can take hours of computation in a supercomputer with hundreds of machines. This also made it much cheaper in energy efficiency - about 1000x. 
+#### Weather Forecasting 
+
+One fascinating application of GNNs is in weather forecasting. Last year Google Deepmind released GraphCast which is based on a graph neural network and was considered the most accurate 10-day global weather forecasting system in the world. It could make accurate predictions very quickly - a 10 day forecast could be calculated in less than a minute.  Conventional approaches can take hours of computation in a supercomputer with hundreds of machines. This also made it much cheaper in energy efficiency - about 1000x. The architecture and some of the predictions can be seen in Fig. 2. 
+
+Figure 2: The architecture is based on a Graph Neural Network with an Encoder-Processor-Decoder configuration. The earth is modelled as an iteratively refined icosahedron with each grid block being mapped to node attributes (encoding). The processor performs message passing on these with 16 unshared GNN layers.The decoder maps these learned featuers back to predict the next state.  
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/graphcast_image.png" alt="Untitled" style="height:auto;">
 
-Another application is in protein design. The goal of this is to create proteins with desired properties which can be used for drugs, enzymes or materials. RosettaFold Diffusion uses a diffusion model which can generate new proteins from noise. The model is trained to recover corrupted (noised) protein structures and can produce unseen structures by denoising from a random noise input. The model operates via a special type of graph neural network and showed great improvements over its competitors across a broad range of problems. 
+#### Protein Design 
+
+Another application is in protein design. The goal of this is to create proteins with desired properties which can be used for drugs, enzymes or materials. In 2023, BakerLab released RosettaFold Diffusion which uses a diffusion model to generate new proteins from noise. The model is trained to recover corrupted (noised) protein structures and can produce unseen structures by denoising from a random noise input. The model operates via a special type of graph neural network and showed great improvements over its competitors across a broad range of problems. Fig. 3 shows a generated molecule and validated image. 
+
+Figure 3: A symmetrical protein assembly (left), generated by RFDiffusion and a validating image produced by single molecule electron microscopy (right). 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/GNN-RFDiffusion.png" alt="Untitled" style="height:auto;">
 
 ### GNN Theory 
 
-There are several different types of graph neural network tasks [1] and in this project we are interested in graph classification. This means, given a molecule which we can represent as a graph, is this a potential drug? 
+There are several different types of graph neural network tasks [1] and in this project we are interested in graph classification. Given a molecule, which we can represent as a graph, is this a potential drug? As discussed before, molecules are described well by graphs as the nodes can represent atoms and the edges represent the bonds between them. 
 
-One GNN model involves using a graph convolutional layer to share information between the nodes (atoms) in the graph (molecule) and then make a prediction based on the all the nodes in the graph. 
+One GNN model involves using a graph convolutional layer to share information between the nodes in the graph and then make a prediction based on information encapusalted by all the nodes. 
 
-The nodes contain information about the atoms such as their atom type and formal charge. These are called their node features, which can be seen in Fig. 2.
+The nodes contain information about the atoms such as their atom type and formal charge. These are called their node features, which can be seen in Fig. 4.
 
-Figure 2: Node features in a graph in which some are known and unknown. 
+Figure 4: Node features in a graph in which some are known and unknown. All of the node features in our data are known. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/new_node_features_in_a_graph.png" alt="Untitled" style="height:auto;">
 
-The node features are updated so that the nodes are represented differently. This occurs through message passing, in which node features are updates as an aggregated function (e.g. mean) of all the neighbour nodes (nodes it is connected to). The aggregation function may be different such as a weighted mean, weighted by the degree of the neighbour nodes. The degree of a node is how many nodes it is connected to. The updated node embedding is then passed through a neural network to reduce its dimensionality. This process of aggregation and passing through a neural network is done several times as required. THe 
+The node features can be updated to take in information from their neighbouring nodes. This occurs through message passing, in which node features are updated by an aggregated function (e.g. mean) of all the neighbour nodes. There are different aggregation functions to choose from. One popular aggregation function is the weighted mean, weighted by the degree of the neighbour nodes. The degree of a node is how many nodes it is connected to. The updated node embedding is then passed through a neural network to reduce its dimensionality. This process of aggregation and passing through a neural network is done several times as required. This process can be seen in Fig.5. I recommend watching this great series on GNNs to better understand the theory [2]. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/message_passing_gcn.png" alt="Untitled" style="height:auto;">
+
+
 
 
 #### Models used: 
@@ -180,5 +187,5 @@ Figure 8: The dimensionally-reduced graph embeddings for all the positive and ne
 It is clear from Fig. 8 that the model is able to differentiate between the two groups of graphs (positive and negative). It is normal that there are mixed regions for two reasons: the model may not be embedding the graphs perfectly and also t-SNE has some degree dimensionality reduction. The separation might be more distinct in higher dimensions however overall this is good clustering. 
 
 [1] https://www.datacamp.com/tutorial/comprehensive-introduction-graph-neural-networks-gnns-tutorial
-
+[2] https://www.youtube.com/watch?v=OI0Jo-5d190&list=PLSgGvve8UweGx4_6hhrF3n4wpHf_RV76_
 
