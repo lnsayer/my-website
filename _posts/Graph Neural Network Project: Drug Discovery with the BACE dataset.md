@@ -55,24 +55,34 @@ There are different aggregation functions to choose from. One popular aggregatio
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/message_passing_gcn.png" alt="Untitled" style="height:auto;">
 
-#### Models used: 
-I tested four different neural networks in this project. Three of which had similar architectures but differed in their convolutional layers and the fourth had a different architecture altogether. The different networks are listed below:  
+### Models used: 
+I tested four different neural networks in this project. Three of which had the same architectures but differed in their convolutional layers and the fourth had a different architecture altogether. The different networks are listed below:  
 
 
-- GCN (Graph Convolutional Network) - The graph convolutional operator from the [Semi-supervised Classification with Graph Convolutional Networks](https://arxiv.org/abs/1609.02907) paper.
+#### GCN (Graph Convolutional Network)
 
-This convolutional layer updates a target node's embeddings by considering the degree of the source node (in the context of a social network, friends with fewer friends themselves are likely to be more important connections than friends with lots of friends like celebrities or influencers). A learnable, layer-specific weight matrix applied to the source node determines how the source nodes update the target node. A much more detailed explanation can be found here [4]. 
+- The graph convolutional operator from the [Semi-supervised Classification with Graph Convolutional Networks](https://arxiv.org/abs/1609.02907) paper.
 
-
-- GAT (Graph Attention Network) - The graph attentional operator from the [Graph Attention Networks](https://arxiv.org/abs/1710.10903) paper
-
-This convolutional layer acts very similarly to GCN layer however the layer-specific weight matrix is applied to both the source node and target node. Then, an attention mechanism is applied to these two nodes. The attention mechanism indicates the importance of a certain source node's features to a target node. It gives more attention to certain nodes. The attention mechanism is a single layer feed forward network. We can apply more than one attention head such that we can attend to different parts of the source nodes. For example, one head might give more attention to the atom type of the source node while another head may give more attention to the hydrogen bonding.
+This convolutional layer updates a target node's embeddings with a learnable, layer specific weight matrix which is applied to the source node. This is weighted by the degree of the source node. Source nodes with fewer connections themselves are more likely to be important (in the context of a social network, friends with fewer friends themselves are likely to be more important connections than friends with lots of friends like celebrities or influencers). A much more detailed explanation [4].
 
 
-- GIN (Graph Isomorphism Network) - The graph isomorphism operator from the [How Powerful are Graph Neural Networks?](paperhttps://arxiv.org/abs/1810.00826) paper
+#### GAT (Graph Attention Network)
+
+- The graph attentional operator from the [Graph Attention Networks](https://arxiv.org/abs/1710.10903) paper
+
+This convolutional layer acts very similarly to GCN layer however the layer-specific weight matrix is applied to both the source node and target node. Then, an attention mechanism is applied to these two nodes. The attention mechanism indicates the importance of a certain source node's features to a target node. It gives more attention to certain nodes. The attention mechanism is a single layer feed forward network. We can apply more than one attention head such that we can attend to different parts of the source nodes. For example, one head might give more attention to the atom type of the source node while another head may give more attention to the hydrogen bonding. A more detailed explanation can be found here [5]. 
+
+
+ #### GIN (Graph Isomorphism Network) 
+ 
+ - The graph isomorphism operator from the [How Powerful are Graph Neural Networks?](paperhttps://arxiv.org/abs/1810.00826) paper
+
+This network has a slightly different architecture to the others. It works similarly to the GCN network however it does not normalise the features of the source node. It also includes a source's own feature vector in the summation, with a weighting such that it can control how much weight to give to itself compared to other target nodes. Secondly, the GIN uses a multi-layer perceptron after summing over the nodes which can capture more complex, non-linear relationships. This is instead of the linear weight matrix. GCNs may end up producing similar aggregated representations of nodes because of the normalisation and weight matrix. GINs ensure this is not the case with the absence of normalisation and the use of a MLP. This makes the graph more injective such that different node neighbourhoods can be better distinguished. As we will see, this makes the graph classification much more effective. 
 
   
-- GraphConv - graph neural network operator from the [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) paper.
+#### GraphConv
+
+- graph neural network operator from the [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) paper.
 
 
 ## Implementation/Methodology
@@ -204,4 +214,5 @@ It is clear from Fig. 8 that the model is able to differentiate between the two 
 [2] https://www.youtube.com/watch?v=OI0Jo-5d190&list=PLSgGvve8UweGx4_6hhrF3n4wpHf_RV76_
 [3] https://medium.com/the-modern-scientist/graph-neural-networks-series-part-4-the-gnns-message-passing-over-smoothing-e77ffee523cc
 [4] https://www.youtube.com/watch?v=5SintlY9hbY
+[5] https://www.youtube.com/watch?v=uFLeKkXWq2c
 
