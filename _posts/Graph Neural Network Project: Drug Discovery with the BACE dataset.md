@@ -82,8 +82,9 @@ This network has a slightly different architecture to the others. It works simil
   
 #### GraphConv
 
-- graph neural network operator from the [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) paper.
+- Graph neural network operator from the [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) paper.
 
+The GraphConv layer uses separate layer-specific weight matrices for the target node and source nodes. Similarly to the GIN layer this controls how much a node's own features will determine its updated features. The features from other nodes are not normalised either and makes the graph more injective. Edge weights can also be incorporated to weight the features from a source node, however used the default weight of 1 for every node in this project. 
 
 ## Implementation/Methodology
 
