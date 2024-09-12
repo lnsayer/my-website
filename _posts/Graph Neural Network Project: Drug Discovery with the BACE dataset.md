@@ -14,7 +14,6 @@ The nodes of a graph represent instances of something such as a person in a soci
 
 Graphs are very good at describing data with relationships and interactions. They are not that unsimilar to other data types and their corresponding neural networks. Convolutional layers in computer vision for example can be seen as acting on an image whose nodes are the pixels and only adjacent pixels are connected by edges in the graph.  
 
-
 ### Recent GNNs Applications 
 
 #### Weather Forecasting 
@@ -85,6 +84,10 @@ This network has a slightly different architecture to the others. It works simil
 - Graph neural network operator from the [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) paper.
 
 The GraphConv layer uses separate layer-specific weight matrices for the target node and source nodes. Similarly to the GIN layer this controls how much a node's own features will determine its updated features. The features from other nodes are not normalised either and makes the graph more injective. Edge weights can also be incorporated to weight the features from a source node, however used the default weight of 1 for every node in this project. 
+
+### BACE Dataset 
+
+
 
 ## Implementation/Methodology
 
