@@ -52,6 +52,8 @@ Figure 5: This is a two layer graph neural network which shows how message passi
 
 There are different aggregation functions to choose from. One popular aggregation function is the weighted mean, weighted by the degree of the neighbour nodes. The degree of a node is how many nodes it is connected to. The updated node embedding is then passed through a weight matrix/neural network to reduce its dimensionality. This process of aggregation and passing through a neural network is done several times as required. This process can be seen in Fig.5. I recommend watching this great series on GNNs to better understand the theory [2]. 
 
+Figure 6: Two layers of a GCN network, in which the nodes features are aggregated (averaged) and then passed through a neural network to reduce their dimensionality. The node dimensionality can be reduced to 1 which is a probability score (e.g. of being a drug or not) [2]. 
+
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/message_passing_gcn.png" alt="Untitled" style="height:auto;">
 
 ### Models used: 
@@ -87,9 +89,11 @@ The GraphConv layer uses separate layer-specific weight matrices for the target 
 
 ### BACE Dataset 
 
-The BACE dataset features 1513 molecules with qualitative (binary label) binding results for Beta-secretase 1 in humans. Beta secretase 1 is involved in pathways which create amyloid beta peptides, which are the main component of the amyloid plaques found in the brains of people with Alzheimer's disease. In theory drugs which block this enzyme would prevent the build-up of beta amyloid peptides which form the amyloid plaques and therefore help slow or stop Alzheimer's disease. Unfortunately, 
+The BACE dataset features 1513 molecules with qualitative (binary label) binding results for Beta-secretase 1 (BACE-1) in humans. Beta secretase 1 is involved in pathways which create amyloid beta peptides, which are the main component of the amyloid plaques found in the brains of people with Alzheimer's disease. In theory drugs which block this enzyme would prevent the build-up of beta amyloid peptides which form the amyloid plaques and therefore help slow or stop Alzheimer's disease. Unfortunately, in practice it appears that drugs inhibiting BACE-1 are ineffective. Pharmaceutical companies such as Merck and Co, Eli Lilly and Co and Astrazeneca have all halted trials for BACE-1 inhibitors after lack of clinical benefits to patients [8], [9], [10].
 
-All data are experimental values reported in the scientific literature over the past decade. The molecules
+All data are experimental values reported in the scientific literature over the past decade. The molecules are formatted as SMILES, and some of these can be seen in Fig. 7. 
+
+*** Insert SMILES molecules figure***
 
 ## Implementation/Methodology
 
@@ -223,4 +227,6 @@ It is clear from Fig. 8 that the model is able to differentiate between the two 
 [5] https://www.youtube.com/watch?v=uFLeKkXWq2c
 [6] https://arxiv.org/abs/1810.00826
 [7]
-
+[8] https://alzheimersnewstoday.com/news/merck-stops-phase-3-study-verubecestat-in-early-alzheimers-patients/?cn-reloaded=1
+[9] https://investor.lilly.com/news-releases/news-release-details/lilly-provides-update-a4-study-solanezumab-preclinical
+[10] https://www.astrazeneca.com/media-centre/press-releases/2018/update-on-phase-iii-clinical-trials-of-lanabecestat-for-alzheimers-disease-12062018.html#
