@@ -55,7 +55,7 @@ There are different aggregation functions to choose from. One popular aggregatio
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/message_passing_gcn.png" alt="Untitled" style="height:auto;">
 
 ### Models used: 
-I tested four different neural networks in this project. Three of which had the same architectures but differed in their convolutional layers and the fourth had a different architecture altogether. The different networks are listed below:  
+I tested four different neural networks in this project. Three of which had the same architectures but differed in their convolutional layers and the fourth had a different architecture altogether. The different layers/networks are listed below:  
 
 
 #### GCN (Graph Convolutional Network)
@@ -69,25 +69,27 @@ This convolutional layer updates a target node's embeddings by aggregating (weig
 
 - The graph attentional operator from the [Graph Attention Networks](https://arxiv.org/abs/1710.10903) paper
 
-This convolutional layer acts very similarly to GCN layer however there is no aggregation. Also, the layer-specific weight matrix is applied to both the source node and target node. Then, an attention mechanism is applied to these two nodes. The attention mechanism indicates the importance of a certain source node's features to a target node. It gives more attention to certain nodes. The attention mechanism is a single layer feed forward network but ca. We can apply more than one attention head such that we can attend to different parts of the source nodes. For example, one head might give more attention to the atom type of the source node while another head may give more attention to the hydrogen bonding. A more detailed explanation can be found here [5]. 
+This convolutional layer acts very similarly to GCN layer however there is no aggregation. Also, the layer-specific weight matrix is applied to both the source node and target node. Then, an attention mechanism is applied to these two nodes. The attention mechanism indicates the importance of a certain source node's features to a target node i.e. it gives more attention to certain nodes. The attention mechanism is a single layer feedforward network. We can apply more than one attention head such that we can attend to different parts of the source nodes. For example, one head might give more attention to the atom type of the source node while another head may give more attention to the hydrogen bonding. A more detailed explanation can be found here [5]. 
 
 
  #### GIN (Graph Isomorphism Network) 
  
  - The graph isomorphism operator from the [How Powerful are Graph Neural Networks?](paperhttps://arxiv.org/abs/1810.00826) paper
 
-This network has a slightly different architecture to the others. It works similarly to the GCN network however it does not normalise the features of the source node. It also includes a source's own feature vector in the summation, with a weighting such that it can control how much weight to give to itself compared to other target nodes. Secondly, the GIN uses a multi-layer perceptron after summing over the nodes which can capture more complex, non-linear relationships. This is instead of the linear weight matrix. GCNs may end up producing similar aggregated representations of nodes because of the normalisation and weight matrix. GINs ensure this is not the case with the absence of normalisation and the use of a MLP. This makes the graph more injective such that different node neighbourhoods can be better distinguished. As we will see, this makes the graph classification much more effective. 
+This network has a slightly different architecture to the others. It works similarly to the GCN network however it does not normalise the features of the source nodes. It also includes a source's own feature vector in the summation, with a weighting such that it can control how much weight to give to itself compared to other target nodes. Secondly, the GIN uses a multi-layer perceptron after summing over the nodes which can capture more complex, non-linear relationships. This is instead of the linear weight matrix. GCNs may end up producing similar aggregated representations of nodes because of the normalisation and weight matrix. GINs ensure this is not the case with the absence of normalisation and the use of a MLP. This makes the graph more injective such that different node neighbourhoods can be better distinguished. As we will see, this makes the graph classification much more effective. The paper which details this network can be found here [6].
 
   
 #### GraphConv
 
 - Graph neural network operator from the [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) paper.
 
-The GraphConv layer uses separate layer-specific weight matrices for the target node and source nodes. Similarly to the GIN layer this controls how much a node's own features will determine its updated features. The features from other nodes are not normalised either and makes the graph more injective. Edge weights can also be incorporated to weight the features from a source node, however used the default weight of 1 for every node in this project. 
+The GraphConv layer uses separate layer-specific weight matrices for the target node and source nodes. Similarly to the GIN layer this controls how much a node's own features will determine its updated features. The features from other nodes are not normalised either and makes the graph more injective. Edge weights can also be incorporated to weight the features from a source node, however used the default weight of 1 for every node in this project. The paper which details this network: [7]
 
 ### BACE Dataset 
 
+The BACE dataset features 1513 molecules with qualitative (binary label) binding results for Beta-secretase 1 in humans. Beta secretase 1 is involved in pathways which create amyloid beta peptides, which are the main component of the amyloid plaques found in the brains of people with Alzheimer's disease. In theory drugs which block this enzyme would prevent the build-up of beta amyloid peptides which form the amyloid plaques and therefore help slow or stop Alzheimer's disease. Unfortunately, 
 
+All data are experimental values reported in the scientific literature over the past decade. The molecules
 
 ## Implementation/Methodology
 
@@ -219,4 +221,6 @@ It is clear from Fig. 8 that the model is able to differentiate between the two 
 [3] https://medium.com/the-modern-scientist/graph-neural-networks-series-part-4-the-gnns-message-passing-over-smoothing-e77ffee523cc
 [4] https://www.youtube.com/watch?v=5SintlY9hbY
 [5] https://www.youtube.com/watch?v=uFLeKkXWq2c
+[6] https://arxiv.org/abs/1810.00826
+[7]
 
