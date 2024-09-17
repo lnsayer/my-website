@@ -95,7 +95,6 @@ All data are experimental values reported in the scientific literature over the 
 
 Figure 7: Three molecules in the BACE dataset, shown in their SMILES notation and respective molecule skeletal formula, drawn by RDKit's Draw.MolToImage. 
 
-
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/bace_dataset_molecules.png" alt="Untitled" style="height:auto;">
 
 
@@ -126,7 +125,7 @@ I used Visual Studio Code as my coding editor and created documented, modularise
 
 ### Technical Details 
 
-Two features unique features I implemented in my code:
+Two unique features I implemented in my code:
 - I created an early stopping protocol since each model architecture trained optimally in a different amount of time. This worked by calculating averages of the loss and AUC from the last ten epochs (e.g if the model was on epoch 53 the average would be calculated from epochs 43-52). The model's parameters were updated if the current moving average (from the test set) was better than all the previous moving averages (i.e if the moving average loss is lower than any previous moving average loss AND the moving average AUC is higher than any previous moving average AUC). This protocol also implemented patience which meant that a training run would wait for a certain number of epochs (e.g. 50) for the metrics to improve before the run was stopped. Therefore the model would always be finally saved 50 epochs before the total number of epochs. 
 This was very useful as it prevented me from having to manually set the number of epochs to train for and also prevented a model from overfitting.
 - I also saved a random set of indices with which to split the whole dataset into the training set and test set (into a 80-20% split). I used these whenever creating the dataloaders. I could have used a random manual seed but this was a more reliable method for producing the same training and test sets.
@@ -164,7 +163,9 @@ The GIN and GINE models were structured slightly differently:
 - MLP
 - Softmax
 
-I did not include a dropout layer for the GIN(E) models which was an oversight as this would have helped to lessen the overfitting which we will see later. 
+The MLPs used in the convolutional layers had three layers each and 128 hidden channels. I did not include a dropout layer for the GIN(E) models which was an oversight as this would have helped to lessen the overfitting which we will see later.
+
+The exact structures of my models can be found in my code on Github [12].
 
 My models therefore had this number of parameters: 
 
@@ -268,3 +269,4 @@ It is clear from Fig. 8 that the model is able to differentiate between the two 
 [9] https://investor.lilly.com/news-releases/news-release-details/lilly-provides-update-a4-study-solanezumab-preclinical
 [10] https://www.astrazeneca.com/media-centre/press-releases/2018/update-on-phase-iii-clinical-trials-of-lanabecestat-for-alzheimers-disease-12062018.html#
 [11] https://deepchem.readthedocs.io/en/latest/api_reference/moleculenet.html
+[12] https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python
