@@ -91,7 +91,10 @@ The GraphConv layer uses separate layer-specific weight matrices for the target 
 
 The dataset used in this project is the BACE dataset and comes from Deepchem [11]. It features 1513 molecules with qualitative (binary label) binding results for Beta-secretase 1 (BACE-1) in humans. Beta secretase 1 is involved in pathways that create amyloid beta peptides, which are the main component of the amyloid plaques found in the brains of people with Alzheimer's disease. In theory drugs which block this enzyme would prevent the build-up of beta amyloid peptides which form the amyloid plaques and therefore help slow or stop Alzheimer's disease. Unfortunately, in practice it appears that drugs inhibiting BACE-1 are ineffective. Pharmaceutical companies such as Merck and Co, Eli Lilly and Co and Astrazeneca have all halted trials for BACE-1 inhibitors after lack of clinical benefits to patients [8], [9], [10].
 
-All data are experimental values reported in the scientific literature over the past decade. The molecules are formatted as SMILES, and some of these can be seen in Fig. 7. 
+All data are experimental values reported in the scientific literature over the past decade. The molecules are formatted as SMILES, and some of these can be seen in Fig. 7. The molecules are quite small, with an average of 34 atoms per molecule.
+
+Figure 7: Three molecules in the BACE dataset, shown in their SMILES notation and respective molecule skeletal formula, drawn by RDKit's Draw.MolToImage. 
+
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/bace_dataset_molecules.png" alt="Untitled" style="height:auto;">
 
@@ -129,6 +132,17 @@ I trained four different model architectures, as described in the introduction: 
 For two of the model architectures (GIN and GAT) I was also able to incorporate the edge attributes of the graphs and I called these models GINE and GATE. I hoped that predictions quality would improve with this further information. 
 
 Graph classification was obtained from the node embeddings by using a pooling method. My most used pooling method was the global mean pooling which calculated an average of the nodes' embedded features to produce a single graph embedding. I also briefly tried global max pooling which finds, for each feature of the nodes, the highest value amongst the nodes.
+
+The architecure of the GCN, GAT, GraphConv and GATE followed this structure: 
+- Convolutional layer
+- Leaky ReLU
+- Convolutional Layer
+- Leaky ReLU
+- Convolutional Layer
+- Pooling Layer
+- Dropout
+- Linear Layer
+- Softmax 
 
 Most of my models had 3 layers with 128 hidden channels per layer. My models therefore had this number of parameters: 
 
