@@ -89,11 +89,12 @@ The GraphConv layer uses separate layer-specific weight matrices for the target 
 
 ### BACE Dataset 
 
-The BACE dataset features 1513 molecules with qualitative (binary label) binding results for Beta-secretase 1 (BACE-1) in humans. Beta secretase 1 is involved in pathways which create amyloid beta peptides, which are the main component of the amyloid plaques found in the brains of people with Alzheimer's disease. In theory drugs which block this enzyme would prevent the build-up of beta amyloid peptides which form the amyloid plaques and therefore help slow or stop Alzheimer's disease. Unfortunately, in practice it appears that drugs inhibiting BACE-1 are ineffective. Pharmaceutical companies such as Merck and Co, Eli Lilly and Co and Astrazeneca have all halted trials for BACE-1 inhibitors after lack of clinical benefits to patients [8], [9], [10].
+The dataset used in this project is the BACE dataset and comes from Deepchem [11]. It features 1513 molecules with qualitative (binary label) binding results for Beta-secretase 1 (BACE-1) in humans. Beta secretase 1 is involved in pathways that create amyloid beta peptides, which are the main component of the amyloid plaques found in the brains of people with Alzheimer's disease. In theory drugs which block this enzyme would prevent the build-up of beta amyloid peptides which form the amyloid plaques and therefore help slow or stop Alzheimer's disease. Unfortunately, in practice it appears that drugs inhibiting BACE-1 are ineffective. Pharmaceutical companies such as Merck and Co, Eli Lilly and Co and Astrazeneca have all halted trials for BACE-1 inhibitors after lack of clinical benefits to patients [8], [9], [10].
 
 All data are experimental values reported in the scientific literature over the past decade. The molecules are formatted as SMILES, and some of these can be seen in Fig. 7. 
 
-*** Insert SMILES molecules figure***
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/bace_dataset_molecules.png" alt="Untitled" style="height:auto;">
+
 
 ## Implementation/Methodology
 
@@ -230,3 +231,4 @@ It is clear from Fig. 8 that the model is able to differentiate between the two 
 [8] https://alzheimersnewstoday.com/news/merck-stops-phase-3-study-verubecestat-in-early-alzheimers-patients/?cn-reloaded=1
 [9] https://investor.lilly.com/news-releases/news-release-details/lilly-provides-update-a4-study-solanezumab-preclinical
 [10] https://www.astrazeneca.com/media-centre/press-releases/2018/update-on-phase-iii-clinical-trials-of-lanabecestat-for-alzheimers-disease-12062018.html#
+[11]
