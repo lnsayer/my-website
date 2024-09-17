@@ -133,7 +133,7 @@ For two of the model architectures (GIN and GAT) I was also able to incorporate 
 
 Graph classification was obtained from the node embeddings by using a pooling method. My most used pooling method was the global mean pooling which calculated an average of the nodes' embedded features to produce a single graph embedding. I also briefly tried global max pooling which finds, for each feature of the nodes, the highest value amongst the nodes.
 
-The architecure of the GCN, GAT, GraphConv and GATE followed this structure: 
+The architecure of the GCN, GAT, GraphConv and GATE models followed this structure: 
 - Convolutional layer
 - Leaky ReLU
 - Convolutional Layer
@@ -144,7 +144,21 @@ The architecure of the GCN, GAT, GraphConv and GATE followed this structure:
 - Linear Layer
 - Softmax 
 
-Most of my models had 3 layers with 128 hidden channels per layer. My models therefore had this number of parameters: 
+Therefore these models had 3 layers, each with 128 hidden channels per layer. 
+
+The GIN and GINE models were structured slightly differently:
+- Convolutional layer
+- ReLU
+- Convolutional Layer
+- ReLU
+- Convolutional Layer
+- Pooling Layer
+- MLP
+- Softmax
+
+I did not include a dropout layer for the GIN(E) models which was an oversight as this would have helped to lessen the overfitting which we will see later. 
+
+My models therefore had this number of parameters: 
 
 - GCN model: 37,250
 - GAT model:  346,754
