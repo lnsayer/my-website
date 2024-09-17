@@ -57,7 +57,7 @@ Figure 6: Two layers of a GCN network, in which the nodes features are aggregate
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/message_passing_gcn.png" alt="Untitled" style="height:auto;">
 
 ### Models used: 
-I tested four different neural networks in this project. Three of which had the same architectures but differed in their convolutional layers and the fourth had a different architecture altogether. The different layers/networks are listed below:  
+I tested four different neural networks in this project. These models had roughly the same architectures, with the main difference being the convolutional layers employed. The different layers/networks are listed below:  
 
 
 #### GCN (Graph Convolutional Network)
@@ -101,6 +101,8 @@ Figure 7: Three molecules in the BACE dataset, shown in their SMILES notation an
 
 ## Implementation/Methodology
 
+### Google Colabs
+
 I initially worked on the dataset using Google Colabs as it has free GPU-access and a convenient notebook style format. I was able to perform preliminary EDA by loading in the data from a CSV file. However, loading the whole CSV file into a dataloader for the training was impractical and I chose to create a custom dataset using PyTorch Geometric's Dataset class. This offered several advantages:
 
 - Although the dataset was small (only 1513 rows with a few columns of data) it was more efficient to load the CSV file once, perform the processing and save each processed molecule. Otherwise we would have to load and process the csv file each time we created the dataloader. 
@@ -116,9 +118,13 @@ Google Colabs was very useful at the beginning of the project but some issues ar
 
 I tried to modularise my code within Google Colabs using the magic command `%%writefile` which saved a cell as a script so that it could be imported by other cells. This turned out to be less efficient since when importing other scripts, their respective imported modules would have to be imported each time (took ~10 seconds) and this made it very time consuming to make small changes to code. 
 
+### Local Work
+
 As a result I tried to setup the scripts locally on my mac but it was difficult to install PyTorch Geometric and DeepChem. I decided to run a dual boot dual drive on my desktop such that I could use a Linux operating system alongside Windows. On my Linux operating system I installed CUDA for access to my 1060GTX 6GB GPU and cuDNN for accelerating this. It took considerable time to find compatible package versions for PyTorch, PyTorch Geometric, DeepChem and RDKit. 
 
 I used Visual Studio Code as my coding editor and created documented, modularised scripts for the different functionalities of the project. I was finally able to save the processed data separately and load it in to create dataloaders very quickly. I was also able to save metrics (loss, accuracy and AUC) from training runs in a separate directory to view results whenever required. The modularised scripts can be viewed [here](https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python).
+
+### Technical Details 
 
 Two features unique features I implemented in my code:
 - I created an early stopping protocol since each model architecture trained optimally in a different amount of time. This worked by calculating averages of the loss and AUC from the last ten epochs (e.g if the model was on epoch 53 the average would be calculated from epochs 43-52). The model's parameters were updated if the current moving average (from the test set) was better than all the previous moving averages (i.e if the moving average loss is lower than any previous moving average loss AND the moving average AUC is higher than any previous moving average AUC). This protocol also implemented patience which meant that a training run would wait for a certain number of epochs (e.g. 50) for the metrics to improve before the run was stopped. Therefore the model would always be finally saved 50 epochs before the total number of epochs. 
@@ -132,6 +138,8 @@ I trained four different model architectures, as described in the introduction: 
 For two of the model architectures (GIN and GAT) I was also able to incorporate the edge attributes of the graphs and I called these models GINE and GATE. I hoped that predictions quality would improve with this further information. 
 
 Graph classification was obtained from the node embeddings by using a pooling method. My most used pooling method was the global mean pooling which calculated an average of the nodes' embedded features to produce a single graph embedding. I also briefly tried global max pooling which finds, for each feature of the nodes, the highest value amongst the nodes.
+
+### Model specifications
 
 The architecure of the GCN, GAT, GraphConv and GATE models followed this structure: 
 - Convolutional layer
@@ -255,8 +263,8 @@ It is clear from Fig. 8 that the model is able to differentiate between the two 
 [4] https://www.youtube.com/watch?v=5SintlY9hbY
 [5] https://www.youtube.com/watch?v=uFLeKkXWq2c
 [6] https://arxiv.org/abs/1810.00826
-[7]
+[7] https://arxiv.org/abs/1810.02244
 [8] https://alzheimersnewstoday.com/news/merck-stops-phase-3-study-verubecestat-in-early-alzheimers-patients/?cn-reloaded=1
 [9] https://investor.lilly.com/news-releases/news-release-details/lilly-provides-update-a4-study-solanezumab-preclinical
 [10] https://www.astrazeneca.com/media-centre/press-releases/2018/update-on-phase-iii-clinical-trials-of-lanabecestat-for-alzheimers-disease-12062018.html#
-[11]
+[11] https://deepchem.readthedocs.io/en/latest/api_reference/moleculenet.html
