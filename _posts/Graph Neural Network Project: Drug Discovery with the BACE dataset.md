@@ -212,11 +212,11 @@ Figure 2: Three different metrics as a function of epoch for a single GINE model
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/gineconv_loss_acc_auc_plots.png" alt="Untitled" style="height:auto;">
 
-The test set loss actually appears to increase after around 40 epochs and the accuracy appears to decrease as well which is classic overfitting. This model seems to be capable of fitting to the data much more effectively than the GCN models. This is supported by the fact that the learning rate was set to 0.0001 for the GIN models, 10x lower than that of the others. 
+The test set loss actually appears to increase after around 40 epochs and the accuracy appears to decrease as well which is classic overfitting. This model seems to be capable of fitting to the data much more effectively than the GCN models. This is supported by the fact that the learning rate was set to 0.0001 for the GIN models, 10x lower than that of the others. The overfitting also likely comes from the omission of a dropout layer in these models, which was an oversight. We could expect less overfitting and also the test set loss to be smoother as the generalisability of the model would improve.  
 
 ### Average metric scores
 
-I checked that the above metric curves (specifically the loss) were reasonable for each set of training runs, i.e. they were not overfitting or underfitting. After this I calculated the average results of the five runs. This was done by saving the models' state dictionaries and then making predictions on the test set, which were used to calculate the following metrics in Table 1. 
+I checked that the above metric curves (specifically the loss) were reasonable for each set of training runs, i.e. they were not overfitting or underfitting. After this I calculated the average results of the five runs. This was done by saving the models' state dictionaries during training, loading the saved parameters and then making predictions on the test set, which were used to calculate the following metrics in Table 1. 
 
 Table 1: Five different metrics for each of the four different GNN architectures. Two more models were trained with the edge attributes. These are averages of five repeats. The precision and recall are calculated for the positive class.  
 | Metric | GCN | GAT Edge | GAT | GraphConv | GIN	 | GINE |
