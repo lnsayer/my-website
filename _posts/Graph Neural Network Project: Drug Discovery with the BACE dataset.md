@@ -62,7 +62,7 @@ I tested four different neural networks in this project. These models had roughl
 
 #### GCN (Graph Convolutional Network)
 
-- The graph convolutional operator from the [Semi-supervised Classification with Graph Convolutional Networks](https://arxiv.org/abs/1609.02907) paper.
+- The graph convolutional operator from the [Semi-supervised Classification with Graph Convolutional Networks](https://arxiv.org/abs/1609.02907) paper
 
 This convolutional layer updates a target node's embeddings by aggregating (weighted average in our case) the source nodes. Then, a learnable, layer specific weight matrix  is applied to the aggregation. The aggregation is weighted inversely to the degree node. This final step is done because source nodes with fewer connections  are more likely to be important (in the context of a social network, friends with fewer friends are likely to be more important connections than friends with lots of friends like celebrities or influencers). 
 
@@ -79,7 +79,7 @@ This convolutional layer acts very similarly to the GCN layer however the layer-
 
 The attention function creates coefficients for the source nodes so the new target node can be constructed from a weighted sum of the source nodes. A more detailed explanation can be found here [5].
 
-The PyTorch Geometric documentation for the [GAT layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GATConv.html#torch_geometric.nn.conv.GATConv) 
+The PyTorch Geometric documentation for the [GAT layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GATConv.html#torch_geometric.nn.conv.GATConv).
 
  #### GIN (Graph Isomorphism Network) 
  
@@ -93,7 +93,7 @@ The PyTorch Geometric documentation for the [GIN layer](https://pytorch-geometri
 
 #### GraphConv
 
-- The graph neural network operator from the [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) paper.
+- The graph neural network operator from the [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) paper
 
 The GraphConv layer uses separate layer-specific weight matrices for the target node and source nodes, similar to the GIN layer. This controls how much a node's own features will determine its updated features. The features from other nodes are not normalised either and makes the graph more injective. Edge weights can also be incorporated to weight the features from a source node, however we used the default weight of 1 for every node in this project. 
 
