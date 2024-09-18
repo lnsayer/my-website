@@ -176,7 +176,7 @@ The GIN and GINE models were structured slightly differently:
 - MLP
 - Softmax
 
-The MLPs used in the convolutional layers had 3 layers each and 128 hidden channels. I did not include a dropout layer for the GIN(E) models which was an oversight as this would have helped to lessen the overfitting which we will see later. In hindsight I should have use more similar methods such as the activation function (ReLU vs Leaky ReLU) and the inclusion of a dropout layer. 
+The MLPs used in the convolutional layers had 3 layers each and 128 hidden channels. I did not include a dropout layer for the GIN(E) models which was an oversight as this would have helped to lessen the overfitting. In hindsight I should have use more similar methods such as the activation function (ReLU vs Leaky ReLU) and the inclusion of a dropout layer. 
 
 The exact structures of my models can be found in my code on Github [12].
 
@@ -200,7 +200,7 @@ During training runs I saved three different metrics at each epoch to measure th
 Figure 1: Three different metrics as a function of epoch for a single GCN model training run. The test set results are shown in orange and the training set results are shown in blue. The model's parameters are saved at epochs with a grey dashed line.  
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/gcn_loss_acc_auc_plot.png" alt="Untitled" style="height:auto;">
 
-As can be seen in Fig. 1 the loss decreases for both the training set and test set over the epochs. The training set loss probably decreases more smoothly than the test set for several reasons: the training set is four times larger than the test set and this helps to average out fluctuations. Also the loss from the training set directly influences the change in the model parameters and this inherently smoothes the training loss. 
+As can be seen in Fig. 1 the loss decreases for both the training set and test set over the epochs. The training set loss decreases more smoothly than the test set for several reasons: the loss from the training set directly influences the change in the model parameters and this inherently smoothes the training loss. Also, the training set is four times larger than the test set and this helps to average out fluctuations. 
 
 Although the test set loss continues to decrease, the AUC metric stagnates and this is why the last saved model is at around 150. 
 
