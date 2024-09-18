@@ -64,28 +64,41 @@ I tested four different neural networks in this project. These models had roughl
 
 - The graph convolutional operator from the [Semi-supervised Classification with Graph Convolutional Networks](https://arxiv.org/abs/1609.02907) paper.
 
-This convolutional layer updates a target node's embeddings by aggregating (weighted average in our case) the source nodes. Then, a learnable, layer specific weight matrix  is applied to the aggregation. The aggregation is weighted inversely to the degree node. This makes sense because source nodes with fewer connections  are more likely to be important (in the context of a social network, friends with fewer friends are likely to be more important connections than friends with lots of friends like celebrities or influencers). A much more detailed explanation [4].
+This convolutional layer updates a target node's embeddings by aggregating (weighted average in our case) the source nodes. Then, a learnable, layer specific weight matrix  is applied to the aggregation. The aggregation is weighted inversely to the degree node. This final step is done because source nodes with fewer connections  are more likely to be important (in the context of a social network, friends with fewer friends are likely to be more important connections than friends with lots of friends like celebrities or influencers). 
+
+The PyTorch Geometric documentation for the [GCN layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GCNConv.html#torch_geometric.nn.conv.GCNConv).
+
+Here is a fantastic, much more detailed explanation [4].
 
 
 #### GAT (Graph Attention Network)
 
 - The graph attentional operator from the [Graph Attention Networks](https://arxiv.org/abs/1710.10903) paper
 
-This convolutional layer acts very similarly to GCN layer however there is no aggregation. Also, the layer-specific weight matrix is applied to both the source node and target node. Then, an attention mechanism is applied to these two nodes. The attention mechanism indicates the importance of a certain source node's features to a target node i.e. it gives more attention to certain nodes. The attention mechanism is a single layer feedforward network. We can apply more than one attention head such that we can attend to different parts of the source nodes. For example, one head might give more attention to the atom type of the source node while another head may give more attention to the hydrogen bonding. A more detailed explanation can be found here [5]. 
+This convolutional layer acts very similarly to the GCN layer however the layer-specific weight matrix is applied to both the source node and target node. Then, an attention mechanism is applied to these two nodes. The attention mechanism indicates the importance of a certain source node's features to a target node i.e. it gives more attention to certain nodes. In our case the attention mechanism is a single layer feedforward network. We can apply more than one attention head such that we can attend to different parts of the source nodes. For example, one head might give more attention to the atom type of the source node while another head may give more attention to the hydrogen bonding. 
 
+The attention function creates coefficients for the source nodes so the new target node can be constructed from a weighted sum of the source nodes. A more detailed explanation can be found here [5].
+
+The PyTorch Geometric documentation for the [GAT layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GATConv.html#torch_geometric.nn.conv.GATConv) 
 
  #### GIN (Graph Isomorphism Network) 
  
- - The graph isomorphism operator from the [How Powerful are Graph Neural Networks?](paperhttps://arxiv.org/abs/1810.00826) paper
+ - The graph isomorphism operator from the [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826) paper
 
-This network has a slightly different architecture to the others. It works similarly to the GCN network however it does not normalise the features of the source nodes. It also includes a source's own feature vector in the summation, with a weighting such that it can control how much weight to give to itself compared to other target nodes. Secondly, the GIN uses a multi-layer perceptron after summing over the nodes which can capture more complex, non-linear relationships. This is instead of the linear weight matrix. GCNs may end up producing similar aggregated representations of nodes because of the normalisation and weight matrix. GINs ensure this is not the case with the absence of normalisation and the use of a MLP. This makes the graph more injective such that different node neighbourhoods can be better distinguished. As we will see, this makes the graph classification much more effective. The paper which details this network can be found here [6].
+This network has a slightly different architecture to the others. It is similar to the GCN network however it does not normalise (by degree node) the features of the source nodes. It also includes a source's own feature vector in the summation, with a weighting such that it can control how much weight to give to itself compared to other target nodes. 
 
-  
+Secondly, the GIN uses a multi-layer perceptron after summing over the nodes which can capture more complex, non-linear relationships. This is instead of the linear weight matrix. GCNs may end up producing similar aggregated representations of nodes because of the normalisation and weight matrix. GINs ensure this is not the case with the absence of normalisation and the use of a MLP. This makes the graph more injective such that different node neighbourhoods can be better distinguished. As we will see, this makes the graph classification much more effective. 
+
+The PyTorch Geometric documentation for the [GIN layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GINConv.html#torch_geometric.nn.conv.GINConv).
+
 #### GraphConv
 
-- Graph neural network operator from the [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) paper.
+- The graph neural network operator from the [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) paper.
 
-The GraphConv layer uses separate layer-specific weight matrices for the target node and source nodes. Similarly to the GIN layer this controls how much a node's own features will determine its updated features. The features from other nodes are not normalised either and makes the graph more injective. Edge weights can also be incorporated to weight the features from a source node, however used the default weight of 1 for every node in this project. The paper which details this network: [7]
+The GraphConv layer uses separate layer-specific weight matrices for the target node and source nodes, similar to the GIN layer. This controls how much a node's own features will determine its updated features. The features from other nodes are not normalised either and makes the graph more injective. Edge weights can also be incorporated to weight the features from a source node, however we used the default weight of 1 for every node in this project. 
+
+The PyTorch Geometric documentation for the [GraphConv layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GINConv.html#torch_geometric.nn.conv.GINConv).
+
 
 ### BACE Dataset 
 
