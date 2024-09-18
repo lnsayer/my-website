@@ -149,11 +149,11 @@ I trained four different models, as described in the introduction: GCN, GAT, GIN
 
 For two of the model architectures (GIN and GAT) I was also able to incorporate the edge attributes of the graphs and I called these models GINE and GATE. I hoped that the prediction quality would improve with this further information. 
 
-Graph classification was obtained from the node embeddings by using a pooling method. My most used pooling method was the global mean pooling which calculated an average of the nodes' embedded features to produce a single graph embedding. I also briefly tried global max pooling which finds, for each feature of the nodes, the highest value amongst the nodes.
+Graph classification was obtained from the node embeddings by using a pooling method. My most used pooling method was the global mean pooling which calculated an average of the nodes' embedded features to produce a single graph embedding. I also briefly tried global max pooling which finds, for each feature of the nodes, the highest value amongst the nodes. However, this pooling method performed slightly worse in the metrics so I stopped using it. 
 
 ### Model specifications
 
-The architecure of the GCN, GAT, GraphConv and GATE models followed this structure: 
+The architectures of the GCN, GAT, GraphConv and GATE models were as follows: 
 - Convolutional layer
 - Leaky ReLU
 - Convolutional Layer
@@ -176,11 +176,11 @@ The GIN and GINE models were structured slightly differently:
 - MLP
 - Softmax
 
-The MLPs used in the convolutional layers had three layers each and 128 hidden channels. I did not include a dropout layer for the GIN(E) models which was an oversight as this would have helped to lessen the overfitting which we will see later.
+The MLPs used in the convolutional layers had 3 layers each and 128 hidden channels. I did not include a dropout layer for the GIN(E) models which was an oversight as this would have helped to lessen the overfitting which we will see later. In hindsight I should have use more similar methods such as the activation function (ReLU vs Leaky ReLU) and the inclusion of a dropout layer. 
 
 The exact structures of my models can be found in my code on Github [12].
 
-My models therefore had this number of parameters: 
+My models had these numbers of parameters: 
 
 - GCN model: 37,250
 - GAT model:  346,754
