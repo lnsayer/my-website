@@ -1,6 +1,6 @@
 # Graph Neural Networks for Drug Discovery in Alzheimer's Disease 
 
-Graph neural networks are a very exciting new neural network architecture that are proving effective in processing relational data, such as molecules. In this project I developed several graph neural networks to classify molecules as drugs in the BACE dataset. I achieved results as high as those in the literature with an AUC score of 0.881 for my top model, GINE, compared to 0.884 for MolXPT, from paperswithcode. 
+Graph neural networks are an exciting new class of neural networksthat are proving very effective in processing relational data, such as molecules. In this project I developed several graph neural networks to classify molecules as drugs in the BACE dataset. I achieved results as high as those in the literature with an AUC score of 0.881 for my top model, GINE, compared to 0.884 for MolXPT, from paperswithcode. I identified which architectures are more effective for these data and wrote clean, documented, modularised reusable code which I could employ in further work. 
 
 ## Project Objectives
 
