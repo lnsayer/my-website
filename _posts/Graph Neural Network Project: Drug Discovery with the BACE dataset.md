@@ -212,14 +212,14 @@ Figure 2: Three different metrics as a function of epoch for a single GINE model
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/gineconv_loss_acc_auc_plots.png" alt="Untitled" style="height:auto;">
 
-The test set loss actually appears to increase after around 40 epochs and the accuracy appears to decrease as well which is classic overfitting. This model seems to be capable of fitting to the data much more effectively than the GCN models. This is supported by the fact that the learning rate was set to 0.0001 for the GIN models, 10x lower than that of the others. The overfitting also likely comes from the omission of a dropout layer in these models, which was an oversight. We could expect less overfitting and also the test set loss to be smoother as the generalisability of the model would improve.  
+The test set loss actually appears to increase after around 40 epochs and the accuracy appears to decrease as well which is classic overfitting. This model seems to be capable of fitting to the data much more effectively than the GCN models. This is supported by the fact that the learning rate was set to 0.0001 for the GIN models, 10x lower than that of the others. The overfitting also likely comes from the omission of a dropout layer in these models, which was an oversight. If we had included this we could have expected less overfitting and also the test set loss to be smoother as the generalisability of the model would improve.  
 
 ### Average metric scores
 
 I checked that the above metric curves (specifically the loss) were reasonable for each set of training runs, i.e. they were not overfitting or underfitting. After this I calculated the average results of the five runs. This was done by saving the models' state dictionaries during training, loading the saved parameters and then making predictions on the test set, which were used to calculate the following metrics in Table 1. 
 
 Table 1: Five different metrics for each of the four different GNN architectures. Two more models were trained with the edge attributes. These are averages of five repeats. The precision and recall are calculated for the positive class.  
-| Metric | GCN | GAT Edge | GAT | GraphConv | GIN	 | GINE |
+| Metric | GCN | GATE | GAT | GraphConv | GIN	 | GINE |
 | ------- | ---- | ------- | ------- | ------- | ---- | -------|
 | AUROC | 0.815 | 0.820 | 0.836 | 0.862 | 0.877	 | 0.881 |
 | Precision | 0.752 | 0.764 | 0.765 | 0.784 | 0.802	 | 0.811|
@@ -229,29 +229,31 @@ Table 1: Five different metrics for each of the four different GNN architectures
 
 As we can see from Table 1 the best performing model over different thresholds was GINE with an AUROC value of 0.881. This is very comparable to the top results in the literature, as reported in PapersWithCode. The highest AUC score in [PapersWithCode](https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1) is 0.884 from MolXPT.
 
-The GINE model also has the highest precision score of 0.811. Precision is more important in the latter stages of drug discovery (lead optimisation, preclinical, clinical trials) where the costs and consequences of advancing a false positive are much higher. The GIN model was best at recall with a recall score of 0.815. Recall is more important in the early stages of drug discovery (hit discovery, target identification) when it is crucial to cast a wide net and identify all candidates. We do not want to miss potentially valuable compounds. 
+The GINE model also has the highest precision score of 0.811. Precision is more important in the latter stages of drug discovery (lead optimisation, preclinical, clinical trials) where the costs and consequences of advancing a false positive are much higher. The GIN model was best at recall with a recall score of 0.815. Recall is more important in the early stages of drug discovery (hit discovery, target identification) when it is crucial to cast a wide net and identify all candidates. We would not want to miss potentially valuable compounds. 
 
-The GraphConv models are not far behind the GIN models, however the GINE model took on average 2.25x fewer epochs to converge than GraphConv, corresponding to roughly 2.25x less time. It is interesting to see that the GAT Edge models performed worse than the GAT models. This may be because the GAT models have a lot of parameters (at least comapted to the GIN models) and they might be overfitting on the training data. It could also be that the edge attributes are irrelevant and just providing noise, however the GINE model would not perform better if that were the case. 
+The GraphConv models are not far behind the GIN models, however the GINE model took on average 2.25x fewer epochs to converge than GraphConv, corresponding to roughly 2.25x less time. It is interesting to see that the GATE models performed worse than the GAT models. This may be because the GAT models have a lot of parameters (at least compared to the GIN models) and they might be overfitting on the training data. It could also be that the edge attributes are irrelevant and just providing noise, however the GINE model would not perform better if that were the case. 
 
 We can see where the models are making incorrect predictions by looking at their confusion matrices. Fig. 3 and Fig. 4 show the confusion matrices for the average GCN and GINE models respectively (average of five repeats).
 
-Figure 3: The confusion matrix for the GCN models. It is an average of the five repeats. 
+Figure 3: The confusion matrix for the GCN models (an average of the five repeats). 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/avg_confusion_matrix_gcn_conv.png" alt="Untitled" style="height:auto;">
 
-Figure 4: The confusion matrix for the GINE models. It is an average of the five repeats. 
+Figure 4: The confusion matrix for the GINE models (an average of the five repeats). 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/new_avg_confusion_matrix_gine_conv.png" alt="Untitled" style="height:auto;">
 
 We can see from the confusion matrices that the two models make incorrect predictions in the same areas. The proportion of false positives between the GCN and GINE models are on average 1.26 (33.6 : 26.6) and the proportion of false negatives between them is on average 1.28 (37.2 : 29.0). The GINE model is generally better overall, not in specific areas. 
 
-I also wanted to look at the sensitivity between precision/recall and the classification threshold. Figures 5 and 6 show the precision and recall as a function of the threshold for the GCN models and GINE models respectively (average of five repeats). 
+### Classification Threshold
 
-Figure 5: Precision and recall as a function of the classifcation threshold for the GCN models (average of the five). The precision is shown in blue and the recall in orange. The metrics are calculated for the positive case. 
+I also wanted to look at the sensitivity between precision/recall and the classification threshold. Figs. 5 and 6 show the precision and recall as a function of the threshold for the GCN models and GINE models respectively (average of five repeats). 
+
+Figure 5: Precision and recall as a function of the classifcation threshold for the GCN models (average of the five). The precision is shown in blue and the recall in orange. The metrics are calculated for the positive class. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/precision_recall_threshold_plot_gcn.png" alt="Untitled" style="height:auto;">
 
-Figure 6: Precision and recall as a function of the classifcation threshold for the GINE models (average of the five). The precision is shown in blue and the recall in orange. The metrics are calculated for the positive case. 
+Figure 6: Precision and recall as a function of the classifcation threshold for the GINE models (average of the five). The precision is shown in blue and the recall in orange. The metrics are calculated for the positive class. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/precision_recall_threshold_plot_gine.png" alt="Untitled" style="height:auto;">
 
