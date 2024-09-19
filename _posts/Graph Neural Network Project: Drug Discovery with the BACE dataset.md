@@ -284,6 +284,12 @@ Figure 8: The dimensionally-reduced graph embeddings for all the positive and ne
 
 It is clear from Fig. 8 that the model is able to differentiate between the two groups of graphs (positive and negative). It is normal that there are mixed regions for two reasons: the model may not be embedding the graphs perfectly and also t-SNE has some degree dimensionality reduction. The separation might be more distinct in higher dimensions however overall this is good clustering. 
 
+## Conclusion 
+
+I used Python and PyTorch to conduct an end-to-end machine learning project to classify small molecules as drugs with the BACE dataset. I achieved good results, with my top model GINE achieving an average AUC score of 0.881 which is very comparable to the top score in the literature of 0.884 by MolXPT. My work shows the dominance of certain neural network architectures (GINE) over others (GCN/GAT) as my top models achieved much better results, with fewer parameters, in less training time. I created custom datasets and dataloaders, organised training and testing runs and implemented GNN models all in the framework of modularised, reusable code. Overall I am very proud of my work and have learnt a lot in my first substantial PyTorch project. 
+
+This work could be further developed for use in drug discovery projects, either at the beginning of a project when it is important to identify all possible candidates or at the end when false positives become more costly. This ties in to future work in which I would like to reuse my code to tackle a larger, more complex dataset which is more realistic. Neural network architecture/models are the focus in academia however in industry data is more important as high customisation is required. I would like to focus more on this to gain relevant skills for future industry work. 
+
 [1] https://www.datacamp.com/tutorial/comprehensive-introduction-graph-neural-networks-gnns-tutorial
 
 [2] https://www.youtube.com/watch?v=OI0Jo-5d190&list=PLSgGvve8UweGx4_6hhrF3n4wpHf_RV76_
