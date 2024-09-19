@@ -16,7 +16,8 @@ Graphs are very good at describing data with relationships and interactions. The
 
 ### Recent GNNs Applications 
 
-Graph neural networks ahve 
+GNNs have rapidly expanded into numerous fields, offering powerful ways for modeling complex data with interconnected structures. The breakthrough in GNNs came in 2016 with the introduction of GCNs (Graph Convolutional Networks) by Thomas Kipf and Max Welling and since then many more effective architectures have been developed. Here are two recent examples of the great potential of GNNs. 
+
 
 #### Weather Forecasting 
 
@@ -280,14 +281,27 @@ Figure 8: The dimensionally-reduced graph embeddings for all the positive and ne
 It is clear from Fig. 8 that the model is able to differentiate between the two groups of graphs (positive and negative). It is normal that there are mixed regions for two reasons: the model may not be embedding the graphs perfectly and also t-SNE has some degree dimensionality reduction. The separation might be more distinct in higher dimensions however overall this is good clustering. 
 
 [1] https://www.datacamp.com/tutorial/comprehensive-introduction-graph-neural-networks-gnns-tutorial
+
 [2] https://www.youtube.com/watch?v=OI0Jo-5d190&list=PLSgGvve8UweGx4_6hhrF3n4wpHf_RV76_
+
 [3] https://medium.com/the-modern-scientist/graph-neural-networks-series-part-4-the-gnns-message-passing-over-smoothing-e77ffee523cc
+
 [4] https://www.youtube.com/watch?v=5SintlY9hbY
+
 [5] https://www.youtube.com/watch?v=uFLeKkXWq2c
+
 [6] https://arxiv.org/abs/1810.00826
+
 [7] https://arxiv.org/abs/1810.02244
+
 [8] https://alzheimersnewstoday.com/news/merck-stops-phase-3-study-verubecestat-in-early-alzheimers-patients/?cn-reloaded=1
+
 [9] https://investor.lilly.com/news-releases/news-release-details/lilly-provides-update-a4-study-solanezumab-preclinical
+
 [10] https://www.astrazeneca.com/media-centre/press-releases/2018/update-on-phase-iii-clinical-trials-of-lanabecestat-for-alzheimers-disease-12062018.html#
+
 [11] https://deepchem.readthedocs.io/en/latest/api_reference/moleculenet.html
+
 [12] https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python
+
+[13] https://www.assemblyai.com/blog/ai-trends-graph-neural-networks/
