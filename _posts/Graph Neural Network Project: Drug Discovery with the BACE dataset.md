@@ -1,3 +1,7 @@
+# Graph Neural Networks for Drug Discovery in Alzheimer's Disease 
+
+Graph neural networks are a very exciting new neural network architecture that are proving effective in processing relational data, such as molecules. In this project I developed several graph neural networks to classify molecules as drugs in the BACE dataset. I achieved results as high as those in the literature with an AUC score of 0.881 for my top model, GINE, compared to 0.884 for MolXPT, from paperswithcode. 
+
 ## Project Objectives
 
 My main objective for this project was to learn to utilise PyTorch on an end-to-end machine learning project which simulated a project in industry. This meant handling the data pipeline, defining the neural networks, creating training pipelines and visualising the results. I wanted to modularise my code so that it could be extended in future projects and make full use of the GPU, as would be done in industry. The results of the work were secondary to this but I still produced results as good as those in the literature.  
