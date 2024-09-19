@@ -257,15 +257,17 @@ Figure 6: Precision and recall as a function of the classifcation threshold for 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/precision_recall_threshold_plot_gine.png" alt="Untitled" style="height:auto;">
 
-The GCN model's curve is roughly what we would expect with the precision taking over the recall at 0.4 (near to 0.5). The recall for the GINE model is much more sensitive and weaker overall. It is never higher than the precision, even at low thresholds and decreases quickly. This indicates the model is conservative at lower thresholds and becomes more selective with a higher threshold. The GCN model on the other hand is more likely to predict positives. The choice of the threshold is very much dependent on the requirements of the model application and it is very useful to see how these models perform. We can plot the precision and recall curves of the two models on the same plot for direct comparison as can be seen in Fig. 7. 
+The GCN model's curve shows a moderately even trade-off between precision and recall with the precision taking over the recall at 0.4 (near to 0.5). The recall for the GINE model is much more sensitive and weaker overall. It is never higher than the precision, even at low thresholds and decreases quickly. This indicates the model is conservative at lower thresholds and becomes more selective with a higher threshold. The GCN model on the other hand is more likely to predict positives. The choice of the threshold is very much dependent on the requirements of the model application and it is very useful to see how these models perform. We can plot the precision and recall curves of the two models on the same plot for direct comparison as can be seen in Fig. 7. 
 
 Figure 7: Precision as a function of recall. The GINE model results are shown in blue line and the GCN model results are shown in the orange. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/precision_recall_gine_gcn.png" alt="Untitled" style="height:auto;">
 
-This shows that the GINE model performs much better with the precision being higher at every recall. The sensitivity is roughly the same however as the gradients are very similar. 
+This shows that the GINE model is much more sensitive as it spans a wider range in both the recall and precision for the same classification thresholds. It also performs much better with the precision being higher at every recall. 
 
-One final plot to gauge the model's predictions was by reducing the dimensionality of the graph embeddings iusing t-SNE from 128 (the number of hidden channels) to 2 and seeing how the positive/negative classes clusters. I used a GINE model for this and we can see the plot in Fig. 8:  
+### Graph embedding visualisations with t-SNE
+
+One final way to visualise the models' predictions was by showing dimensionally-reduced representations of the graph embeddings. I used a method called t-SNE (t-distributed stochastic neighbour embedding) to reduce the final graph embeddings from 128 (the number of hidden channels) to 2 to see how the positive/negative classes cluster. I used a GINE model for this and we can see the plot in Fig. 8:  
 
 Figure 8: The dimensionally-reduced graph embeddings for all the positive and negative (predictive) cases of the 1513 molecules in the BACE dataset. The graph embeddings were reduced using t-SNE. The positive classifications are shown in blue and the negative classifications are shown in orange. 
 
