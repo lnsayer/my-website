@@ -16,6 +16,8 @@ Graphs are very good at describing data with relationships and interactions. The
 
 ### Recent GNNs Applications 
 
+Graph neural networks ahve 
+
 #### Weather Forecasting 
 
 One fascinating application of GNNs is in weather forecasting. Last year Google Deepmind released GraphCast which is based on a graph neural network and was considered the most accurate 10-day global weather forecasting system in the world. It could make accurate predictions very quickly - a 10 day forecast could be calculated in less than a minute.  Conventional approaches can take hours of computation in a supercomputer with hundreds of machines. This also made it much cheaper in energy efficiency - about 1000x. The architecture and some of the predictions can be seen in Fig. 2. 
@@ -233,6 +235,8 @@ The GINE model also has the highest precision score of 0.811. Precision is more 
 
 The GraphConv models are not far behind the GIN models, however the GINE model took on average 2.25x fewer epochs to converge than GraphConv, corresponding to roughly 2.25x less time. It is interesting to see that the GATE models performed worse than the GAT models. This may be because the GAT models have a lot of parameters (at least compared to the GIN models) and they might be overfitting on the training data. It could also be that the edge attributes are irrelevant and just providing noise, however the GINE model would not perform better if that were the case. 
 
+### Confusion Matrices 
+
 We can see where the models are making incorrect predictions by looking at their confusion matrices. Fig. 3 and Fig. 4 show the confusion matrices for the average GCN and GINE models respectively (average of five repeats).
 
 Figure 3: The confusion matrix for the GCN models (an average of the five repeats). 
@@ -267,7 +271,7 @@ This shows that the GINE model is much more sensitive as it spans a wider range 
 
 ### Graph embedding visualisations with t-SNE
 
-One final way to visualise the models' predictions was by showing dimensionally-reduced representations of the graph embeddings. I used a method called t-SNE (t-distributed stochastic neighbour embedding) to reduce the final graph embeddings from 128 (the number of hidden channels) to 2 to see how the positive/negative classes cluster. I used a GINE model for this and we can see the plot in Fig. 8:  
+One final way to visualise the models' predictions was by showing dimensionally-reduced representations of the graph embeddings. I used a method called t-SNE (t-distributed stochastic neighbour embedding) to reduce the dimensionality of the final graph embeddings from 128 (the number of hidden channels) to 2 to see how the positive/negative classes cluster. I used a GINE model for this and we can see the plot in Fig. 8.
 
 Figure 8: The dimensionally-reduced graph embeddings for all the positive and negative (predictive) cases of the 1513 molecules in the BACE dataset. The graph embeddings were reduced using t-SNE. The positive classifications are shown in blue and the negative classifications are shown in orange. 
 
