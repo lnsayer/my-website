@@ -1,6 +1,6 @@
 # Graph Neural Networks for Drug Discovery in Alzheimer's Disease 
 
-Graph neural networks are an exciting new class of neural networks that are proving very effective in processing relational data, such as molecules. In this project I developed several graph neural networks to classify molecules as drugs in the BACE dataset, which is very useful in the drug discovery process, particularly in hit identification. I achieved results as high as those in the literature with an average AUC score of 0.881 for my top model, GINE, compared to 0.884 for MolXPT, from paperswithcode [14]. I identified which architectures were more effective for these data and wrote clean, documented, modularised reusable code which I could employ in further work. 
+Graph neural networks are an exciting new class of neural networks that are proving very effective in processing relational data i.e. graphs. In this project I developed several graph neural networks to classify molecules as drugs in the BACE dataset, which is very useful in the drug discovery process, particularly in hit identification. I achieved results as high as those in the literature with an average AUC score of 0.881 for my top model, GINE, compared to 0.884 for MolXPT, from paperswithcode [14]. I identified which architectures were more effective for these data and wrote clean, documented, modularised reusable code which I could employ in further work. 
 
 ## Project Objectives
 
@@ -18,7 +18,7 @@ Figure 1: The nodes (shown as circles) and edges (lines between the circles) of 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/GraphTypes.png" alt="Untitled" style="height:auto;">
 
-The nodes of a graph represent instances of something such as a person in a social network, a town in a country or an atom in a molecule. Edges represent the connections between these and can be directed, undirected and also weighted. For example one person following another on Instagram (directed edge), a motorway between towns (undirected and weighted) or an atomic bond (undirected). 
+The nodes of a graph represent instances of something such as a person in a social network, a town in a country or an atom in a molecule. Edges represent the connections between these and can be directed, undirected and also weighted. For example, one person following another on Instagram (directed edge), a motorway between towns (directed and weighted) or an atomic bond (undirected). 
 
 Graphs are very good at describing data with relationships and interactions. They are not that unsimilar to other data types and their corresponding neural networks. Convolutional layers in computer vision for example can be seen as acting on an image whose nodes are the pixels and only adjacent pixels are connected by edges in the graph.  
 
@@ -71,7 +71,7 @@ Figure 6: Two layers of a Graph Convolutional Network (GCN), in which the nodes 
 
 Traditional drug discovery is a complex, expensive process that can take years or even decades and yet still has a low success rate. It involves identifying a "target" which is a protein/molecule involved in a disease whose activity needs to be altered to tackle the disease. A "hit" is a molecule which can potentially interact with the target to obtain the desired effect. After identifying the target and hits, many stages are carried out to refine the hits and test their safety and viability as a drug.  AI can aid in all of these stages but with regards to our dataset, one in particular is hit identification. 
 
-Traditionally, hit identification would involve high-throughput screening to test thousands or millions of compounds in a short time, which requires siginificant resources and has a low hit rate. AI can be used to speed up this process by predicting the interactions between the target and hits before lab testing. It can therefore detect new compounds from chemical libraries or test existing candidates to reduce the number of molecules which need to be tested. Many companies are using AI in this way to make drug discovery more efficient such as BenevolentAI and Exscientia, amongst many others [15] [16].
+Traditionally, hit identification would involve high-throughput screening to test thousands or millions of compounds in a short time, which requires siginificant resources and has a low hit rate. AI can be used to speed up this process by predicting the interactions between the target and hits before lab testing. It can therefore detect new potential drugs from chemical libraries or test existing candidates to reduce the number of molecules which need to be tested. Many companies are using AI in this way to make drug discovery more efficient such as BenevolentAI and Exscientia, amongst many others [15] [16].
 
 ### Models used: 
 I tested four different neural networks in this project. These models had roughly the same architectures, with the main difference being the convolutional layers employed. The different layers/networks are listed below:  
