@@ -1,6 +1,6 @@
 # Graph Neural Networks for Drug Discovery in Alzheimer's Disease 
 
-Graph neural networks are an exciting new class of neural networks that are proving very effective in processing relational data, such as molecules. In this project I developed several graph neural networks to classify molecules as drugs in the BACE dataset, which is very useful in the drug discovery process, particularly in hit identification. I achieved results as high as those in the literature with an AUC score of 0.881 for my top model, GINE, compared to 0.884 for MolXPT, from paperswithcode [14]. I identified which architectures were more effective for these data and wrote clean, documented, modularised reusable code which I could employ in further work. 
+Graph neural networks are an exciting new class of neural networks that are proving very effective in processing relational data, such as molecules. In this project I developed several graph neural networks to classify molecules as drugs in the BACE dataset, which is very useful in the drug discovery process, particularly in hit identification. I achieved results as high as those in the literature with an average AUC score of 0.881 for my top model, GINE, compared to 0.884 for MolXPT, from paperswithcode [14]. I identified which architectures were more effective for these data and wrote clean, documented, modularised reusable code which I could employ in further work. 
 
 ## Project Objectives
 
@@ -69,9 +69,9 @@ Figure 6: Two layers of a Graph Convolutional Network (GCN), in which the nodes 
 
 ### Application to drug discovery 
 
-Traditional drug discovery is a complex, expensive process that can take years or even decades and yet still has a low success rate. It involves identifying a "target" which is a protein/molecule involved in a disease whose activity needs to be altered to lessen the disease. A "hit" is a molecule which can potentially interact with the target to obtain the desired effect. After identifying the target and hits, many stages are carried out to refine the hits and test their safety and viability as a drug.  AI can aid in all of these stages but with regards to our dataset, one in particular is hit identification. 
+Traditional drug discovery is a complex, expensive process that can take years or even decades and yet still has a low success rate. It involves identifying a "target" which is a protein/molecule involved in a disease whose activity needs to be altered to tackle the disease. A "hit" is a molecule which can potentially interact with the target to obtain the desired effect. After identifying the target and hits, many stages are carried out to refine the hits and test their safety and viability as a drug.  AI can aid in all of these stages but with regards to our dataset, one in particular is hit identification. 
 
-Traditionally, hit identification would involve high-throughput screening to test thousands or millions of compounds in a short time, which requires siginificant resources and has a low hit rate. AI can be used to speed up this process by predicting the interactions between the target and hits before lab testing. It can therefore detect new compounds from chemical libraries or test existing candidates to reduce the number of molecules which need to be tested. Many companies are using AI in this way to make drug discovery 
+Traditionally, hit identification would involve high-throughput screening to test thousands or millions of compounds in a short time, which requires siginificant resources and has a low hit rate. AI can be used to speed up this process by predicting the interactions between the target and hits before lab testing. It can therefore detect new compounds from chemical libraries or test existing candidates to reduce the number of molecules which need to be tested. Many companies are using AI in this way to make drug discovery more efficient such as BenevolentAI and Exscientia, amongst many others [15] [16].
 
 ### Models used: 
 I tested four different neural networks in this project. These models had roughly the same architectures, with the main difference being the convolutional layers employed. The different layers/networks are listed below:  
@@ -327,3 +327,7 @@ This work could be further developed for use in drug discovery projects, either 
 [13] https://www.assemblyai.com/blog/ai-trends-graph-neural-networks/
 
 [14] https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1
+
+[15] https://www.benevolent.com/about-us/sustainability/covid-19/ 
+
+[16] https://investors.exscientia.ai/press-releases/press-release-details/2021/Exscientia-announces-second-molecule-created-using-AI-from-Sumitomo-Dainippon-Pharma-collaboration-to-enter-Phase-1-clinical-trial/default.aspx
