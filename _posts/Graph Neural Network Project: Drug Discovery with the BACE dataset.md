@@ -10,11 +10,11 @@ My main objective for this project was to learn to utilise PyTorch on an end-to-
 
 ### GNN Overview 
 
-Graph neural networks have recently emerged as a powerful class of deep learning artificial networks, which process data structured as graphs. Graph neural networks are effective in many different fields such as recommmendation systems, drug/protein discovery and fraud detection [2]. 
+Graph neural networks have recently emerged as a powerful class of deep learning artificial networks, which process data structured as graphs. Graph neural networks are effective in many different fields such as recommmendation systems, drug/protein discovery and fraud detection [3]. 
 
 Graphs are non-euclidean data structures composed of nodes and edges, as can be seen in Fig.1 below. 
 
-Figure 1: The nodes (shown as circles) and edges (lines between the circles) of a graph [3].
+Figure 1: The nodes (shown as circles) and edges (lines between the circles) of a graph [4].
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/GraphTypes.png" alt="Untitled" style="height:auto;">
 
@@ -24,20 +24,20 @@ Graphs are very good at describing data with relationships and interactions. The
 
 ### Recent GNNs Applications 
 
-GNNs have rapidly expanded into numerous fields, offering powerful ways for modeling complex data with interconnected structures. The breakthrough in GNNs came in 2016 with the introduction of GCNs (Graph Convolutional Networks) by Thomas Kipf and Max Welling [4] and since then many more effective architectures have been developed. Here are two recent examples of the great potential of GNNs. 
+GNNs have rapidly expanded into numerous fields, offering powerful ways for modeling complex data with interconnected structures. The breakthrough in GNNs came in 2016 with the introduction of GCNs (Graph Convolutional Networks) by Thomas Kipf and Max Welling [5] and since then many more effective architectures have been developed. Here are two recent examples of the great potential of GNNs. 
 
 
 #### Weather Forecasting 
 
-One fascinating application of GNNs is in weather forecasting. Last year Google Deepmind released GraphCast which is based on a graph neural network and was considered the most accurate 10-day global weather forecasting system in the world [5] [2]. It could make accurate predictions very quickly - a 10 day forecast could be calculated in less than a minute.  Conventional approaches can take hours of computation in a supercomputer with hundreds of machines. This also made it much cheaper in energy efficiency - about 1000x. The architecture and some of the predictions can be seen in Fig. 2. 
+One fascinating application of GNNs is in weather forecasting. Last year Google Deepmind released GraphCast which is based on a graph neural network and was considered the most accurate 10-day global weather forecasting system in the world [6] [3]. It could make accurate predictions very quickly - a 10 day forecast could be calculated in less than a minute.  Conventional approaches can take hours of computation in a supercomputer with hundreds of machines. This also made it much cheaper in energy efficiency - about 1000x. The architecture and some of the predictions can be seen in Fig. 2. 
 
-Figure 2: The architecture is based on a Graph Neural Network with an Encoder-Processor-Decoder configuration [2]. The earth is modelled as an iteratively refined icosahedron (20 equilateral-triangular faces) with each grid block being mapped to node attributes (encoding). The processor performs message passing on these with 16 unshared GNN layers. The decoder maps these learned features back to predict the next state.  
+Figure 2: The architecture is based on a Graph Neural Network with an Encoder-Processor-Decoder configuration [3]. The earth is modelled as an iteratively refined icosahedron (20 equilateral-triangular faces) with each grid block being mapped to node attributes (encoding). The processor performs message passing on these with 16 unshared GNN layers. The decoder maps these learned features back to predict the next state.  
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/graphcast_image.png" alt="Untitled" style="height:auto;">
 
 #### Protein Design 
 
-Another application is in protein design. The goal of this is to create proteins with desired properties which can be used for drugs, enzymes or materials. In 2023, BakerLab released RosettaFold Diffusion which uses a diffusion model to generate new proteins from noise [6] [2]. The model is trained to recover corrupted (noised) protein structures and can produce unseen structures by denoising from a random noise input. The model operates via a special type of graph neural network and showed great improvements over its competitors across a broad range of problems. Fig. 3 shows a generated molecule and validated image. 
+Another application is in protein design. The goal of this is to create proteins with desired properties which can be used for drugs, enzymes or materials. In 2023, BakerLab released RosettaFold Diffusion which uses a diffusion model to generate new proteins from noise [7] [3]. The model is trained to recover corrupted (noised) protein structures and can produce unseen structures by denoising from a random noise input. The model operates via a special type of graph neural network and showed great improvements over its competitors across a broad range of problems. Fig. 3 shows a generated molecule and validated image. 
 
 Figure 3: A symmetrical protein assembly (left), generated by RFDiffusion and a validating image (right) produced by single molecule electron microscopy [2]. 
 
@@ -45,33 +45,33 @@ Figure 3: A symmetrical protein assembly (left), generated by RFDiffusion and a 
 
 ### GNN Theory 
 
-There are several different types of graph neural network tasks [7] and this project focusses on graph classification. This problem involves predicting whether a molecule, which can be represented as a graph, is a potential drug. As discussed before, molecules are described well by graphs as the nodes represent atoms and the edges represent the bonds between them. 
+There are several different types of graph neural network tasks and this project focusses on graph classification [8]. This problem involves predicting whether a molecule, which can be represented as a graph, is a potential drug. As discussed before, molecules are described well by graphs as the nodes represent atoms and the edges represent the bonds between them. 
 
-One popular GNN model (the graph convolutional network) involves using a graph convolutional layer to share information between the nodes in the graph and then make a prediction based on information encapsulated by all the nodes. 
+One popular GNN model (the graph convolutional network [5]) involves using a graph convolutional layer to share information between the nodes in the graph and then make a prediction based on information encapsulated by all the nodes. 
 
 The nodes contain information about the atoms such as their atom type and formal charge. These are called their node features, which can be seen in Fig. 4.
 
-Figure 4: Node features in a graph in which some are known and unknown. All of the node features in our data are known. 
+Figure 4: Node features in a graph in which some are known and unknown. All of the node features in our data are known [9]. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/new_node_features_in_a_graph.png" alt="Untitled" style="height:auto;">
 
 The node features can be updated to take in information from their neighbouring nodes. This occurs through message passing, in which node features are updated by an aggregated function (e.g. mean) of all the neighbour nodes. Fig.5 shows message passing for a small graph. 
 
-Figure 5: This is a two layer graph neural network which shows how message passing is performed on the target node A. In the second round of message passing node A will update its node features based on information aggregated from its neighbours B, C and D. B, C and D have updated their nodes in the first round of message passing from (A, C), (A, B, E, F) and (A) respectively. We can therefore see how more rounds of message passing share information through the graph more widely. Each round increases the reach of a node by 1. [3]
+Figure 5: This is a two layer graph neural network which shows how message passing is performed on the target node A. In the second round of message passing node A will update its node features based on information aggregated from its neighbours B, C and D. B, C and D have updated their nodes in the first round of message passing from (A, C), (A, B, E, F) and (A) respectively. We can therefore see how more rounds of message passing share information through the graph more widely. Each round increases the reach of a node by 1 [10]. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/message_passing.png" alt="Untitled" style="height:auto;">
 
-There are different aggregation functions to choose from. One popular aggregation function is the weighted mean, weighted by the degree of the neighbour nodes. The degree of a node is how many nodes it is connected to. The updated node embedding is then passed through a weight matrix/neural network to reduce its dimensionality. This process of aggregation and passing through a neural network is done several times as required. This process can be seen in Fig.5. I recommend watching this great series on GNNs to better understand the theory [2]. 
+There are different aggregation functions to choose from. One popular aggregation function is the weighted mean, weighted by the degree of the neighbour nodes. The degree of a node is how many nodes it is connected to. The updated node embedding is then passed through a weight matrix/neural network to reduce its dimensionality. This process of aggregation and passing through a neural network is done several times as required. This process can be seen in Fig.5. I recommend watching this great series on GNNs to better understand the theory [11]. 
 
-Figure 6: Two layers of a Graph Convolutional Network (GCN), in which the nodes features are aggregated (averaged) and then passed through a neural network (or weight matrix) to reduce their dimensionality. The node dimensionality can be reduced to 1 which is a probability score (e.g. of being a drug or not) [2]. 
+Figure 6: Two layers of a Graph Convolutional Network (GCN), in which the nodes features are aggregated (averaged) and then passed through a neural network (or weight matrix) to reduce their dimensionality. The node dimensionality can be reduced to 1 which is a probability score (e.g. of being a drug or not) [12]. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/message_passing_gcn.png" alt="Untitled" style="height:auto;">
 
 ### Application to drug discovery 
 
-Traditional drug discovery is a complex, expensive process that can take years or even decades and yet still has a low success rate. It involves identifying a "target" which is a protein/molecule involved in a disease whose activity needs to be altered to tackle the disease. A "hit" is a molecule which can potentially interact with the target to obtain the desired effect. After identifying the target and hits, many stages are carried out to refine the hits and test their safety and viability as a drug.  AI can aid in all of these stages but with regards to our dataset, one in particular is hit identification. 
+Traditional drug discovery is a complex, expensive process that can take years or even decades and yet still has a low success rate. It involves identifying a "target" which is a protein/molecule involved in a disease whose activity needs to be altered to tackle the disease. A "hit" is a molecule which can potentially interact with the target to obtain the desired effect. After identifying the target and hits, many stages are carried out to refine the hits and test their safety and viability as a drug. AI can aid in all of these stages but with regards to our dataset, one in particular is hit identification. 
 
-Traditionally, hit identification would involve high-throughput screening to test thousands or millions of compounds in a short time, which requires siginificant resources and has a low hit rate. AI can be used to speed up this process by predicting the interactions between the target and hits before lab testing. It can therefore detect new potential drugs from chemical libraries or test existing candidates to reduce the number of molecules which need to be tested. Many companies are using AI in this way to make drug discovery more efficient such as BenevolentAI and Exscientia, amongst many others [15] [16].
+Traditionally, hit identification would involve high-throughput screening to test thousands or millions of compounds in a short time, which requires siginificant resources and has a low hit rate. AI can be used to speed up this process by predicting the interactions between the target and hits before lab testing. It can therefore detect new potential drugs from chemical libraries or test existing candidates to reduce the number of molecules which need to be tested. Many companies are using AI in this way to make drug discovery more efficient such as BenevolentAI and Exscientia, amongst many others [13] [14].
 
 ### Models used: 
 I tested four different neural networks in this project. These models had roughly the same architectures, with the main difference being the convolutional layers employed. The different layers/networks are listed below:  
@@ -79,42 +79,42 @@ I tested four different neural networks in this project. These models had roughl
 
 #### GCN (Graph Convolutional Network)
 
-- The graph convolutional operator from [Semi-supervised Classification with Graph Convolutional Networks](https://arxiv.org/abs/1609.02907)
+- The graph convolutional operator from [Semi-supervised Classification with Graph Convolutional Networks](https://arxiv.org/abs/1609.02907) [5]
 
 This convolutional layer updates a target node's embeddings by aggregating (weighted average in our case) the source nodes. Then, a learnable, layer specific weight matrix  is applied to the aggregation. The aggregation is weighted inversely to the degree node. This final step is done because source nodes with fewer connections  are more likely to be important (in the context of a social network, friends with fewer friends are likely to be more important connections than friends with lots of friends like celebrities or influencers). 
 
-The PyTorch Geometric documentation for the [GCN layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GCNConv.html#torch_geometric.nn.conv.GCNConv).
+The PyTorch Geometric documentation for the [GCN layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GCNConv.html#torch_geometric.nn.conv.GCNConv) [15].
 
 Here is a fantastic, much more detailed explanation [4].
 
 
 #### GAT (Graph Attention Network)
 
-- The graph attentional operator from [Graph Attention Networks](https://arxiv.org/abs/1710.10903)
+- The graph attentional operator from [Graph Attention Networks](https://arxiv.org/abs/1710.10903) [16]
 
 This convolutional layer acts very similarly to the GCN layer however the layer-specific weight matrix is applied to both the source node and target node. Then, an attention mechanism is applied to these two nodes. The attention mechanism indicates the importance of a certain source node's features to a target node i.e. it gives more attention to certain nodes. In our case the attention mechanism is a single layer feedforward network. We can apply more than one attention head such that we can attend to different parts of the source nodes. For example, one head might give more attention to the atom type of the source node while another head may give more attention to the hydrogen bonding. 
 
 The attention function creates coefficients for the source nodes so the new target node can be constructed from a weighted sum of the source nodes. A more detailed explanation can be found here [5].
 
-The PyTorch Geometric documentation for the [GAT layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GATConv.html#torch_geometric.nn.conv.GATConv).
+The PyTorch Geometric documentation for the [GAT layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GATConv.html#torch_geometric.nn.conv.GATConv) [17].
 
  #### GIN (Graph Isomorphism Network) 
  
- - The graph isomorphism operator from [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826)
+ - The graph isomorphism operator from [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826) [18]
 
 This network has a slightly different architecture to the others. It is similar to the GCN network however it does not normalise (by degree node) the features of the source nodes. It also includes a source's own feature vector in the summation, with a weighting such that it can control how much weight to give to itself compared to other target nodes. 
 
 Secondly, the GIN uses a multi-layer perceptron after summing over the nodes which can capture more complex, non-linear relationships. This is instead of the linear weight matrix. GCNs may end up producing similar aggregated representations of nodes because of the normalisation and weight matrix. GINs ensure this is not the case with the absence of normalisation and the use of a MLP. This makes the graph more injective such that different node neighbourhoods can be better distinguished. As we will see, this makes the graph classification much more effective. 
 
-The PyTorch Geometric documentation for the [GIN layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GINConv.html#torch_geometric.nn.conv.GINConv).
+The PyTorch Geometric documentation for the [GIN layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GINConv.html#torch_geometric.nn.conv.GINConv) [19].
 
 #### GraphConv
 
-- The graph neural network operator from [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244)
+- The graph neural network operator from [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) [20]
 
 The GraphConv layer uses separate layer-specific weight matrices for the target node and source nodes, similar to the GIN layer. This controls how much a node's own features will determine its updated features. The features from other nodes are not normalised either and makes the graph more injective. Edge weights can also be incorporated to weight the features from a source node, however we used the default weight of 1 for every node in this project. 
 
-The PyTorch Geometric documentation for the [GraphConv layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GINConv.html#torch_geometric.nn.conv.GINConv).
+The PyTorch Geometric documentation for the [GraphConv layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GINConv.html#torch_geometric.nn.conv.GINConv) [21].
 
 
 ### BACE Dataset 
@@ -300,21 +300,51 @@ I used Python and PyTorch to conduct an end-to-end machine learning project to c
 
 This work could be further developed for use in drug discovery projects, either at the beginning of a project when it is important to identify all possible candidates or at the end when false positives become more costly. This ties in to future work in which I would like to reuse my code to tackle a larger, more complex dataset which is more realistic. Neural network architecture/models are the focus in academia however in industry data is more important as high customisation is required. I would like to focus more on this to gain relevant skills for future industry work. 
 
-[7] https://www.datacamp.com/tutorial/comprehensive-introduction-graph-neural-networks-gnns-tutorial
+
 
 [1] Molecular Property Prediction on BACE, paperswithcode, https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1
 
 [2] https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python
 
-[2] AI trends in 2024: Graph Neural Networks, Marco Ramponi, https://www.assemblyai.com/blog/ai-trends-graph-neural-networks/
+[3] AI trends in 2024: Graph Neural Networks, Marco Ramponi, https://www.assemblyai.com/blog/ai-trends-graph-neural-networks/
 
-[3] Graph Theory Using Python – Introduction And Implementation, Active State, https://www.activestate.com/blog/graph-theory-using-python-introduction-and-implementation/
+[4] Graph Theory Using Python – Introduction And Implementation, Active State, https://www.activestate.com/blog/graph-theory-using-python-introduction-and-implementation/
 
-[4] Semi-Supervised Classification with Graph Convolutional Networks, Thomas N. Kipf, Max Welling, https://arxiv.org/abs/1609.02907
+[5] Semi-Supervised Classification with Graph Convolutional Networks, Thomas N. Kipf, Max Welling, https://arxiv.org/abs/1609.02907
 
-[5] GraphCast: AI model for faster and more accurate global weather forecasting, Remi Lam, https://deepmind.google/discover/blog/graphcast-ai-model-for-faster-and-more-accurate-global-weather-forecasting/
+[6] GraphCast: AI model for faster and more accurate global weather forecasting, Remi Lam, https://deepmind.google/discover/blog/graphcast-ai-model-for-faster-and-more-accurate-global-weather-forecasting/
 
-[6] RFdiffusion: A generative model for protein design, https://www.bakerlab.org/2023/07/11/diffusion-model-for-protein-design/
+[7] RFdiffusion: A generative model for protein design, https://www.bakerlab.org/2023/07/11/diffusion-model-for-protein-design/
+
+[8] A Comprehensive Introduction to Graph Neural Networks (GNNs), Datacamp, https://www.datacamp.com/tutorial/comprehensive-introduction-graph-neural-networks-gnns-tutorial
+
+[9] Michael Bronstein, Feature Propagation is a simple and surprisingly efficient solution for learning on graphs with missing node features, https://towardsdatascience.com/learning-on-graphs-with-missing-features-dd34be61b06
+
+[10] Omar Hussein, Graph Neural Networks Series | Part 4 |The GNNs, Message Passing & Over-smoothing, https://medium.com/the-modern-scientist/graph-neural-networks-series-part-4-the-gnns-message-passing-over-smoothing-e77ffee523cc
+
+[11] Intro to Graphs and Label Propagation Algorithm in Machine Learning, WelcomeAIOverlords https://www.youtube.com/watch?v=OI0Jo-5d190&list=PLSgGvve8UweGx4_6hhrF3n4wpHf_RV76_
+
+[12] Graph Convolutional Networks (GCNs) made simple
+, WelcomeAIOverlords, https://www.youtube.com/watch?v=2KRAOZIULzw&t=487s
+
+[13] We used our BenAI Engine to identify a leading COVID-19 treatment, which is now FDA approved, BenevolentAI, https://www.benevolent.com/about-us/sustainability/covid-19/ 
+
+[14] Exscientia announces second molecule created using AI from Sumitomo Dainippon Pharma collaboration to enter Phase 1 clinical trial, Exscientia, https://investors.exscientia.ai/press-releases/press-release-details/2021/Exscientia-announces-second-molecule-created-using-AI-from-Sumitomo-Dainippon-Pharma-collaboration-to-enter-Phase-1-clinical-trial/default.aspx 
+
+[15] conv.GCNConv, Torch Geometric, https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GCNConv.html#torch_geometric.nn.conv.GCNConv
+
+[16] Graph Attention Networks, Petar Veličković et al. , https://arxiv.org/abs/1710.10903
+
+[17] conv.GATConv, Torch Geometric, https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GATConv.html#torch_geometric.nn.conv.GATConv
+
+[18] How Powerful are Graph Neural Networks?, Keyulu Xu et al., https://arxiv.org/abs/1810.00826
+
+[19] conv.GINConv, Torch Geometric, https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GINConv.html#torch_geometric.nn.conv.GINConv
+
+[20] Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks
+, Christopher Morris et al., https://arxiv.org/abs/1810.02244
+
+[21] 
 
 [2 old] https://www.youtube.com/watch?v=OI0Jo-5d190&list=PLSgGvve8UweGx4_6hhrF3n4wpHf_RV76_
 
