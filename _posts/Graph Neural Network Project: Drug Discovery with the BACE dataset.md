@@ -1,6 +1,6 @@
 # Graph Neural Networks for Drug Discovery in Alzheimer's Disease 
 
-Graph neural networks are an exciting new class of neural networks that are proving very effective in processing relational data i.e. graphs. In this project I developed several graph neural networks to classify molecules as drugs in the BACE dataset, which is very useful in the drug discovery process, particularly in hit identification. I achieved results as high as those in the literature with an average AUC score of 0.881 for my top model, GINE, compared to 0.884 for MolXPT, from paperswithcode [14]. I identified which architectures were more effective for these data and wrote clean, documented, modularised reusable code which I could employ in further work. 
+Graph neural networks are an exciting new class of neural networks that are proving very effective in processing relational data. In this project I developed several graph neural networks to classify molecules as drugs in the BACE dataset, which is very useful in the drug discovery process, particularly in hit identification. I achieved results as high as those in the literature with an average AUC score of 0.881 for my top model, GINE, compared to 0.884 for MolXPT, from paperswithcode [14]. I identified which architectures were more effective for these data and wrote clean, documented, modularised reusable code which I could employ in further work. 
 
 ## Project Objectives
 
@@ -79,7 +79,7 @@ I tested four different neural networks in this project. These models had roughl
 
 #### GCN (Graph Convolutional Network)
 
-- The graph convolutional operator from the [Semi-supervised Classification with Graph Convolutional Networks](https://arxiv.org/abs/1609.02907) paper
+- The graph convolutional operator from [Semi-supervised Classification with Graph Convolutional Networks](https://arxiv.org/abs/1609.02907)
 
 This convolutional layer updates a target node's embeddings by aggregating (weighted average in our case) the source nodes. Then, a learnable, layer specific weight matrix  is applied to the aggregation. The aggregation is weighted inversely to the degree node. This final step is done because source nodes with fewer connections  are more likely to be important (in the context of a social network, friends with fewer friends are likely to be more important connections than friends with lots of friends like celebrities or influencers). 
 
@@ -90,7 +90,7 @@ Here is a fantastic, much more detailed explanation [4].
 
 #### GAT (Graph Attention Network)
 
-- The graph attentional operator from the [Graph Attention Networks](https://arxiv.org/abs/1710.10903) paper
+- The graph attentional operator from [Graph Attention Networks](https://arxiv.org/abs/1710.10903)
 
 This convolutional layer acts very similarly to the GCN layer however the layer-specific weight matrix is applied to both the source node and target node. Then, an attention mechanism is applied to these two nodes. The attention mechanism indicates the importance of a certain source node's features to a target node i.e. it gives more attention to certain nodes. In our case the attention mechanism is a single layer feedforward network. We can apply more than one attention head such that we can attend to different parts of the source nodes. For example, one head might give more attention to the atom type of the source node while another head may give more attention to the hydrogen bonding. 
 
@@ -100,7 +100,7 @@ The PyTorch Geometric documentation for the [GAT layer](https://pytorch-geometri
 
  #### GIN (Graph Isomorphism Network) 
  
- - The graph isomorphism operator from the [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826) paper
+ - The graph isomorphism operator from [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826)
 
 This network has a slightly different architecture to the others. It is similar to the GCN network however it does not normalise (by degree node) the features of the source nodes. It also includes a source's own feature vector in the summation, with a weighting such that it can control how much weight to give to itself compared to other target nodes. 
 
@@ -110,7 +110,7 @@ The PyTorch Geometric documentation for the [GIN layer](https://pytorch-geometri
 
 #### GraphConv
 
-- The graph neural network operator from the [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244) paper
+- The graph neural network operator from [Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks](https://arxiv.org/abs/1810.02244)
 
 The GraphConv layer uses separate layer-specific weight matrices for the target node and source nodes, similar to the GIN layer. This controls how much a node's own features will determine its updated features. The features from other nodes are not normalised either and makes the graph more injective. Edge weights can also be incorporated to weight the features from a source node, however we used the default weight of 1 for every node in this project. 
 
@@ -119,7 +119,7 @@ The PyTorch Geometric documentation for the [GraphConv layer](https://pytorch-ge
 
 ### BACE Dataset 
 
-The dataset used in this project is the BACE dataset, which comes from Deepchem [11]. It features 1513 molecules with qualitative (binary label) binding results for Beta-secretase 1 (BACE-1) in humans. Beta secretase 1 is involved in pathways that create amyloid beta peptides, which are the main component of the amyloid plaques found in the brains of people with Alzheimer's disease. In theory drugs which block this enzyme would prevent the build-up of beta amyloid peptides which form the amyloid plaques and therefore help slow or stop Alzheimer's disease. Unfortunately, in practice it appears that drugs inhibiting BACE-1 are ineffective. Pharmaceutical companies such as Merck and Co, Eli Lilly and Co and Astrazeneca have all halted trials for BACE-1 inhibitors after lack of clinical benefits to patients [8], [9], [10].
+The dataset used in this project is the BACE dataset, which comes from Deepchem [11]. It features 1513 molecules with qualitative (binary label) binding results for Beta-secretase 1 (BACE-1) in humans. Beta secretase 1 is involved in pathways that create amyloid beta peptides, which are the main component of the amyloid plaques found in the brains of people with Alzheimer's disease. In theory drugs which block this enzyme could prevent the build-up of beta amyloid peptides which form the amyloid plaques and therefore help slow or stop Alzheimer's disease. Unfortunately, in practice it appears that drugs inhibiting BACE-1 are ineffective. Pharmaceutical companies such as Merck and Co, Eli Lilly and Co and Astrazeneca have all halted trials for BACE-1 inhibitors after lack of clinical benefits to patients [8], [9], [10].
 
 All data in the BACE dataset are experimental values reported in the scientific literature over the past decade. The molecules are formatted as SMILES, and some of these can be seen in Fig. 7. The molecules are quite small, with an average of 34 atoms per molecule.
 
@@ -156,9 +156,9 @@ I used Visual Studio Code as my coding editor and created documented, modularise
 ### Technical Details 
 
 Two unique features I implemented in my code:
-- I created an early stopping protocol since each model architecture trained optimally in a different amount of time. This worked by calculating averages of the loss and AUC from the last ten epochs (e.g if the model was on epoch 53 the average would be calculated from epochs 43-52). The model's parameters were updated if the current moving average (from the test set) was better than all the previous moving averages (i.e if the moving average loss is lower than any previous moving average loss AND the moving average AUC is higher than any previous moving average AUC). This protocol also implemented patience which meant that a training run would wait for a certain number of epochs (e.g. 50) for the metrics to improve before the run was stopped. Therefore the model would always be finally saved 50 epochs before the total number of epochs trained for. 
+- I created an early stopping protocol since each model architecture trained optimally in a different amount of time. This worked by calculating averages of the loss and AUC from the last ten epochs (e.g if the model was on epoch 53 the average would be calculated from epochs 44-53). The model's parameters were updated if the current moving average (from the test set) was better than all the previous moving averages (i.e if the moving average loss is lower than any previous moving average loss AND the moving average AUC is higher than any previous moving average AUC). This protocol also implemented patience which meant that a training run would wait for a certain number of epochs (e.g. 50) for the metrics to improve before the run was stopped. Therefore the model would always be finally saved 50 epochs before the total number of epochs trained for. 
 This was very useful as it prevented me from having to manually set the number of epochs and also prevented a model from overfitting.
-- I also saved a random set of indices with which to split the whole dataset into the training set and test set (80-20% split). I used these whenever creating the dataloaders. I could have used a random manual seed but this was a more reliable method for producing the same training and test sets.
+- I saved a random set of indices with which to split the whole dataset into the training set and test set (80-20% split). I used these whenever creating the dataloaders. I could have used a random manual seed but this was a more reliable method for producing the same training and test sets.
 
 The BACE dataset includes its molecules in SMILES format which I was able to convert into Graph format using DeepChem's [MolGraphConvFeaturizer](https://deepchem.readthedocs.io/en/latest/api_reference/featurizers.html#molgraphconvfeaturizer) and then into a PyTorch Geometric graph. The number of features of each graph was 30 and the number of edge attributes were 11. Some of the node features were for example atom type and formal charge and some of the edge attributes were for example bond type and whether they were in the same ring. 
 
@@ -166,7 +166,7 @@ I trained four different models, as described in the introduction: GCN, GAT, GIN
 
 For two of the model architectures (GIN and GAT) I was also able to incorporate the edge attributes of the graphs and I called these models GINE and GATE. I hoped that the prediction quality would improve with this further information. 
 
-Graph classification was obtained from the node embeddings by using a pooling method. My most used pooling method was the global mean pooling which calculated an average of the nodes' embedded features to produce a single graph embedding. I also briefly tried global max pooling which finds, for each feature of the nodes, the highest value amongst the nodes. However, this pooling method performed slightly worse in the metrics so I stopped using it. 
+Graph classification was obtained from the node embeddings by using a pooling method. I used global mean pooling the most which calculated an average of the nodes' embedded features to produce a single graph embedding. I also briefly tried global max pooling which finds, for each feature of the nodes, the highest value amongst the nodes. However, this pooling method performed slightly worse in the metrics so I stopped using it. 
 
 ### Model specifications
 
@@ -212,12 +212,12 @@ These are quite small models and if I choose to tackle a larger dataset I would 
 
 ### Loss, Accuracy and AUC curves 
 
-During training runs I saved three different metrics at each epoch to measure the performance of the model: the loss, accuracy and AUC of both the training set and test set. I performed five repeats for each model and all metrics are an average of these repeats. In these results we will use the GCN model as the baseline since it is the most simple model and compare it with the GINE, which was our best model. The metrics results for the GCN model can be seen in Fig. 1: 
+During training runs I saved three different metrics at each epoch to measure the performance of the model: the loss, accuracy and AUC of both the training set and test set. I performed five repeats for each model and all metrics are an average of these repeats. In the following plots we will use the GCN model as the baseline since it is the simplest model and compare it with the GINE, the best model. The metrics results for the GCN model can be seen in Fig. 1: 
 
 Figure 1: Three different metrics as a function of epoch for a single GCN model training run. The test set results are shown in orange and the training set results are shown in blue. The model's parameters are saved at epochs with a grey dashed line.  
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/gcn_loss_acc_auc_plot.png" alt="Untitled" style="height:auto;">
 
-As can be seen in Fig. 1 the loss decreases for both the training set and test set over the epochs. The training set loss decreases more smoothly than the test set for several reasons: the loss from the training set directly influences the change in the model parameters and this inherently smoothes the training loss. Also, the training set is four times larger than the test set and this helps to average out fluctuations. 
+As can be seen in Fig. 1 the loss decreases for both the training set and test set over epoch. The training set loss decreases more smoothly than the test set for several reasons: the loss from the training set directly influences the change in the model parameters and this inherently smoothes the training loss. Also, the training set is four times larger than the test set and this helps to average out fluctuations. 
 
 Although the test set loss continues to decrease, the AUC metric stagnates and this is why the last saved model is at around 150. 
 
@@ -229,7 +229,7 @@ Figure 2: Three different metrics as a function of epoch for a single GINE model
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/gineconv_loss_acc_auc_plots.png" alt="Untitled" style="height:auto;">
 
-The test set loss actually appears to increase after around 40 epochs and the accuracy appears to decrease as well which is classic overfitting. This model seems to be capable of fitting to the data much more effectively than the GCN models. This is supported by the fact that the learning rate was set to 0.0001 for the GIN models, 10x lower than that of the others. The overfitting also likely comes from the omission of a dropout layer in these models, which was an oversight. If we had included this we could have expected less overfitting and also the test set loss to be smoother as the generalisability of the model would improve.  
+The test set loss actually appears to increase after around 40 epochs and the accuracy appears to decrease as well which is classic overfitting. This model seems to be capable of fitting to the data much more effectively than the GCN models. This is supported by the fact that the learning rate was set to 0.0001 for the GIN models, 10x lower than that of the others. The overfitting likely comes from the omission of a dropout layer in these models, which was an oversight. If we had included this we could have expected less overfitting and also the test set loss to be smoother as the generalisability of the model would improve.  
 
 ### Average metric scores
 
@@ -246,7 +246,7 @@ Table 1: Five different metrics for each of the four different GNN architectures
 
 As we can see from Table 1 the best performing model over different thresholds was GINE with an AUROC value of 0.881. This is very comparable to the top results in the literature, as reported in PapersWithCode. The highest AUC score in [PapersWithCode](https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1) is 0.884 from MolXPT.
 
-The GINE model also has the highest precision score of 0.811. Precision is more important in the latter stages of drug discovery (lead optimisation, preclinical, clinical trials) where the costs and consequences of advancing a false positive are much higher. The GIN model was best at recall with a recall score of 0.815. Recall is more important in the early stages of drug discovery (hit discovery, target identification) when it is crucial to cast a wide net and identify all candidates. We would not want to miss potentially valuable compounds. 
+The GINE model also has the highest precision score of 0.811. Precision is more important in the latter stages of drug discovery (lead optimisation, preclinical, clinical trials) where the costs and consequences of advancing a false positive are much higher. The GIN model had the best recall score of 0.815. Recall is more important in the early stages of drug discovery (hit discovery, target identification) when it is crucial to cast a wide net and identify all candidates. We would not want to miss potentially valuable compounds. 
 
 The GraphConv models are not far behind the GIN models, however the GINE model took on average 2.25x fewer epochs to converge than GraphConv, corresponding to roughly 2.25x less time. It is interesting to see that the GATE models performed worse than the GAT models. This may be because the GAT models have a lot of parameters (at least compared to the GIN models) and they might be overfitting on the training data. It could also be that the edge attributes are irrelevant and just providing noise, however the GINE model would not perform better if that were the case. 
 
@@ -288,7 +288,7 @@ This shows that the GINE model is much more sensitive as it spans a wider range 
 
 One final way to visualise the models' predictions was by showing dimensionally-reduced representations of the graph embeddings. I used a method called t-SNE (t-distributed stochastic neighbour embedding) to reduce the dimensionality of the final graph embeddings from 128 (the number of hidden channels) to 2 to see how the positive/negative classes cluster. I used a GINE model for this and we can see the plot in Fig. 8.
 
-Figure 8: The dimensionally-reduced graph embeddings for all the positive and negative (predictive) cases of the 1513 molecules in the BACE dataset. The graph embeddings were reduced using t-SNE. The positive classifications are shown in blue and the negative classifications are shown in orange. 
+Figure 8: The dimensionally-reduced graph embeddings for all the positive and negative (predictive) cases of the 1513 molecules in the BACE dataset. The graph embeddings were reduced using t-SNE. The positive predictions are shown in blue and the negative predictions are shown in orange. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/t-sne_visualisation_graph_embeddings.png" alt="Untitled" style="height:auto;">
 
