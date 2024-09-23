@@ -1,6 +1,6 @@
 # Graph Neural Networks for Drug Discovery in Alzheimer's Disease 
 
-Graph neural networks are an exciting new class of neural networks that are proving very effective in processing relational data. In this project I developed several graph neural networks to classify molecules as drugs in the BACE dataset, which is very useful in the drug discovery process, particularly in hit identification. I achieved results as high as those in the literature with an average AUC score of 0.881 for my top model, GINE, compared to 0.884 for MolXPT, from paperswithcode [14]. I identified which architectures were more effective for these data and wrote clean, documented, modularised reusable code which I could employ in further work. 
+Graph neural networks are an exciting new class of neural networks that are proving very effective in processing relational data. In this project I developed several graph neural networks to classify molecules as drugs in the BACE dataset, which is very useful in the drug discovery process, particularly in hit identification. I achieved results as high as those in the literature with an average AUC score of 0.881 for my top model, GINE, compared to 0.884 for MolXPT, from paperswithcode [1]. I identified which architectures were more effective for these data and wrote clean, documented, modularised reusable code which I could employ in further work. My code can be found on my [Github](https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python) [2].
 
 ## Project Objectives
 
@@ -10,11 +10,11 @@ My main objective for this project was to learn to utilise PyTorch on an end-to-
 
 ### GNN Overview 
 
-Graph neural networks have recently emerged as a powerful class of deep learning artificial networks, which process data structured as graphs. Graph neural networks are effective in many different fields such as recommmendation systems, drug/protein discovery and fraud detection. 
+Graph neural networks have recently emerged as a powerful class of deep learning artificial networks, which process data structured as graphs. Graph neural networks are effective in many different fields such as recommmendation systems, drug/protein discovery and fraud detection [2]. 
 
 Graphs are non-euclidean data structures composed of nodes and edges, as can be seen in Fig.1 below. 
 
-Figure 1: The nodes (shown as circles) and edges (lines between the circles) of a graph.
+Figure 1: The nodes (shown as circles) and edges (lines between the circles) of a graph [3].
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/GraphTypes.png" alt="Untitled" style="height:auto;">
 
@@ -24,28 +24,28 @@ Graphs are very good at describing data with relationships and interactions. The
 
 ### Recent GNNs Applications 
 
-GNNs have rapidly expanded into numerous fields, offering powerful ways for modeling complex data with interconnected structures. The breakthrough in GNNs came in 2016 with the introduction of GCNs (Graph Convolutional Networks) by Thomas Kipf and Max Welling and since then many more effective architectures have been developed. Here are two recent examples of the great potential of GNNs. 
+GNNs have rapidly expanded into numerous fields, offering powerful ways for modeling complex data with interconnected structures. The breakthrough in GNNs came in 2016 with the introduction of GCNs (Graph Convolutional Networks) by Thomas Kipf and Max Welling [4] and since then many more effective architectures have been developed. Here are two recent examples of the great potential of GNNs. 
 
 
 #### Weather Forecasting 
 
-One fascinating application of GNNs is in weather forecasting. Last year Google Deepmind released GraphCast which is based on a graph neural network and was considered the most accurate 10-day global weather forecasting system in the world. It could make accurate predictions very quickly - a 10 day forecast could be calculated in less than a minute.  Conventional approaches can take hours of computation in a supercomputer with hundreds of machines. This also made it much cheaper in energy efficiency - about 1000x. The architecture and some of the predictions can be seen in Fig. 2. 
+One fascinating application of GNNs is in weather forecasting. Last year Google Deepmind released GraphCast which is based on a graph neural network and was considered the most accurate 10-day global weather forecasting system in the world [5] [2]. It could make accurate predictions very quickly - a 10 day forecast could be calculated in less than a minute.  Conventional approaches can take hours of computation in a supercomputer with hundreds of machines. This also made it much cheaper in energy efficiency - about 1000x. The architecture and some of the predictions can be seen in Fig. 2. 
 
-Figure 2: The architecture is based on a Graph Neural Network with an Encoder-Processor-Decoder configuration. The earth is modelled as an iteratively refined icosahedron (20 equilateral-triangular faces) with each grid block being mapped to node attributes (encoding). The processor performs message passing on these with 16 unshared GNN layers. The decoder maps these learned features back to predict the next state.  
+Figure 2: The architecture is based on a Graph Neural Network with an Encoder-Processor-Decoder configuration [2]. The earth is modelled as an iteratively refined icosahedron (20 equilateral-triangular faces) with each grid block being mapped to node attributes (encoding). The processor performs message passing on these with 16 unshared GNN layers. The decoder maps these learned features back to predict the next state.  
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/graphcast_image.png" alt="Untitled" style="height:auto;">
 
 #### Protein Design 
 
-Another application is in protein design. The goal of this is to create proteins with desired properties which can be used for drugs, enzymes or materials. In 2023, BakerLab released RosettaFold Diffusion which uses a diffusion model to generate new proteins from noise. The model is trained to recover corrupted (noised) protein structures and can produce unseen structures by denoising from a random noise input. The model operates via a special type of graph neural network and showed great improvements over its competitors across a broad range of problems. Fig. 3 shows a generated molecule and validated image. 
+Another application is in protein design. The goal of this is to create proteins with desired properties which can be used for drugs, enzymes or materials. In 2023, BakerLab released RosettaFold Diffusion which uses a diffusion model to generate new proteins from noise [6] [2]. The model is trained to recover corrupted (noised) protein structures and can produce unseen structures by denoising from a random noise input. The model operates via a special type of graph neural network and showed great improvements over its competitors across a broad range of problems. Fig. 3 shows a generated molecule and validated image. 
 
-Figure 3: A symmetrical protein assembly (left), generated by RFDiffusion and a validating image (right) produced by single molecule electron microscopy. 
+Figure 3: A symmetrical protein assembly (left), generated by RFDiffusion and a validating image (right) produced by single molecule electron microscopy [2]. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/GNN-RFDiffusion.png" alt="Untitled" style="height:auto;">
 
 ### GNN Theory 
 
-There are several different types of graph neural network tasks [1] and in this project we are interested in graph classification. This problem involves predicting whether a molecule, which can be represented as a graph, is a potential drug. As discussed before, molecules are described well by graphs as the nodes represent atoms and the edges represent the bonds between them. 
+There are several different types of graph neural network tasks [7] and this project focusses on graph classification. This problem involves predicting whether a molecule, which can be represented as a graph, is a potential drug. As discussed before, molecules are described well by graphs as the nodes represent atoms and the edges represent the bonds between them. 
 
 One popular GNN model (the graph convolutional network) involves using a graph convolutional layer to share information between the nodes in the graph and then make a prediction based on information encapsulated by all the nodes. 
 
@@ -300,17 +300,31 @@ I used Python and PyTorch to conduct an end-to-end machine learning project to c
 
 This work could be further developed for use in drug discovery projects, either at the beginning of a project when it is important to identify all possible candidates or at the end when false positives become more costly. This ties in to future work in which I would like to reuse my code to tackle a larger, more complex dataset which is more realistic. Neural network architecture/models are the focus in academia however in industry data is more important as high customisation is required. I would like to focus more on this to gain relevant skills for future industry work. 
 
-[1] https://www.datacamp.com/tutorial/comprehensive-introduction-graph-neural-networks-gnns-tutorial
+[7] https://www.datacamp.com/tutorial/comprehensive-introduction-graph-neural-networks-gnns-tutorial
 
-[2] https://www.youtube.com/watch?v=OI0Jo-5d190&list=PLSgGvve8UweGx4_6hhrF3n4wpHf_RV76_
+[1] Molecular Property Prediction on BACE, paperswithcode, https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1
 
-[3] https://medium.com/the-modern-scientist/graph-neural-networks-series-part-4-the-gnns-message-passing-over-smoothing-e77ffee523cc
+[2] https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python
 
-[4] https://www.youtube.com/watch?v=5SintlY9hbY
+[2] AI trends in 2024: Graph Neural Networks, Marco Ramponi, https://www.assemblyai.com/blog/ai-trends-graph-neural-networks/
 
-[5] https://www.youtube.com/watch?v=uFLeKkXWq2c
+[3] Graph Theory Using Python – Introduction And Implementation, Active State, https://www.activestate.com/blog/graph-theory-using-python-introduction-and-implementation/
 
-[6] https://arxiv.org/abs/1810.00826
+[4] Semi-Supervised Classification with Graph Convolutional Networks, Thomas N. Kipf, Max Welling, https://arxiv.org/abs/1609.02907
+
+[5] GraphCast: AI model for faster and more accurate global weather forecasting, Remi Lam, https://deepmind.google/discover/blog/graphcast-ai-model-for-faster-and-more-accurate-global-weather-forecasting/
+
+[6] RFdiffusion: A generative model for protein design, https://www.bakerlab.org/2023/07/11/diffusion-model-for-protein-design/
+
+[2 old] https://www.youtube.com/watch?v=OI0Jo-5d190&list=PLSgGvve8UweGx4_6hhrF3n4wpHf_RV76_
+
+[3 old] https://medium.com/the-modern-scientist/graph-neural-networks-series-part-4-the-gnns-message-passing-over-smoothing-e77ffee523cc
+
+[4 old] https://www.youtube.com/watch?v=5SintlY9hbY
+
+[5 old] https://www.youtube.com/watch?v=uFLeKkXWq2c
+
+[6 old] https://arxiv.org/abs/1810.00826
 
 [7] https://arxiv.org/abs/1810.02244
 
@@ -323,10 +337,6 @@ This work could be further developed for use in drug discovery projects, either 
 [11] https://deepchem.readthedocs.io/en/latest/api_reference/moleculenet.html
 
 [12] https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python
-
-[13] https://www.assemblyai.com/blog/ai-trends-graph-neural-networks/
-
-[14] https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1
 
 [15] https://www.benevolent.com/about-us/sustainability/covid-19/ 
 
