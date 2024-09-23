@@ -292,7 +292,7 @@ Figure 15: The dimensionally-reduced graph embeddings for all the positive and n
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/t-sne_visualisation_graph_embeddings.png" alt="Untitled" style="height:auto;">
 
-It is clear from Fig. 8 that the model is able to differentiate between the two groups of graphs (positive and negative). It is normal that there are mixed regions for two reasons: the model may not be embedding the graphs perfectly and also t-SNE has some degree dimensionality reduction. The separation might be more distinct in higher dimensions however overall this is good clustering. 
+It is clear from Fig. 15 that the model is able to differentiate between the two groups of graphs (positive and negative). It is normal that there are mixed regions for two reasons: the model may not be embedding the graphs perfectly and also t-SNE has some degree dimensionality reduction. The separation might be more distinct in higher dimensions however overall this is good clustering. 
 
 ## Conclusion 
 
