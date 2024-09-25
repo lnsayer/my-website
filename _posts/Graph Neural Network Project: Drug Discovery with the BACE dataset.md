@@ -135,13 +135,13 @@ Figure 7: Three molecules in the BACE dataset, shown in their SMILES notation an
 I initially worked on the dataset using Google Colabs as it has free GPU-access and a convenient notebook style format [27]. I was able to perform preliminary EDA by loading in the data from a CSV file. However, loading the whole CSV file into a dataloader for the training was impractical and I chose to create a custom dataset using PyTorch Geometric's Dataset class. This offered several advantages:
 
 - Although the dataset was small (only 1513 rows with a few columns of data) it was more efficient to load the CSV file once, perform the processing and save each processed molecule. Otherwise we would have to load and process the csv file each time we created the dataloader. 
-- If in future work we decided to work with more data and the dataset was bigger than CPU memory, using a custom dataset would be more flexible for loading the dataset.
+- If in future work we decided to work with more data and the dataset was bigger than CPU memory, using a custom dataset would be more flexible for loading.
 - A custom dataset is more flexible for working with non-tabular datatypes. 
 - We would be able to perform any pre-transforms or transforms to the data while creating the dataset and only have to perform this once.
 
 Google Colabs was very useful at the beginning of the project but some issues arose as I streamlined the project and implemented more models:
 - The notebook became very long with all the models, analysis and random cells used to understand what the code was doing.
-- I had to install PyTorch Geometric, Deepchem and RDKit everytime I loaded the the notebook as these were not pre-installed in Colabs.
+- I had to install PyTorch Geometric, Deepchem and RDKit everytime I loaded the notebook as these were not pre-installed in Colabs.
 - I had to create the dataset and dataloaders each time I loaded the notebook. I managed to save the processed molecules in my Google Drive but loading these each session was longer than performing the processing and saving it in the memory of the session.
 - GPU-access was limited with the free version, I paid for Colab Pro but it did not suffice for heavy-use.
 
@@ -193,7 +193,7 @@ The GIN and GINE models were structured slightly differently:
 - MLP
 - Softmax
 
-The MLPs used in the convolutional layers had 3 layers each and 128 hidden channels. I did not include a dropout layer for the GIN(E) models which was an oversight as this would have helped to lessen the overfitting. In hindsight I should have use more similar methods such as the activation function (ReLU vs Leaky ReLU) and the inclusion of a dropout layer. 
+The MLPs used in the convolutional layers had 3 layers each and 128 hidden channels. I did not include a dropout layer for the GIN(E) models which was an oversight as this would have helped to lessen the overfitting. In hindsight I should have used more similar methods such as the activation function (ReLU vs Leaky ReLU) and the inclusion of a dropout layer. 
 
 The exact structures of my models can be found in my code on Github [29].
 
@@ -217,7 +217,7 @@ During training runs I saved three different metrics at each epoch to measure th
 Figure 8: Three different metrics as a function of epoch for a single GCN model training run. The test set results are shown in orange and the training set results are shown in blue. The model's parameters are saved at epochs with a grey dashed line.  
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/gcn_loss_acc_auc_plot.png" alt="Untitled" style="height:auto;">
 
-As can be seen in Fig. 8 the loss decreases for both the training set and test set over epoch. The training set loss decreases more smoothly than the test set for several reasons: the loss from the training set directly influences the change in the model parameters and this inherently smoothes the training loss. Also, the training set is four times larger than the test set and this helps to average out fluctuations. 
+As can be seen in Fig. 8 the loss decreases for both the training set and test set over epochs. The training set loss decreases more smoothly than the test set for several reasons: the loss from the training set directly influences the change in the model parameters and this inherently smoothes the training loss. Also, the training set is four times larger than the test set and this helps to average out fluctuations. 
 
 Although the test set loss continues to decrease, the AUC metric stagnates and this is why the last saved model is at around 150. 
 
@@ -262,7 +262,7 @@ Figure 11: The confusion matrix for the GINE models (an average of the five repe
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/new_avg_confusion_matrix_gine_conv.png" alt="Untitled" style="height:auto;">
 
-We can see from the confusion matrices that the two models make incorrect predictions in the same areas. The proportion of false positives between the GCN and GINE models are on average 1.26 (33.6 : 26.6) and the proportion of false negatives between them is on average 1.28 (37.2 : 29.0). The GINE model is generally better overall, not in specific areas. 
+We can see from the confusion matrices that the two models make incorrect predictions in the same areas. The proportion of false positives between the GCN and GINE models are on average 1.26 (33.6 : 26.6) and the proportion of false negatives between them is on average 1.28 (37.2 : 29.0). The GINE model is generally better overall, although not in any specific areas. 
 
 ### Classification Threshold
 
@@ -286,7 +286,7 @@ This shows that the GINE model is much more sensitive as it spans a wider range 
 
 ### Graph embedding visualisations with t-SNE
 
-One final way to visualise the models' predictions was by showing dimensionally-reduced representations of the graph embeddings. I used a method called t-SNE (t-distributed stochastic neighbour embedding) to reduce the dimensionality of the final graph embeddings from 128 (the number of hidden channels) to 2 to see how the positive/negative classes cluster. I used a GINE model for this and we can see the plot in Fig. 15.
+One final way to visualise the models' predictions is by showing dimensionally-reduced representations of the graph embeddings. I used a method called t-SNE (t-distributed stochastic neighbour embedding) to reduce the dimensionality of the final graph embeddings from 128 (the number of hidden channels) to 2 to see how the positive/negative classes cluster. I used a GINE model for this and we can see the plot in Fig. 15.
 
 Figure 15: The dimensionally-reduced graph embeddings for all the positive and negative (predictive) cases of the 1513 molecules in the BACE dataset. The graph embeddings were reduced using t-SNE. The positive predictions are shown in blue and the negative predictions are shown in orange. 
 
@@ -298,7 +298,7 @@ It is clear from Fig. 15 that the model is able to differentiate between the two
 
 I used Python and PyTorch to conduct an end-to-end machine learning project to classify small molecules as drugs with the BACE dataset. I achieved good results, with my top model GINE achieving an average AUC score of 0.881 which is very comparable to the top score in the literature of 0.884 by MolXPT [1]. My work shows the dominance of certain neural network architectures (GINE) over others (GCN/GAT) as my top models achieved much better results, with fewer parameters, in less training time. I created custom datasets and dataloaders, organised training and testing runs and implemented GNN models all in the framework of modularised, reusable code. Overall I am very proud of my work and have learnt a lot in my first substantial PyTorch project. 
 
-This work could be further developed for use in drug discovery projects, either at the beginning of a project when it is important to identify all possible candidates or at the end when false positives become more costly. This ties in to future work in which I would like to reuse my code to tackle a larger, more complex dataset which is more realistic. Neural network architecture/models are the focus in academia however in industry data is more important as high customisation is required. I would like to focus more on this to gain relevant skills for future industry work. 
+This work could be further developed for use in drug discovery projects, either at the beginning of a project when it is important to identify all possible candidates or at the end when false positives become more costly. This ties in to future work in which I would like to reuse my code to tackle a larger, more complex dataset which is more realistic. Neural network architecture/models are the focus in academia however in industry, data is more important as high customisation is required. I would like to focus more on this to gain relevant skills for future industry work. 
 
 [1] Molecular Property Prediction on BACE, paperswithcode, https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1
 
