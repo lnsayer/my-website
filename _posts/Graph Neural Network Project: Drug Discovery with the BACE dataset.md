@@ -20,7 +20,7 @@ Figure 1: The nodes (shown as circles) and edges (lines between the circles) of 
 
 The nodes of a graph represent instances of something such as a person in a social network, a town in a country or an atom in a molecule. Edges represent the connections between these and can be directed, undirected and also weighted. For example, one person following another on Instagram (directed edge), a motorway between towns (directed and weighted) or an atomic bond (undirected). 
 
-Graphs are very good at describing data with relationships and interactions. They are not that unsimilar to other data types and their corresponding neural networks. Convolutional layers in computer vision for example can be seen as acting on an image whose nodes are the pixels and only adjacent pixels are connected by edges in the graph.  
+Graphs are very good at describing data with relationships and interactions. They are not that dissimilar to other data types and their corresponding neural networks. Convolutional layers in computer vision for example can be seen as acting on an image whose nodes are the pixels and only adjacent pixels are connected by edges in the graph.  
 
 ### Recent GNNs Applications 
 
@@ -29,7 +29,7 @@ GNNs have rapidly expanded into numerous fields, offering powerful ways for mode
 
 #### Weather Forecasting 
 
-One fascinating application of GNNs is in weather forecasting. Last year Google Deepmind released GraphCast which is based on a graph neural network and was considered the most accurate 10-day global weather forecasting system in the world [6] [3]. It could make accurate predictions very quickly - a 10 day forecast could be calculated in less than a minute.  Conventional approaches can take hours of computation in a supercomputer with hundreds of machines. This also made it much cheaper in energy efficiency - about 1000x. The architecture and some of the predictions can be seen in Fig. 2. 
+One fascinating application of GNNs is in weather forecasting. Last year Google Deepmind released GraphCast which is based on a graph neural network and was considered at the time the most accurate 10-day global weather forecasting system in the world [6] [3]. It could make accurate predictions very quickly - a 10 day forecast could be calculated in less than a minute.  Conventional approaches can take hours of computation in a supercomputer with hundreds of machines. This also made it much cheaper in energy efficiency - about 1000x. The architecture and some of the predictions can be seen in Fig. 2. 
 
 Figure 2: The architecture is based on a Graph Neural Network with an Encoder-Processor-Decoder configuration [3]. The earth is modelled as an iteratively refined icosahedron (20 equilateral-triangular faces) with each grid block being mapped to node attributes (encoding). The processor performs message passing on these with 16 unshared GNN layers. The decoder maps these learned features back to predict the next state.  
 
@@ -51,7 +51,7 @@ One popular GNN model (the graph convolutional network [5]) involves using a gra
 
 The nodes contain information about the atoms such as their atom type and formal charge. These are called their node features, which can be seen in Fig. 4.
 
-Figure 4: Node features in a graph in which some are known and unknown. All of the node features in our data are known [9]. 
+Figure 4: Node features in a graph in which some are known and some unknown. All of the node features in our data are known [9]. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/new_node_features_in_a_graph.png" alt="Untitled" style="height:auto;">
 
@@ -63,15 +63,15 @@ Figure 5: This is a two layer graph neural network which shows how message passi
 
 There are different aggregation functions to choose from. One popular aggregation function is the weighted mean, weighted by the degree of the neighbour nodes. The degree of a node is how many nodes it is connected to. The updated node embedding is then passed through a weight matrix/neural network to reduce its dimensionality. This process of aggregation and passing through a neural network is done several times as required. This process can be seen in Fig.5. I recommend watching this great series on GNNs to better understand the theory [11]. 
 
-Figure 6: Two layers of a Graph Convolutional Network (GCN), in which the nodes features are aggregated (averaged) and then passed through a neural network (or weight matrix) to reduce their dimensionality. The node dimensionality can be reduced to 1 which is a probability score (e.g. of being a drug or not) [12]. 
+Figure 6: Two layers of a Graph Convolutional Network (GCN), in which the nodes' features are aggregated (averaged) and then passed through a neural network (or weight matrix) to reduce their dimensionality. The node dimensionality can be reduced to 1 which is a probability score (e.g. of being a viable drug or not) [12]. 
 
 <img src="https://lnsayer.github.io/my-website/files/bace_dataset/message_passing_gcn.png" alt="Untitled" style="height:auto;">
 
 ### Application to drug discovery 
 
-Traditional drug discovery is a complex, expensive process that can take years or even decades and yet still has a low success rate. It involves identifying a "target" which is a protein/molecule involved in a disease whose activity needs to be altered to tackle the disease. A "hit" is a molecule which can potentially interact with the target to obtain the desired effect. After identifying the target and hits, many stages are carried out to refine the hits and test their safety and viability as a drug. AI can aid in all of these stages but with regards to our dataset, one in particular is hit identification. 
+Traditional drug discovery is a complex, expensive process that can take years or even decades and yet still has a low success rate. It involves identifying a "target" which is a protein/molecule involved in a disease whose activity needs to be altered to tackle the disease. A "hit" is a molecule which can potentially interact with the target to obtain the desired effect. After identifying the target and hits, many stages are required to refine the hits and test their safety and viability as a drug. AI can aid in all of these stages but with regards to our dataset, one in particular is hit identification. 
 
-Traditionally, hit identification would involve high-throughput screening to test thousands or millions of compounds in a short time, which requires siginificant resources and has a low hit rate. AI can be used to speed up this process by predicting the interactions between the target and hits before lab testing. It can therefore detect new potential drugs from chemical libraries or test existing candidates to reduce the number of molecules which need to be tested. Many companies are using AI in this way to make drug discovery more efficient such as BenevolentAI and Exscientia, amongst many others [13] [14].
+Traditionally, hit identification would involve high-throughput screening to test thousands or millions of compounds in a short time, which requires significant resources and has a low hit rate. AI can be used to speed up this process by predicting the interactions between the target and hits before lab testing. It can therefore detect new potential drugs from chemical libraries or test existing candidates to reduce the number of molecules which need to be tested. Many companies are using AI in this way to make drug discovery more efficient such as BenevolentAI and Exscientia, amongst many others [13] [14].
 
 ### Models used: 
 I tested four different neural networks in this project. These models had roughly the same architectures, with the main difference being the convolutional layers employed. The different layers/networks are listed below:  
