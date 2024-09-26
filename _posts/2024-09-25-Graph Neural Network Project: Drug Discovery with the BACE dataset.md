@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Graph Neural Networks for Drug Discovery in Alzheimer's Disease
-cover-img: /files/bace_dataset/bace_dataset_molecules.png
-thumbnail-img: /files/bace_dataset/bace_dataset_molecules.png
+cover-img: /files/bace_dataset/cover_photo_molecules.png
+thumbnail-img: /files/bace_dataset/thumbnail_image.png
 share-img: /files/bace_dataset/bace_dataset_molecules.png
 tags: [Graph Neural Networks, Classification, Drug Discovery, GCN, GAT, GINConv, GraphConv, PyTorch Geometric]
 author: Louis Sayer
