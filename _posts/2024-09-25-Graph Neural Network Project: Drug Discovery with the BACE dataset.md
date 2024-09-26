@@ -254,13 +254,13 @@ Table 1: Five different metrics for each of the four different GNN architectures
 | Accuracy | 0.762 | 0.776 | 0.786 | 0.800 | 0.819	 | 0.817 |
 | F-1 Score | 0.761 | 0.775 | 0.784 | 0.800 | 0.819	 | 0.816|
 
-| Metric | GCN | GATE |
-| ------- | ---- | ------ | 
-| AUROC | 0.815 | 0.820 |
-| Precision | 0.752 | 0.764 | 
-| Recall | 0.732 | 0.754 |
-| Accuracy | 0.762 | 0.776 | 
-| F-1 Score | 0.761 | 0.775 | 
+| Metric | GCN | GATE | GIN	 | GINE |
+| ------- | ---- | ------ | ---- | -------|
+| AUROC | 0.815 | 0.820 |0.877	 | 0.881 |
+| Precision | 0.752 | 0.764 | 0.802	 | 0.811|
+| Recall | 0.732 | 0.754 |0.815 | 0.796 |
+| Accuracy | 0.762 | 0.776 |  0.819	 | 0.817 |
+| F-1 Score | 0.761 | 0.775 | 0.819	 | 0.816|
 
 
 
