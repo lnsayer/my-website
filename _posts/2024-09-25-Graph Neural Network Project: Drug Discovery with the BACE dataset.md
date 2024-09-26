@@ -246,13 +246,6 @@ The test set loss actually appears to increase after around 40 epochs and the ac
 I checked that the above metric curves (specifically the loss) were reasonable for each set of training runs, i.e. they were not overfitting or underfitting. After this I calculated the average results of the five runs. This was done by saving the models' state dictionaries during training, loading the saved parameters and then making predictions on the test set, which were used to calculate the following metrics in Table 1. 
 
 Table 1: Five different metrics for each of the four different GNN architectures. Two more models were trained with the edge attributes. These are averages of five repeats. The precision and recall are calculated for the positive class.  
-| Metric | GCN | GATE | GAT | GraphConv | GIN	 | GINE |
-| ------- | ---- | ------- | ------- | ------- | ---- | -------|
-| AUROC | 0.815 | 0.820 | 0.836 | 0.862 | 0.877	 | 0.881 |
-| Precision | 0.752 | 0.764 | 0.765 | 0.784 | 0.802	 | 0.811|
-| Recall | 0.732 | 0.754 | 0.785 | 0.793 | 0.815 | 0.796 |
-| Accuracy | 0.762 | 0.776 | 0.786 | 0.800 | 0.819	 | 0.817 |
-| F-1 Score | 0.761 | 0.775 | 0.784 | 0.800 | 0.819	 | 0.816|
 
 | Metric | GCN | GATE | GIN	 | GINE | GAT | GraphConv |
 | ------- | ---- | ------ | ---- | -------|------- | ------- |
@@ -261,14 +254,6 @@ Table 1: Five different metrics for each of the four different GNN architectures
 | Recall | 0.732 | 0.754 |0.815 | 0.796 |0.785 | 0.793 |
 | Accuracy | 0.762 | 0.776 |  0.819	 | 0.817 |0.786 | 0.800 |
 | F-1 Score | 0.761 | 0.775 | 0.819	 | 0.816| 0.784 | 0.800 |
-
-
-
-| Model | Default hyperparameters | Best hyperparameters |
-| ------ | ----------- | ---|
-| Age imputed with median | 0.802 | 0.816 |
-| Age imputed with KNN    | 0.800 | 0.829 |
-| Age imputed with KNN along with test data  | 0.805 | 0.826 |
 
 As we can see from Table 1 the best performing model over different thresholds was GINE with an AUROC value of 0.881. This is very comparable to the top results in the literature, as reported in PapersWithCode. The highest AUC score in [PapersWithCode](https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1) is 0.884 from MolXPT [1].
 
@@ -326,64 +311,64 @@ I used Python and PyTorch to conduct an end-to-end machine learning project to c
 
 This work could be further developed for use in drug discovery projects, either at the beginning of a project when it is important to identify all possible candidates or at the end when false positives become more costly. This ties in to future work in which I would like to reuse my code to tackle a larger, more complex dataset which is more realistic. Neural network architecture/models are the focus in academia however in industry, data is more important as high customisation is required. I would like to focus more on this to gain relevant skills for future industry work. 
 
-[1] Molecular Property Prediction on BACE, paperswithcode, https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1
+[1] Molecular Property Prediction on BACE, paperswithcode, [https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1](https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1)
 
-[2] https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python
+[2] [https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python](https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python)
 
-[3] AI trends in 2024: Graph Neural Networks, Marco Ramponi, https://www.assemblyai.com/blog/ai-trends-graph-neural-networks/
+[3] AI trends in 2024: Graph Neural Networks, Marco Ramponi, [https://www.assemblyai.com/blog/ai-trends-graph-neural-networks/](https://www.assemblyai.com/blog/ai-trends-graph-neural-networks/)
 
-[4] Graph Theory Using Python – Introduction And Implementation, Active State, https://www.activestate.com/blog/graph-theory-using-python-introduction-and-implementation/
+[4] Graph Theory Using Python – Introduction And Implementation, Active State, [https://www.activestate.com/blog/graph-theory-using-python-introduction-and-implementation/](https://www.activestate.com/blog/graph-theory-using-python-introduction-and-implementation/)
 
-[5] Semi-Supervised Classification with Graph Convolutional Networks, Thomas N. Kipf, Max Welling, https://arxiv.org/abs/1609.02907
+[5] Semi-Supervised Classification with Graph Convolutional Networks, Thomas N. Kipf, Max Welling, [https://arxiv.org/abs/1609.02907](https://arxiv.org/abs/1609.02907)
 
-[6] GraphCast: AI model for faster and more accurate global weather forecasting, Remi Lam, https://deepmind.google/discover/blog/graphcast-ai-model-for-faster-and-more-accurate-global-weather-forecasting/
+[6] GraphCast: AI model for faster and more accurate global weather forecasting, Remi Lam, [https://deepmind.google/discover/blog/graphcast-ai-model-for-faster-and-more-accurate-global-weather-forecasting/](https://deepmind.google/discover/blog/graphcast-ai-model-for-faster-and-more-accurate-global-weather-forecasting/)
 
-[7] RFdiffusion: A generative model for protein design, https://www.bakerlab.org/2023/07/11/diffusion-model-for-protein-design/
+[7] RFdiffusion: A generative model for protein design, [https://www.bakerlab.org/2023/07/11/diffusion-model-for-protein-design/](https://www.bakerlab.org/2023/07/11/diffusion-model-for-protein-design/)
 
-[8] A Comprehensive Introduction to Graph Neural Networks (GNNs), Datacamp, https://www.datacamp.com/tutorial/comprehensive-introduction-graph-neural-networks-gnns-tutorial
+[8] A Comprehensive Introduction to Graph Neural Networks (GNNs), Datacamp, [https://www.datacamp.com/tutorial/comprehensive-introduction-graph-neural-networks-gnns-tutorial](https://www.datacamp.com/tutorial/comprehensive-introduction-graph-neural-networks-gnns-tutorial)
 
-[9] Michael Bronstein, Feature Propagation is a simple and surprisingly efficient solution for learning on graphs with missing node features, https://towardsdatascience.com/learning-on-graphs-with-missing-features-dd34be61b06
+[9] Michael Bronstein, Feature Propagation is a simple and surprisingly efficient solution for learning on graphs with missing node features, [https://towardsdatascience.com/learning-on-graphs-with-missing-features-dd34be61b06](https://towardsdatascience.com/learning-on-graphs-with-missing-features-dd34be61b06)
 
-[10] Omar Hussein, Graph Neural Networks Series | Part 4 |The GNNs, Message Passing & Over-smoothing, https://medium.com/the-modern-scientist/graph-neural-networks-series-part-4-the-gnns-message-passing-over-smoothing-e77ffee523cc
+[10] Omar Hussein, Graph Neural Networks Series | Part 4 |The GNNs, Message Passing & Over-smoothing, [https://medium.com/the-modern-scientist/graph-neural-networks-series-part-4-the-gnns-message-passing-over-smoothing-e77ffee523cc](https://medium.com/the-modern-scientist/graph-neural-networks-series-part-4-the-gnns-message-passing-over-smoothing-e77ffee523cc)
 
-[11] Intro to Graphs and Label Propagation Algorithm in Machine Learning, WelcomeAIOverlords https://www.youtube.com/watch?v=OI0Jo-5d190&list=PLSgGvve8UweGx4_6hhrF3n4wpHf_RV76_
+[11] Intro to Graphs and Label Propagation Algorithm in Machine Learning, WelcomeAIOverlords [https://www.youtube.com/watch?v=OI0Jo-5d190&list=PLSgGvve8UweGx4_6hhrF3n4wpHf_RV76_](https://www.youtube.com/watch?v=OI0Jo-5d190&list=PLSgGvve8UweGx4_6hhrF3n4wpHf_RV76_)
 
 [12] Graph Convolutional Networks (GCNs) made simple
-, WelcomeAIOverlords, https://www.youtube.com/watch?v=2KRAOZIULzw&t=487s
+, WelcomeAIOverlords, [https://www.youtube.com/watch?v=2KRAOZIULzw&t=487s](https://www.youtube.com/watch?v=2KRAOZIULzw&t=487s)
 
-[13] We used our BenAI Engine to identify a leading COVID-19 treatment, which is now FDA approved, BenevolentAI, https://www.benevolent.com/about-us/sustainability/covid-19/ 
+[13] We used our BenAI Engine to identify a leading COVID-19 treatment, which is now FDA approved, BenevolentAI, [https://www.benevolent.com/about-us/sustainability/covid-19/](https://www.benevolent.com/about-us/sustainability/covid-19/)
 
-[14] Exscientia announces second molecule created using AI from Sumitomo Dainippon Pharma collaboration to enter Phase 1 clinical trial, Exscientia, https://investors.exscientia.ai/press-releases/press-release-details/2021/Exscientia-announces-second-molecule-created-using-AI-from-Sumitomo-Dainippon-Pharma-collaboration-to-enter-Phase-1-clinical-trial/default.aspx 
+[14] Exscientia announces second molecule created using AI from Sumitomo Dainippon Pharma collaboration to enter Phase 1 clinical trial, Exscientia, [https://investors.exscientia.ai/press-releases/press-release-details/2021/Exscientia-announces-second-molecule-created-using-AI-from-Sumitomo-Dainippon-Pharma-collaboration-to-enter-Phase-1-clinical-trial/default.aspx](https://investors.exscientia.ai/press-releases/press-release-details/2021/Exscientia-announces-second-molecule-created-using-AI-from-Sumitomo-Dainippon-Pharma-collaboration-to-enter-Phase-1-clinical-trial/default.aspx)
 
-[15] conv.GCNConv, Torch Geometric, https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GCNConv.html#torch_geometric.nn.conv.GCNConv
+[15] conv.GCNConv, Torch Geometric, [https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GCNConv.html#torch_geometric.nn.conv.GCNConv](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GCNConv.html#torch_geometric.nn.conv.GCNConv)
 
-[16] Graph Attention Networks, Petar Veličković et al. , https://arxiv.org/abs/1710.10903
+[16] Graph Attention Networks, Petar Veličković et al. , [https://arxiv.org/abs/1710.10903](https://arxiv.org/abs/1710.10903)
 
-[17] conv.GATConv, Torch Geometric, https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GATConv.html#torch_geometric.nn.conv.GATConv
+[17] conv.GATConv, Torch Geometric, [https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GATConv.html#torch_geometric.nn.conv.GATConv](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GATConv.html#torch_geometric.nn.conv.GATConv)
 
-[18] How Powerful are Graph Neural Networks?, Keyulu Xu et al., https://arxiv.org/abs/1810.00826
+[18] How Powerful are Graph Neural Networks?, Keyulu Xu et al., [https://arxiv.org/abs/1810.00826](https://arxiv.org/abs/1810.00826)
 
-[19] conv.GINConv, Torch Geometric, https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GINConv.html#torch_geometric.nn.conv.GINConv
+[19] conv.GINConv, Torch Geometric, [https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GINConv.html#torch_geometric.nn.conv.GINConv](https://arxiv.org/abs/1810.00826)
 
 [20] Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks
-, Christopher Morris et al., https://arxiv.org/abs/1810.02244
+, Christopher Morris et al., [https://arxiv.org/abs/1810.02244](https://arxiv.org/abs/1810.02244)
 
-[21] conv.GraphConv, Torch Geometric, https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GraphConv.html
+[21] conv.GraphConv, Torch Geometric, [https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GraphConv.html](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GraphConv.html)
 
-[22] MoleculeNet, DeepChem, https://deepchem.readthedocs.io/en/latest/api_reference/moleculenet.html
+[22] MoleculeNet, DeepChem, [https://deepchem.readthedocs.io/en/latest/api_reference/moleculenet.html](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GraphConv.html)
 
-[23] Beta-secretase 1, Wikipedia, https://en.wikipedia.org/wiki/Beta-secretase_1
+[23] Beta-secretase 1, Wikipedia, [https://en.wikipedia.org/wiki/Beta-secretase_1](https://en.wikipedia.org/wiki/Beta-secretase_1)
 
-[24] Merck Stops Phase 3 Trial of Verubecestat in Early Alzheimer’s Patients Amid Concerns Over Benefit, Alzheimer's Today, https://alzheimersnewstoday.com/news/merck-stops-phase-3-study-verubecestat-in-early-alzheimers-patients/?cn-reloaded=1
+[24] Merck Stops Phase 3 Trial of Verubecestat in Early Alzheimer’s Patients Amid Concerns Over Benefit, Alzheimer's Today, [https://alzheimersnewstoday.com/news/merck-stops-phase-3-study-verubecestat-in-early-alzheimers-patients/?cn-reloaded=1](https://alzheimersnewstoday.com/news/merck-stops-phase-3-study-verubecestat-in-early-alzheimers-patients/?cn-reloaded=1)
 
-[25] Lilly Provides Update on A4 Study of Solanezumab for Preclinical Alzheimer's Disease, Lily Investors, https://investor.lilly.com/news-releases/news-release-details/lilly-provides-update-a4-study-solanezumab-preclinical
+[25] Lilly Provides Update on A4 Study of Solanezumab for Preclinical Alzheimer's Disease, Lily Investors, [https://investor.lilly.com/news-releases/news-release-details/lilly-provides-update-a4-study-solanezumab-preclinical](https://investor.lilly.com/news-releases/news-release-details/lilly-provides-update-a4-study-solanezumab-preclinical)
 
-[26] Update on Phase III clinical trials of lanabecestat for Alzheimer’s disease, Astrazeneca, https://www.astrazeneca.com/media-centre/press-releases/2018/update-on-phase-iii-clinical-trials-of-lanabecestat-for-alzheimers-disease-12062018.html#
+[26] Update on Phase III clinical trials of lanabecestat for Alzheimer’s disease, Astrazeneca, [https://www.astrazeneca.com/media-centre/press-releases/2018/update-on-phase-iii-clinical-trials-of-lanabecestat-for-alzheimers-disease-12062018.html#](https://www.astrazeneca.com/media-centre/press-releases/2018/update-on-phase-iii-clinical-trials-of-lanabecestat-for-alzheimers-disease-12062018.html#)
 
-[27] My initial colabs notebook graph_classification_bace_dataset.ipynb, https://github.com/lnsayer/drug_discovery_with_bace_dataset/blob/main/graph_classification_bace_dataset.ipynb
+[27] My initial colabs notebook graph_classification_bace_dataset.ipynb, [https://github.com/lnsayer/drug_discovery_with_bace_dataset/blob/main/graph_classification_bace_dataset.ipynb](https://github.com/lnsayer/drug_discovery_with_bace_dataset/blob/main/graph_classification_bace_dataset.ipynb)
 
-[28] My modularised colab notebook, https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_ipynb
+[28] My modularised colab notebook, [https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_ipynb](https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_ipynb)
 
-[29] My modularised Python scripts folder, https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python
+[29] My modularised Python scripts folder, [https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python](https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python)
 
-[30] MolGraphConvFeaturiser, Deepchem, https://deepchem.readthedocs.io/en/latest/api_reference/featurizers.html#molgraphconvfeaturizer
+[30] MolGraphConvFeaturiser, Deepchem, [https://deepchem.readthedocs.io/en/latest/api_reference/featurizers.html#molgraphconvfeaturizer](https://deepchem.readthedocs.io/en/latest/api_reference/featurizers.html#molgraphconvfeaturizer)
