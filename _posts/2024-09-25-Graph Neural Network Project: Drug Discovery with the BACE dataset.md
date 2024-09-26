@@ -255,6 +255,12 @@ Table 1: Five different metrics for each of the four different GNN architectures
 | Accuracy | 0.762 | 0.776 | 0.786 | 0.800 | 0.819	 | 0.817 |
 | F-1 Score | 0.761 | 0.775 | 0.784 | 0.800 | 0.819	 | 0.816|
 
+| Model | Default hyperparameters | Best hyperparameters |
+| ------ | ----------- | ---|
+| Age imputed with median | 0.802 | 0.816 |
+| Age imputed with KNN    | 0.800 | 0.829 |
+| Age imputed with KNN along with test data  | 0.805 | 0.826 |
+
 As we can see from Table 1 the best performing model over different thresholds was GINE with an AUROC value of 0.881. This is very comparable to the top results in the literature, as reported in PapersWithCode. The highest AUC score in [PapersWithCode](https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1) is 0.884 from MolXPT [1].
 
 The GINE model also has the highest precision score of 0.811. Precision is more important in the latter stages of drug discovery (lead optimisation, preclinical, clinical trials) where the costs and consequences of advancing a false positive are much higher. The GIN model had the best recall score of 0.815. Recall is more important in the early stages of drug discovery (hit discovery, target identification) when it is crucial to cast a wide net and identify all candidates. We would not want to miss potentially valuable compounds. 
