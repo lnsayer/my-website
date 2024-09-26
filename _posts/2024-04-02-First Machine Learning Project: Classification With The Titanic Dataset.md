@@ -4,7 +4,7 @@ title: First Machine Learning Project
 subtitle: Classification with the Titanic dataset
 cover-img: /files/titanic_project/Stöwer_Titanic.jpg
 thumbnail-img: /files/titanic_project/Stöwer_Titanic.jpg
-share-img: /assets/img/path.jpg
+share-img: /files/titanic_project/Stöwer_Titanic.jpg
 tags: [Machine Learning, Classification, Tutorial]
 author: Louis Sayer
 mathjax: true
