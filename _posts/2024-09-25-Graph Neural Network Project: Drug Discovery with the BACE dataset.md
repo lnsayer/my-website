@@ -329,7 +329,7 @@ This work could be further developed for use in drug discovery projects, either 
 
 [9] Michael Bronstein, Feature Propagation is a simple and surprisingly efficient solution for learning on graphs with missing node features, [https://towardsdatascience.com/learning-on-graphs-with-missing-features-dd34be61b06](https://towardsdatascience.com/learning-on-graphs-with-missing-features-dd34be61b06)
 
-[10] Omar Hussein, Graph Neural Networks Series | Part 4 |The GNNs, Message Passing & Over-smoothing, [https://medium.com/the-modern-scientist/graph-neural-networks-series-part-4-the-gnns-message-passing-over-smoothing-e77ffee523cc](https://medium.com/the-modern-scientist/graph-neural-networks-series-part-4-the-gnns-message-passing-over-smoothing-e77ffee523cc)
+[10] Omar Hussein, Graph Neural Networks Series Part 4 The GNNs, Message Passing & Over-smoothing, [https://medium.com/the-modern-scientist/graph-neural-networks-series-part-4-the-gnns-message-passing-over-smoothing-e77ffee523cc](https://medium.com/the-modern-scientist/graph-neural-networks-series-part-4-the-gnns-message-passing-over-smoothing-e77ffee523cc)
 
 [11] Intro to Graphs and Label Propagation Algorithm in Machine Learning, WelcomeAIOverlords [https://www.youtube.com/watch?v=OI0Jo-5d190&list=PLSgGvve8UweGx4_6hhrF3n4wpHf_RV76_](https://www.youtube.com/watch?v=OI0Jo-5d190&list=PLSgGvve8UweGx4_6hhrF3n4wpHf_RV76_)
 
