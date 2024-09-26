@@ -9,8 +9,6 @@
 # --- Required options --- #
 ############################
 
-destination: ./_site
-
 # Name of website
 title: Louis Sayer
 
