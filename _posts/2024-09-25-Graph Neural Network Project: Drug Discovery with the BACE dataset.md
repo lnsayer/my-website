@@ -98,7 +98,7 @@ The attention function creates coefficients for the source nodes so the new targ
 
 The PyTorch Geometric documentation for the [GAT layer](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.GATConv.html#torch_geometric.nn.conv.GATConv) [17].
 
- #### GIN (Graph Isomorphism Network) 
+#### GIN (Graph Isomorphism Network)
  
  - The graph isomorphism operator from [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826) [18]
 
