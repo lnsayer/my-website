@@ -10,7 +10,7 @@ mathjax: true
 ---
  
 
-x Graph neural networks are an exciting new class of neural networks that are proving very effective in processing relational data. In this project I developed several graph neural networks to classify molecules as drugs in the BACE dataset, which is very useful in the drug discovery process, particularly in hit identification. I achieved results as high as those in the literature with an average AUC score of 0.881 for my top model, GINE, compared to 0.884 for MolXPT, from paperswithcode [1]. I identified which architectures were more effective for these data and wrote clean, documented, modularised reusable code which I could employ in further work. My code can be found on my [Github](https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python) [2].
+Graph neural networks are an exciting new class of neural networks that are proving very effective in processing relational data. In this project I developed several graph neural networks to classify molecules as drugs in the BACE dataset, which is very useful in the drug discovery process, particularly in hit identification. I achieved results as high as those in the literature with an average AUC score of 0.881 for my top model, GINE, compared to 0.884 for MolXPT, from paperswithcode [1]. I identified which architectures were more effective for these data and wrote clean, documented, modularised reusable code which I could employ in further work. My code can be found on my [Github](https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python) [2].
 
 ## Project Objectives
 
@@ -253,6 +253,16 @@ Table 1: Five different metrics for each of the four different GNN architectures
 | Recall | 0.732 | 0.754 | 0.785 | 0.793 | 0.815 | 0.796 |
 | Accuracy | 0.762 | 0.776 | 0.786 | 0.800 | 0.819	 | 0.817 |
 | F-1 Score | 0.761 | 0.775 | 0.784 | 0.800 | 0.819	 | 0.816|
+
+| Metric | GCN | GATE |
+| ------- | ---- | ------ | 
+| AUROC | 0.815 | 0.820 |
+| Precision | 0.752 | 0.764 | 
+| Recall | 0.732 | 0.754 |
+| Accuracy | 0.762 | 0.776 | 
+| F-1 Score | 0.761 | 0.775 | 
+
+
 
 | Model | Default hyperparameters | Best hyperparameters |
 | ------ | ----------- | ---|
