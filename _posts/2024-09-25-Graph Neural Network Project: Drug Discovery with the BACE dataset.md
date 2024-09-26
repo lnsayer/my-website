@@ -1,3 +1,14 @@
+---
+layout: post
+title: Graph Neural Networks for Drug Discovery in Alzheimer's Disease
+cover-img: /files/bace_dataset/bace_dataset_molecules.png
+thumbnail-img: /files/bace_dataset/bace_dataset_molecules.png
+share-img: /files/bace_dataset/bace_dataset_molecules.png
+tags: [Graph Neural Networks, Classification, Drug Discovery, GCN, GAT, GINConv, GraphConv, PyTorch Geometric]
+author: Louis Sayer
+mathjax: true
+---
+
 # Graph Neural Networks for Drug Discovery in Alzheimer's Disease 
 
 x Graph neural networks are an exciting new class of neural networks that are proving very effective in processing relational data. In this project I developed several graph neural networks to classify molecules as drugs in the BACE dataset, which is very useful in the drug discovery process, particularly in hit identification. I achieved results as high as those in the literature with an average AUC score of 0.881 for my top model, GINE, compared to 0.884 for MolXPT, from paperswithcode [1]. I identified which architectures were more effective for these data and wrote clean, documented, modularised reusable code which I could employ in further work. My code can be found on my [Github](https://github.com/lnsayer/drug_discovery_with_bace_dataset/tree/main/going_modular_python) [2].
