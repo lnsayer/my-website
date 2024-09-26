@@ -286,7 +286,6 @@ defaults:
 exclude:
   - CHANGELOG.md
   - CNAME
-  - Gemfile
   - LICENSE
   - README.md
   - screenshot.png
