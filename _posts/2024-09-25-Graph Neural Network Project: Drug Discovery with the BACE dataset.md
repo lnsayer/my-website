@@ -261,6 +261,16 @@ The GINE model also has the highest precision score of 0.811. Precision is more 
 
 The GraphConv models are not far behind the GIN models, however the GINE model took on average 2.25x fewer epochs to converge than GraphConv, corresponding to roughly 2.25x less time. It is interesting to see that the GATE models performed worse than the GAT models. This may be because the GAT models have a lot of parameters (at least compared to the GIN models) and they might be overfitting on the training data. It could also be that the edge attributes are irrelevant and just providing noise, however the GINE model would not perform better if that were the case. 
 
+This work's best results can be viewed in comparison to the best results from paperswithcode in Fig.10. 
+
+Figure 10: The best ROC-AUC scores for models from paperswithcode as shown in blue and my best result (from the GINE model) as shown in orange. More detail can be found on the paperswithcode [website](https://paperswithcode.com/sota/molecular-property-prediction-on-bace-1).
+
+
+<img src="https://lnsayer.github.io/my-website/files/bace_dataset/date_auc_paperswithcode.png" alt="Untitled" style="height:auto;">
+
+
+
+
 ### Confusion Matrices 
 
 We can see where the models are making incorrect predictions by looking at their confusion matrices. Fig. 10 and Fig. 11 show the confusion matrices for the average GCN and GINE models respectively (average of five repeats).
